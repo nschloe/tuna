@@ -4,7 +4,8 @@ import tuna
 
 
 def test_tuna():
-    tuna.cli.main(["optimesh.prof"])
+    # tuna.cli.main(["optimesh.prof"])
+    tuna.cli.main(["foo.prof"])
     return
 
 
