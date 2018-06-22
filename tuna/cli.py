@@ -3,7 +3,7 @@
 import argparse
 
 from .__about__ import __version__
-from .main import read
+from .main import read, start_server
 
 
 def main(argv=None):
@@ -11,6 +11,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     read(args.infile)
+    start_server()
     return
 
 

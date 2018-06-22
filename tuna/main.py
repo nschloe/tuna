@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 #
+# import SimpleHTTPServer
+import http.server
 import json
+import os
 import pstats
+import socketserver
+import tempfile
+import threading
+import webbrowser
 
 
-def read(filename):
-    stats = pstats.Stats(filename)
+def read(prof_filename):
+    stats = pstats.Stats(prof_filename)
 
     # Same as stats.stats.
     # import marshal
@@ -44,6 +51,31 @@ def read(filename):
 
     data = populate(root_nodes, None)
 
-    with open("test.json", "w") as f:
+    json_filename = tempfile.NamedTemporaryFile().name
+    with open(json_filename, "w") as f:
         json.dump(data, f, indent=2)
+    return json_filename
+
+
+class ServerThread(threading.Thread):
+    def __init__(self, web_dir, port):
+        threading.Thread.__init__(self)
+        self.web_dir = web_dir
+        self.port = port
+        return
+
+    def run(self):
+        os.chdir(self.web_dir)
+
+        Handler = http.server.SimpleHTTPRequestHandler
+        httpd = socketserver.TCPServer(("", self.port), Handler)
+        print("serving at port", self.port)
+        httpd.serve_forever()
+        return
+
+
+def start_server():
+    web_dir = os.path.join(os.path.dirname(__file__), 'web')
+    ServerThread(web_dir, 8000).start()
+    webbrowser.open_new_tab("tuna.html")
     return
