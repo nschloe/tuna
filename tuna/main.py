@@ -66,7 +66,6 @@ class ServerThread(threading.Thread):
 
     def run(self):
         os.chdir(self.web_dir)
-
         Handler = http.server.SimpleHTTPRequestHandler
         httpd = socketserver.TCPServer(("", self.port), Handler)
         print("serving at port", self.port)
@@ -76,6 +75,6 @@ class ServerThread(threading.Thread):
 
 def start_server():
     web_dir = os.path.join(os.path.dirname(__file__), 'web')
-    ServerThread(web_dir, 8000).start()
-    webbrowser.open_new_tab("tuna.html")
+    ServerThread(web_dir, 8080).start()
+    webbrowser.open_new_tab("http://localhost:8080")
     return
