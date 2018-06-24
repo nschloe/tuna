@@ -51,15 +51,20 @@ class Icicle extends HTMLElement {
         .attr("y", function(d) { return d.y0; })
         .attr("width", function(d) { return d.x1 - d.x0; })
         .attr("height", function(d) { return d.y1 - d.y0; });
-      // Now the text.
-      g.append("text")
-        .text(function(d) { return d.data.name; })
-        .attr("x", function(d) { return (d.x0 + d.x1)/2; })
+      // Now the text. Multiline text is realized with <tspan> in SVG.
+      const text = g.append("text")
         .attr("y", function(d) { return (d.y0 + d.y1)/2; })
         .attr("alignment-baseline", "middle")
         .attr("text-anchor", "middle")
         .attr("fill", "white")
         .attr("clip-path", function(d) { return "url(#" + "cp_" + d.x0 + "_" + d.x1 + "_" + d.y0 + "_" + d.y1 + ")"; });
+      text.append("tspan")
+        .text(function(d) { return d.data.name })
+        .attr("x", function(d) { return (d.x0 + d.x1)/2; });
+      text.append("tspan")
+        .text(function(d) { return d3.format(".3e")(d.value) + " s" })
+        .attr("x", function(d) { return (d.x0 + d.x1)/2; })
+        .attr("dy", "1.2em");
     });
 
     // function clicked(d) {
