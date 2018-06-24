@@ -22,7 +22,7 @@ class Icicle extends HTMLElement {
     d3.json(this.filename).then(function(data) {
       const root = d3.hierarchy(data);
       root.sum( function(d) { return d.value; });
-      root.sort();
+      root.sort( function(d) { return d.value; });
 
       partition(root);
 
@@ -36,8 +36,8 @@ class Icicle extends HTMLElement {
         .attr("y", function(d) { return d.y0; })
         .attr("width", function(d) { return d.x1 - d.x0; })
         .attr("height", function(d) { return d.y1 - d.y0; })
-        .attr("fill", function(d) { return color((d.children ? d : d.parent).key); });
-      // .on("click", clicked);
+        .attr("fill", function(d) { return color((d.children ? d : d.parent).key); })
+        .on("click", clicked);
 
       // title, typically rendered as tooltip
       rect.append("title")
@@ -60,24 +60,27 @@ class Icicle extends HTMLElement {
         .attr("clip-path", function(d) { return "url(#" + "cp_" + d.x0 + "_" + d.x1 + "_" + d.y0 + "_" + d.y1 + ")"; });
       text.append("tspan")
         .text(function(d) { return d.data.name })
+        .attr("font-family", "sans-serif")
         .attr("x", function(d) { return (d.x0 + d.x1)/2; });
       text.append("tspan")
         .text(function(d) { return d3.format(".3e")(d.value) + " s" })
+        .attr("font-family", "sans-serif")
         .attr("x", function(d) { return (d.x0 + d.x1)/2; })
-        .attr("dy", "1.2em");
+        .attr("dy", "1.5em");
     });
 
-    // function clicked(d) {
-    //   // x.domain([d.x0, d.x1]);
-    //   // y.domain([d.y0, 1]).range([d.y0 ? 20 : 0, height]);
-    //
-    //   rect.transition()
-    //       .duration(750)
-    //       .attr("x", function(d) { return d.x0; })
-    //       .attr("y", function(d) { return d.y0; })
-    //       .attr("width", function(d) { return d.x1 - d.x0; })
-    //       .attr("height", function(d) { return d.y1 - d.y0; });
-    // }
+    function clicked(d) {
+      console.log("clicked");
+      // x.domain([d.x0, d.x1]);
+      // y.domain([d.y0, 1]).range([d.y0 ? 20 : 0, height]);
+
+      // rect.transition()
+      //     .duration(750)
+      //     .attr("x", function(d) { return d.x0; })
+      //     .attr("y", function(d) { return d.y0; })
+      //     .attr("width", function(d) { return d.x1 - d.x0; })
+      //     .attr("height", function(d) { return d.y1 - d.y0; });
+    }
   }
 }
 
