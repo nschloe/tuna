@@ -1,10 +1,7 @@
-// import {scaleOrdinal} from "d3-scale";
-
 class Icicle extends HTMLElement {
   connectedCallback () {
     this.createShadowRoot()
-    // this.text = this.getAttribute('text')
-    // this.size = this.getAttribute('font-size')
+    this.filename = this.getAttribute('filename')
     this.render()
   }
 
@@ -44,24 +41,24 @@ class Icicle extends HTMLElement {
   const width = 960;
   const height = 500;
 
-  // var color = d3.scaleOrdinal(d3.schemeCategory20c);
-  var color = d3.scaleOrdinal(d3.schemeCategory10);
+  // const color = d3.scaleOrdinal(d3.schemeCategory20c);
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-  var partition = d3.partition()
+  const partition = d3.partition()
      .size([width, height]);
 
-  var svg = d3.select("body").append("svg")
+  const svg = d3.select("body").append("svg")
       .attr("width", width)
       .attr("height", height);
 
-  d3.json("/test2.json").then(function(data) {
-    var root = d3.hierarchy(data);
+  d3.json(this.filename).then(function(data) {
+    const root = d3.hierarchy(data);
     root.sum( function(d) { return d.value; });
     root.sort();
 
     partition(root);
 
-    var rect = svg.selectAll("rect");
+    const rect = svg.selectAll("rect");
     rect = rect
         .data(root.descendants())
         .enter().append("rect")
