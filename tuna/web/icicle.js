@@ -2,6 +2,8 @@ class Icicle extends HTMLElement {
   connectedCallback () {
     this.createShadowRoot()
     this.filename = this.getAttribute('filename')
+    this.width = this.getAttribute('width')
+    this.height = this.getAttribute('height')
     this.render()
   }
 
@@ -38,18 +40,15 @@ class Icicle extends HTMLElement {
     // this.addSpans(div)
     // this.addStyle()
     //
-  const width = 960;
-  const height = 500;
-
   // const color = d3.scaleOrdinal(d3.schemeCategory20c);
   const color = d3.scaleOrdinal(d3.schemeCategory10);
 
   const partition = d3.partition()
-     .size([width, height]);
+     .size([this.width, this.height]);
 
   const svg = d3.select("body").append("svg")
-      .attr("width", width)
-      .attr("height", height);
+      .attr("width", this.width)
+      .attr("height", this.height);
 
   d3.json(this.filename).then(function(data) {
     const root = d3.hierarchy(data);
