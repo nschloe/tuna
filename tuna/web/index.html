@@ -13,24 +13,18 @@
     </h1>
 
     <!--script src="//d3js.org/d3.v3.min.js"></script-->
-    <script src="js/d3.v3.min.js"></script>
+    <!--script src="js/d3.v3.min.js"></script-->
+    <script src="js/d3.v4.min.js"></script>
     <!--script src="https://d3js.org/d3.v5.min.js"></script-->
 <script>
 
 var width = 960,
     height = 500;
 
-var x = d3.scale.linear()
-    .range([0, width]);
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
 
-var y = d3.scale.linear()
-    .range([0, height]);
-
-var color = d3.scale.category20c();
-
-var partition = d3.layout.partition()
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
-    .value(function(d) { return d.value; });
+var partition = d3.partition()
+   .size([width, height]);
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -38,31 +32,37 @@ var svg = d3.select("body").append("svg")
 
 var rect = svg.selectAll("rect");
 
-d3.json("test.json", function(error, root) {
+d3.json("test2.json", function(error, data) {
   if (error) throw error;
 
+  root = d3.hierarchy(data);
+  root.sum( function(d) { return d.value; });
+  root.sort();
+
+  partition(root);
+
   rect = rect
-      .data(partition(d3.entries(root)[0]))
+      .data(root.descendants())
       .enter().append("rect")
-      .attr("x", function(d) { return x(d.x); })
-      .attr("y", function(d) { return y(d.y); })
-      .attr("width", function(d) { return x(d.dx); })
-      .attr("height", function(d) { return y(d.dy); })
-      .attr("fill", function(d) { return color((d.children ? d : d.parent).key); })
-      .on("click", clicked);
+        .attr("x", function(d) { return d.x0; })
+        .attr("y", function(d) { return d.y0; })
+        .attr("width", function(d) { return d.x1 - d.x0; })
+        .attr("height", function(d) { return d.y1 - d.y0; })
+        .attr("fill", function(d) { return color((d.children ? d : d.parent).key); });
+        // .on("click", clicked);
 });
 
-function clicked(d) {
-  x.domain([d.x, d.x + d.dx]);
-  y.domain([d.y, 1]).range([d.y ? 20 : 0, height]);
-
-  rect.transition()
-      .duration(750)
-      .attr("x", function(d) { return x(d.x); })
-      .attr("y", function(d) { return y(d.y); })
-      .attr("width", function(d) { return x(d.x + d.dx) - x(d.x); })
-      .attr("height", function(d) { return y(d.y + d.dy) - y(d.y); });
-}
+// function clicked(d) {
+//   // x.domain([d.x0, d.x1]);
+//   // y.domain([d.y0, 1]).range([d.y0 ? 20 : 0, height]);
+//
+//   rect.transition()
+//       .duration(750)
+//       .attr("x", function(d) { return d.x0; })
+//       .attr("y", function(d) { return d.y0; })
+//       .attr("width", function(d) { return d.x1 - d.x0; })
+//       .attr("height", function(d) { return d.y1 - d.y0; });
+// }
 
 </script>
 

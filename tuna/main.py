@@ -31,7 +31,7 @@ def read(prof_filename):
             root_nodes.append(key)
 
     def populate(keys, parent):
-        out = {}
+        out = []
         for key in keys:
             if parent is None:
                 _, _, selftime, cumtime, parent_times = stats.stats[key]
@@ -40,21 +40,29 @@ def read(prof_filename):
                 _, _, selftime, cumtime = parent_times[parent]
 
             # Convert the tuple key into a string
-            strkey = "{}::{}::{}".format(*key)
+            name = "{}::{}::{}".format(*key)
             if len(parent_times) <= 1:
                 # Handle children
                 # merge dictionaries
-                out[strkey] = populate(children[key], key)
-                out[strkey]["selftime"] = selftime
+                out.append({"name": name, "children": populate(children[key], key)})
+                out[-1]["children"].append({"name": name + "::self", "value": selftime})
             else:
-                out[strkey] = cumtime
+                out.append({"name": name, "value": cumtime})
         return out
 
     data = populate(root_nodes, None)
+    # TODO perhaps remove this?
+    data = {"name": "root", "children": data}
+
+    # import pprint
+    # pprint.pprint(data)
+    # exit(1)
 
     json_filename = tempfile.NamedTemporaryFile().name
+    print(json_filename)
     with open(json_filename, "w") as f:
         json.dump(data, f, indent=2)
+
     return json_filename
 
 
