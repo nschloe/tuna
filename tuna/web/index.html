@@ -14,14 +14,15 @@
 
     <!--script src="//d3js.org/d3.v3.min.js"></script-->
     <!--script src="js/d3.v3.min.js"></script-->
-    <script src="js/d3.v4.min.js"></script>
-    <!--script src="https://d3js.org/d3.v5.min.js"></script-->
+    <!--script src="js/d3.v5.min.js"></script-->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
 <script>
 
 var width = 960,
     height = 500;
 
-var color = d3.scaleOrdinal(d3.schemeCategory20c);
+// var color = d3.scaleOrdinal(d3.schemeCategory20c);
+var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 var partition = d3.partition()
    .size([width, height]);
@@ -30,17 +31,14 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-var rect = svg.selectAll("rect");
-
-d3.json("test2.json", function(error, data) {
-  if (error) throw error;
-
+d3.json("/test2.json").then(function(data) {
   root = d3.hierarchy(data);
   root.sum( function(d) { return d.value; });
   root.sort();
 
   partition(root);
 
+  var rect = svg.selectAll("rect");
   rect = rect
       .data(root.descendants())
       .enter().append("rect")
