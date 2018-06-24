@@ -13,6 +13,7 @@ class Icicle extends HTMLElement {
 
     const partition = d3.partition()
       .size([this.width, this.height]);
+    // .round(true);
 
     const svg = d3.select("body").append("svg")
       .attr("width", this.width)
@@ -25,15 +26,41 @@ class Icicle extends HTMLElement {
 
       partition(root);
 
-      const rect = svg.selectAll("rect")
-        .data(root.descendants())
-        .enter().append("rect")
+      // Put text and rectangle into a group; cf. <https://stackoverflow.com/a/6732550/353337>.
+      // const g = svg.append("g");
+
+      const g = svg.selectAll("g").data(root.descendants())
+        .enter().append("g");
+
+      const rect = g.append("rect")
         .attr("x", function(d) { return d.x0; })
         .attr("y", function(d) { return d.y0; })
         .attr("width", function(d) { return d.x1 - d.x0; })
         .attr("height", function(d) { return d.y1 - d.y0; })
         .attr("fill", function(d) { return color((d.children ? d : d.parent).key); });
       // .on("click", clicked);
+
+      // title, typically rendered as tooltip
+      rect.append("title")
+        .text(function(d) { return d.data.name + "\n" + d.value + " s"; });
+
+      // Now add the text. First, the clip path.
+      const clipPath = g.append("clipPath")
+        .attr("id", function(d) { return d.data.name.replace(/\W/g,'_'); });
+      clipPath.append("rect")
+        .attr("x", function(d) { return d.x0; })
+        .attr("y", function(d) { return d.y0; })
+        .attr("width", function(d) { return d.x1 - d.x0; })
+        .attr("height", function(d) { return d.y1 - d.y0; });
+      // Now the text.
+      g.append("text")
+        .text(function(d) { return d.data.name; })
+        .attr("x", function(d) { return (d.x0 + d.x1)/2; })
+        .attr("y", function(d) { return (d.y0 + d.y1)/2; })
+        .attr("alignment-baseline", "middle")
+        .attr("text-anchor", "middle")
+        .attr("fill", "white")
+        .attr("clip-path", function(d) { return "url(#" + d.data.name.replace(/\W/g,'_') + ")"; });
     });
 
     // function clicked(d) {
