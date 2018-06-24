@@ -40,47 +40,45 @@ class Icicle extends HTMLElement {
     // this.addSpans(div)
     // this.addStyle()
     //
-  // const color = d3.scaleOrdinal(d3.schemeCategory20c);
-  const color = d3.scaleOrdinal(d3.schemeCategory10);
+    // const color = d3.scaleOrdinal(d3.schemeCategory20c);
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-  const partition = d3.partition()
-     .size([this.width, this.height]);
+    const partition = d3.partition()
+      .size([this.width, this.height]);
 
-  const svg = d3.select("body").append("svg")
+    const svg = d3.select("body").append("svg")
       .attr("width", this.width)
       .attr("height", this.height);
 
-  d3.json(this.filename).then(function(data) {
-    const root = d3.hierarchy(data);
-    root.sum( function(d) { return d.value; });
-    root.sort();
+    d3.json(this.filename).then(function(data) {
+      const root = d3.hierarchy(data);
+      root.sum( function(d) { return d.value; });
+      root.sort();
 
-    partition(root);
+      partition(root);
 
-    const rect = svg.selectAll("rect");
-    rect = rect
+      const rect = svg.selectAll("rect")
         .data(root.descendants())
         .enter().append("rect")
-          .attr("x", function(d) { return d.x0; })
-          .attr("y", function(d) { return d.y0; })
-          .attr("width", function(d) { return d.x1 - d.x0; })
-          .attr("height", function(d) { return d.y1 - d.y0; })
-          .attr("fill", function(d) { return color((d.children ? d : d.parent).key); });
-          // .on("click", clicked);
-});
+        .attr("x", function(d) { return d.x0; })
+        .attr("y", function(d) { return d.y0; })
+        .attr("width", function(d) { return d.x1 - d.x0; })
+        .attr("height", function(d) { return d.y1 - d.y0; })
+        .attr("fill", function(d) { return color((d.children ? d : d.parent).key); });
+      // .on("click", clicked);
+    });
 
-// function clicked(d) {
-//   // x.domain([d.x0, d.x1]);
-//   // y.domain([d.y0, 1]).range([d.y0 ? 20 : 0, height]);
-//
-//   rect.transition()
-//       .duration(750)
-//       .attr("x", function(d) { return d.x0; })
-//       .attr("y", function(d) { return d.y0; })
-//       .attr("width", function(d) { return d.x1 - d.x0; })
-//       .attr("height", function(d) { return d.y1 - d.y0; });
-// }
-
+    // function clicked(d) {
+    //   // x.domain([d.x0, d.x1]);
+    //   // y.domain([d.y0, 1]).range([d.y0 ? 20 : 0, height]);
+    //
+    //   rect.transition()
+    //       .duration(750)
+    //       .attr("x", function(d) { return d.x0; })
+    //       .attr("y", function(d) { return d.y0; })
+    //       .attr("width", function(d) { return d.x1 - d.x0; })
+    //       .attr("height", function(d) { return d.y1 - d.y0; });
+    // }
   }
 }
 
