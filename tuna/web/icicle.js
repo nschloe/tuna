@@ -12,8 +12,8 @@ class Icicle extends HTMLElement {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     const partition = d3.partition()
-      .size([this.width, this.height]);
-    // .round(true);
+      .size([this.width, this.height])
+      .round(true);
 
     const svg = d3.select("body").append("svg")
       .attr("width", this.width)
@@ -26,9 +26,8 @@ class Icicle extends HTMLElement {
 
       partition(root);
 
-      // Put text and rectangle into a group; cf. <https://stackoverflow.com/a/6732550/353337>.
-      // const g = svg.append("g");
-
+      // Put text and rectangle into a group;
+      // cf. <https://stackoverflow.com/a/6732550/353337>.
       const g = svg.selectAll("g").data(root.descendants())
         .enter().append("g");
 
@@ -46,7 +45,7 @@ class Icicle extends HTMLElement {
 
       // Now add the text. First, the clip path.
       const clipPath = g.append("clipPath")
-        .attr("id", function(d) { return d.data.name.replace(/\W/g,'_'); });
+        .attr("id", function(d) { return "cp_" + d.x0 + "_" + d.x1 + "_" + d.y0 + "_" + d.y1; })
       clipPath.append("rect")
         .attr("x", function(d) { return d.x0; })
         .attr("y", function(d) { return d.y0; })
@@ -60,7 +59,7 @@ class Icicle extends HTMLElement {
         .attr("alignment-baseline", "middle")
         .attr("text-anchor", "middle")
         .attr("fill", "white")
-        .attr("clip-path", function(d) { return "url(#" + d.data.name.replace(/\W/g,'_') + ")"; });
+        .attr("clip-path", function(d) { return "url(#" + "cp_" + d.x0 + "_" + d.x1 + "_" + d.y0 + "_" + d.y1 + ")"; });
     });
 
     // function clicked(d) {
