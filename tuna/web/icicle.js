@@ -1,45 +1,13 @@
 class Icicle extends HTMLElement {
   connectedCallback () {
-    this.createShadowRoot()
+    // this.createShadowRoot()
     this.filename = this.getAttribute('filename')
     this.width = this.getAttribute('width')
     this.height = this.getAttribute('height')
     this.render()
   }
 
-  // addStyle () {
-  //   const styleTag = document.createElement('style')
-  //   styleTag.textContent = getStyle(this.size)
-  //   this.shadowRoot.appendChild(styleTag)
-  // }
-
-  // addSpanEventListeners (span) {
-  //   span.addEventListener('mouseover', () => { span.classList.add('hovered') })
-  //   span.addEventListener('animationend', () => { span.classList.remove('hovered') })
-  // }
-
-  // createSpan (letter) {
-  //   const span = document.createElement('span')
-  //   span.classList.add('letter')
-  //   span.innerHTML = letter
-  //   this.addSpanEventListeners(span)
-  //   return span
-  // }
-
-  // addSpans (div) {
-  //   Array.from(this.text).forEach(letter => {
-  //     let span = this.createSpan(letter)
-  //     div.appendChild(span)
-  //   })
-  // }
-
   render () {
-    // const div = document.createElement('div')
-    // div.classList.add('header')
-    // this.shadowRoot.appendChild(div)
-    // this.addSpans(div)
-    // this.addStyle()
-    //
     // const color = d3.scaleOrdinal(d3.schemeCategory20c);
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
