@@ -11,6 +11,11 @@ class Icicle extends HTMLElement {
     // const color = d3.scaleOrdinal(d3.schemeCategory20c);
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
+    // TODO filter width 0
+    // zoom
+    // unzoom
+    // some interesting test cases
+
     const partition = d3.partition()
       .size([this.width, this.height])
       .round(true);
@@ -20,9 +25,9 @@ class Icicle extends HTMLElement {
       .attr("height", this.height);
 
     d3.json(this.filename).then(function(data) {
-      const root = d3.hierarchy(data);
-      root.sum( function(d) { return d.value; });
-      root.sort( function(d) { return d.value; });
+      const root = d3.hierarchy(data)
+        .sum( function(d) { return d.value; })
+        .sort(function(a, b) { return b.value - a.value; });
 
       partition(root);
 
