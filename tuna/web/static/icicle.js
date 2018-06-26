@@ -13,8 +13,6 @@ class Icicle extends HTMLElement {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     // TODO filter width 0
-    // zoom
-    // unzoom
     // some interesting test cases
     // favicon
 
@@ -58,7 +56,7 @@ class Icicle extends HTMLElement {
     // Now add the text. First, the clip path.
     const clipPath = g.append("clipPath")
       .attr("id", function(d) { return "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)); })
-    clipPath.append("rect")
+    const clipRect = clipPath.append("rect")
       .attr("x", function(d) { return x(d.x0); })
       .attr("y", function(d) { return y(d.y0); })
       .attr("width", function(d) { return x(d.x1) - x(d.x0); })
@@ -70,11 +68,11 @@ class Icicle extends HTMLElement {
       .attr("text-anchor", "middle")
       .attr("fill", "white")
       .attr("clip-path", function(d) { return "url(#" + "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)) + ")"; });
-    text.append("tspan")
+    const tspan1 = text.append("tspan")
       .text(function(d) { return d.data.name })
       .attr("font-family", "sans-serif")
       .attr("x", function(d) { return x(d.x0 + d.x1)/2; });
-    text.append("tspan")
+    const tspan2 = text.append("tspan")
       .text(function(d) { return d3.format(".3e")(d.value) + " s" })
       .attr("font-family", "sans-serif")
       .attr("x", function(d) { return x(d.x0 + d.x1)/2; })
@@ -93,6 +91,25 @@ class Icicle extends HTMLElement {
         .attr("y", function(d) { return y(d.y0); })
         .attr("width", function(d) { return x(d.x1) - x(d.x0); })
         .attr("height", function(d) { return y(d.y1) - y(d.y0); });
+
+      clipRect.transition()
+        .duration(750)
+        .attr("x", function(d) { return x(d.x0); })
+        .attr("y", function(d) { return y(d.y0); })
+        .attr("width", function(d) { return x(d.x1) - x(d.x0); })
+        .attr("height", function(d) { return y(d.y1) - y(d.y0); });
+
+      text.transition()
+        .duration(750)
+        .attr("y", function(d) { return y((d.y0 + d.y1)/2); });
+
+      tspan1.transition()
+        .duration(750)
+        .attr("x", function(d) { return x((d.x0 + d.x1)/2); });
+
+      tspan2.transition()
+        .duration(750)
+        .attr("x", function(d) { return x((d.x0 + d.x1)/2); });
     }
   }
 }
