@@ -45,8 +45,8 @@ class Icicle extends HTMLElement {
       .attr("y", function(d) { return y(d.y0); })
       .attr("width", function(d) { return x(d.x1 - d.x0); })
       .attr("height", function(d) { return y(d.y1 - d.y0); })
-      .attr("fill", function(d) { return color((d.children ? d : d.parent).key); })
       .on("click", clicked);
+      // .attr("fill", function(d) { return color((d.children ? d : d.parent).key); })
 
     // title, typically rendered as tooltip
     rect.append("title")

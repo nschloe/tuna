@@ -1,3 +1,9 @@
 rect {
   stroke: #fff;
+  fill: #1f77b4;
+}
+
+
+rect:hover {
+  fill: #57a0e1;
 }
