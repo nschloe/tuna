@@ -14,7 +14,6 @@ class Icicle extends HTMLElement {
 
     // TODO filter width 0
     // some interesting test cases
-    // favicon
 
     var x = d3.scaleLinear()
       .range([0, this.width]);
