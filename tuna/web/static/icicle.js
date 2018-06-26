@@ -15,8 +15,6 @@ class Icicle extends HTMLElement {
     // zoom
     // unzoom
     // some interesting test cases
-    // remove root node
-    // use actual json
 
     const partition = d3.partition()
       .size([this.width, this.height])

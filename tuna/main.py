@@ -3,8 +3,8 @@
 import asyncio
 import os
 import pstats
+import re
 import threading
-import time
 import webbrowser
 
 import tornado.ioloop
@@ -45,17 +45,16 @@ def read(prof_filename):
         return out
 
     data = populate(root_nodes, None)
+
     # TODO perhaps remove this?
-    data = {"name": "root", "children": data}
-
-    # import pprint
-    # pprint.pprint(data)
-    # exit(1)
-
-    # json_filename = tempfile.NamedTemporaryFile().name
-    # print(json_filename)
-    # with open(json_filename, "w") as f:
-    #     json.dump(data, f, indent=2)
+    # watch <https://github.com/d3/d3-hierarchy/issues/119>
+    # For now, just assume that data only has two "roots", and one if from the profiler.
+    # Remove it.
+    assert len(data) == 2
+    m = [re.search("_lsprof.Profiler", data[k]["name"]) for k in [0, 1]]
+    assert (m[0] is None) != (m[1] is None)
+    idx = 0 if m[0] is None else 1
+    data = data[idx]
 
     return data
 
@@ -82,14 +81,13 @@ class ServerThread(threading.Thread):
         class IndexHandler(tornado.web.RequestHandler):
             def get(self):
                 self.render(
-                    os.path.join(this_dir, "web", 'index.html'),
-                    data=tornado.escape.json_encode(data)
+                    os.path.join(this_dir, "web", "index.html"),
+                    data=tornado.escape.json_encode(data),
                 )
                 return
 
         app = tornado.web.Application(
-            [(r"/", IndexHandler)],
-            static_path=os.path.join(this_dir, "web", "static"),
+            [(r"/", IndexHandler)], static_path=os.path.join(this_dir, "web", "static")
         )
         app.listen(self.port)
         tornado.ioloop.IOLoop.current().start()
