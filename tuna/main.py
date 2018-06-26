@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 #
-# import SimpleHTTPServer
-import http.server
-import json
+import asyncio
 import os
 import pstats
-import socketserver
-import tempfile
 import threading
 import time
 import webbrowser
@@ -17,11 +13,6 @@ import tornado.web
 
 def read(prof_filename):
     stats = pstats.Stats(prof_filename)
-
-    # Same as stats.stats.
-    # import marshal
-    # with open(filename, 'rb') as f:
-    #     stats = marshal.load(f)
 
     # Get a dictionary of direct descendants
     root_nodes = []
@@ -70,66 +61,43 @@ def read(prof_filename):
 
 
 class ServerThread(threading.Thread):
-    def __init__(self, web_dir):
+    def __init__(self, prof_filename):
         threading.Thread.__init__(self)
-        self.web_dir = web_dir
-        self.port = None
+        self.data = read(prof_filename)
+        self.port = 8000
         return
 
     def run(self):
-        os.chdir(self.web_dir)
-        Handler = http.server.SimpleHTTPRequestHandler
-        # Sometimes, port 8000 is occupied. Just keep trying then.
-        self.port = None
-        for port in [8000 + k for k in range(100)]:
-            try:
-                httpd = socketserver.TCPServer(("", port), Handler)
-            except OSError:
-                print("Port {} in use, trying another.".format(port))
-            else:
-                self.port = port
-                break
+        # Create event loop in this thread; cf.
+        # <https://github.com/tornadoweb/tornado/issues/2183#issuecomment-371001254>.
+        # If not used, one sees the error message
+        # ```
+        # RuntimeError: There is no current event loop in thread 'Thread-1'.
+        # ```
+        asyncio.set_event_loop(asyncio.new_event_loop())
 
-        assert self.port is not None, "Could not find open port."
+        this_dir = os.path.dirname(__file__)
+        data = self.data
 
-        print("serving at port {}".format(self.port))
-        httpd.serve_forever()
+        class IndexHandler(tornado.web.RequestHandler):
+            def get(self):
+                self.render(
+                    os.path.join(this_dir, "web", 'index.html'),
+                    data=tornado.escape.json_encode(data)
+                )
+                return
+
+        app = tornado.web.Application(
+            [(r"/", IndexHandler)],
+            static_path=os.path.join(this_dir, "web", "static"),
+        )
+        app.listen(self.port)
+        tornado.ioloop.IOLoop.current().start()
         return
 
 
-# def start_server():
-#     web_dir = os.path.join(os.path.dirname(__file__), "web")
-#     thread = ServerThread(web_dir)
-#     thread.start()
-#     while thread.port is None:
-#         time.sleep(0.1)
-#     webbrowser.open_new_tab("http://localhost:{}".format(thread.port))
-#     return
-
-
-# class MainHandler(tornado.web.RequestHandler):
-#     def get(self):
-#         self.write("Hello, world")
-
-
 def start_server(prof_filename):
-    data = read(prof_filename)
-
-    this_dir = os.path.dirname(__file__)
-
-    class IndexHandler(tornado.web.RequestHandler):
-        def get(self):
-            self.render(
-                os.path.join(this_dir, "web", 'index.html'),
-                data=tornado.escape.json_encode(data)
-            )
-            return
-
-    app = tornado.web.Application(
-        # [(r"/", tornado.web.StaticFileHandler, {"path": path})]
-        [(r"/", IndexHandler)],
-        static_path=os.path.join(this_dir, "web", "static"),
-    )
-    app.listen(8000)
-    tornado.ioloop.IOLoop.current().start()
+    thread = ServerThread(prof_filename)
+    thread.start()
+    webbrowser.open_new_tab("http://localhost:{}".format(thread.port))
     return
