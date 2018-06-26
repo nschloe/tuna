@@ -11,6 +11,9 @@ import threading
 import time
 import webbrowser
 
+import tornado.ioloop
+import tornado.web
+
 
 def read(prof_filename):
     stats = pstats.Stats(prof_filename)
@@ -58,12 +61,12 @@ def read(prof_filename):
     # pprint.pprint(data)
     # exit(1)
 
-    json_filename = tempfile.NamedTemporaryFile().name
-    print(json_filename)
-    with open(json_filename, "w") as f:
-        json.dump(data, f, indent=2)
+    # json_filename = tempfile.NamedTemporaryFile().name
+    # print(json_filename)
+    # with open(json_filename, "w") as f:
+    #     json.dump(data, f, indent=2)
 
-    return json_filename
+    return data
 
 
 class ServerThread(threading.Thread):
@@ -94,11 +97,39 @@ class ServerThread(threading.Thread):
         return
 
 
-def start_server():
-    web_dir = os.path.join(os.path.dirname(__file__), "web")
-    thread = ServerThread(web_dir)
-    thread.start()
-    while thread.port is None:
-        time.sleep(0.1)
-    webbrowser.open_new_tab("http://localhost:{}".format(thread.port))
+# def start_server():
+#     web_dir = os.path.join(os.path.dirname(__file__), "web")
+#     thread = ServerThread(web_dir)
+#     thread.start()
+#     while thread.port is None:
+#         time.sleep(0.1)
+#     webbrowser.open_new_tab("http://localhost:{}".format(thread.port))
+#     return
+
+
+# class MainHandler(tornado.web.RequestHandler):
+#     def get(self):
+#         self.write("Hello, world")
+
+
+def start_server(prof_filename):
+    data = read(prof_filename)
+
+    this_dir = os.path.dirname(__file__)
+
+    class IndexHandler(tornado.web.RequestHandler):
+        def get(self):
+            self.render(
+                os.path.join(this_dir, "web", 'index.html'),
+                data=tornado.escape.json_encode(data)
+            )
+            return
+
+    app = tornado.web.Application(
+        # [(r"/", tornado.web.StaticFileHandler, {"path": path})]
+        [(r"/", IndexHandler)],
+        static_path=os.path.join(this_dir, "web", "static"),
+    )
+    app.listen(8000)
+    tornado.ioloop.IOLoop.current().start()
     return

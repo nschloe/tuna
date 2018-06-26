@@ -10,8 +10,7 @@ def main(argv=None):
     parser = _get_parser()
     args = parser.parse_args(argv)
 
-    read(args.infile)
-    start_server()
+    start_server(args.infile)
     return
 
 
