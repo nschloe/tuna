@@ -23,4 +23,4 @@ jobs:
       - run: cd test/ && MPLBACKEND=Agg pytest --cov tuna
       # submit to codecov
       - run: apt-get install -y curl
-      - run: bash <(curl -s https://codecov.io/bash)
+      - run: bash <(curl -s https://codecov.io/bash) -R ~/work
