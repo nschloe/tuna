@@ -9,10 +9,11 @@ jobs:
       - run: apt-get update
       - run: apt-get install -y git python3-pip
       - run: pip3 install -U pytest pytest-cov black flake8
-      - run: npm install -g eslint
+      - run: npm install -g eslint htmlhint
       - checkout
       - run: pip3 install .
       # format and lint
       - run: LC_ALL=C.UTF-8 black --check setup.py tuna/ test/*.py
       - run: flake8 setup.py tuna/ test/*.py
       - run: eslint tuna/web/static/icicle.js
+      - run: htmlhint tuna/web/index.html

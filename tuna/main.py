@@ -80,7 +80,7 @@ class ServerThread(threading.Thread):
                 self.render(
                     os.path.join(this_dir, "web", "index.html"),
                     data=tornado.escape.json_encode(data),
-                    version=__version__
+                    version=__version__,
                 )
                 return
 
