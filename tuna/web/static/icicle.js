@@ -91,10 +91,12 @@ class Icicle extends HTMLElement {
       .attr("x", function(d) { return x(d.x0 + d.x1)/2; })
       .attr("dy", "1.5em");
 
-    // make height available in clicked()
+    // Make rowHeight available in clicked()
+    const rowHeight = this.rowHeight;
+
     function clicked(d) {
       x.domain([d.x0, d.x1]);
-      y.domain([d.y0, 1]).range([d.y0 ? 20 : 0, height]);
+      y.domain([d.y0, 1]).range([d.y0 ? 20 : 0, (d.height+1) * rowHeight]);
 
       rect.transition()
         .duration(750)
