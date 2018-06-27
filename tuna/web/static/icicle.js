@@ -3,7 +3,7 @@ class Icicle extends HTMLElement {
     // this.createShadowRoot()
     this.data = JSON.parse(this.getAttribute('data'));
     this.width = this.getAttribute('width');
-    this.height = this.getAttribute('height');
+    this.rowHeight = this.getAttribute('row-height');
     this.render();
   }
 
@@ -12,24 +12,27 @@ class Icicle extends HTMLElement {
 
     // TODO some interesting test cases
 
+    const root = d3.hierarchy(this.data)
+      .sum(function(d) { return d.value; })
+      .sort(function(a, b) { return b.value - a.value; });
+
+    const numLevels = root.height + 1;
+    const height = numLevels * this.rowHeight;
+
     var x = d3.scaleLinear()
       .range([0, this.width]);
 
     var y = d3.scaleLinear()
-      .range([0, this.height]);
+      .range([0, height]);
 
     const svg = d3.select("body").append("svg")
       .attr("width", this.width)
-      .attr("height", this.height);
-
-    const root = d3.hierarchy(this.data)
-      .sum( function(d) { return d.value; })
-      .sort(function(a, b) { return b.value - a.value; });
+      .attr("height", height);
 
     const totalRuntime = root.value;
 
     const partition = d3.partition();
-    // .size([this.width, this.height])
+    // .size([this.width, height])
     // .round(true);
     partition(root);
 
@@ -45,7 +48,7 @@ class Icicle extends HTMLElement {
       .attr("x", function(d) { return x(d.x0); })
       .attr("y", function(d) { return y(d.y0); })
       .attr("width", function(d) { return x(d.x1 - d.x0); })
-      .attr("height", function(d) { return y(d.y1 - d.y0); })
+      .attr("height", this.rowHeight)
       .on("click", clicked);
       // .attr("fill", function(d) { return color((d.children ? d : d.parent).key); })
 
@@ -62,7 +65,7 @@ class Icicle extends HTMLElement {
       .attr("x", function(d) { return x(d.x0); })
       .attr("y", function(d) { return y(d.y0); })
       .attr("width", function(d) { return x(d.x1) - x(d.x0); })
-      .attr("height", function(d) { return y(d.y1) - y(d.y0); });
+      .attr("height", this.rowHeight);
     // Now the text. Multiline text is realized with <tspan> in SVG.
     const text = g.append("text")
       .attr("y", function(d) { return y(d.y0 + d.y1)/2; })
@@ -81,8 +84,6 @@ class Icicle extends HTMLElement {
       .attr("dy", "1.5em");
 
     // make height available in clicked()
-    const height = this.height;
-
     function clicked(d) {
       x.domain([d.x0, d.x1]);
       y.domain([d.y0, 1]).range([d.y0 ? 20 : 0, height]);
@@ -91,15 +92,13 @@ class Icicle extends HTMLElement {
         .duration(750)
         .attr("x", function(d) { return x(d.x0); })
         .attr("y", function(d) { return y(d.y0); })
-        .attr("width", function(d) { return x(d.x1) - x(d.x0); })
-        .attr("height", function(d) { return y(d.y1) - y(d.y0); });
+        .attr("width", function(d) { return x(d.x1) - x(d.x0); });
 
       clipRect.transition()
         .duration(750)
         .attr("x", function(d) { return x(d.x0); })
         .attr("y", function(d) { return y(d.y0); })
-        .attr("width", function(d) { return x(d.x1) - x(d.x0); })
-        .attr("height", function(d) { return y(d.y1) - y(d.y0); });
+        .attr("width", function(d) { return x(d.x1) - x(d.x0); });
 
       text.transition()
         .duration(750)
