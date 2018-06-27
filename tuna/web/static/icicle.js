@@ -20,8 +20,9 @@ class Icicle extends HTMLElement {
       .sum(function(d) { return d.value; })
       .sort(function(a, b) { return b.value - a.value; });
 
+    const strokeWidth = 1;
     const numLevels = root.height + 1;
-    const height = numLevels * this.rowHeight;
+    const height = numLevels * this.rowHeight + numLevels * strokeWidth;
 
     var x = d3.scaleLinear()
       .range([0, this.width]);
@@ -95,8 +96,11 @@ class Icicle extends HTMLElement {
     const rowHeight = this.rowHeight;
 
     function clicked(d) {
+      const offset = d.y0 ? 20 : 0;
+      const height = root.height - d.depth;
+      const newHeight = (height+1) * rowHeight + (height+1) * strokeWidth;
       x.domain([d.x0, d.x1]);
-      y.domain([d.y0, 1]).range([d.y0 ? 20 : 0, (d.height+1) * rowHeight]);
+      y.domain([d.y0, 1]).range([offset, newHeight + offset]);
 
       rect.transition()
         .duration(750)
