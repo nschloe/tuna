@@ -2,9 +2,8 @@ import time
 
 
 def prime(n):
-    # compute the n-th prime number, takes longer for larger n
     time.sleep(n)
-    return 2
+    return 0
 
 
 def a(k=1):
