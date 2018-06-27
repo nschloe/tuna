@@ -3,7 +3,6 @@
 import asyncio
 import os
 import pstats
-import re
 import threading
 import webbrowser
 
@@ -14,47 +13,42 @@ import tornado.web
 def read(prof_filename):
     stats = pstats.Stats(prof_filename)
 
-    # Get a dictionary of direct descendants
-    root_nodes = []
+    # One way of picking finding out the root notes would be to loop over
+    # stats.stats.items() and check which doesn't have parents. This, however, doesn't
+    # work if there are loops in the graph, occurring, for example, when exec() is
+    # called somewhere in the program. For this reason, simple hardcode the root node.
+    # This disregards the _lsprof.Profiler, but the runtime of this is typically so
+    # small that it's okay to skip it.
+    root = ('~', 0, '<built-in method builtins.exec>')
+
+    # Collect children
     children = {key: [] for key in stats.stats.keys()}
     for key, value in stats.stats.items():
         _, _, _, _, parents = value
         for parent in parents:
             children[parent].append(key)
-        if not parents:
-            root_nodes.append(key)
 
-    def populate(keys, parent):
-        out = []
-        for key in keys:
-            if parent is None:
-                _, _, selftime, cumtime, parent_times = stats.stats[key]
-            else:
-                _, _, _, _, parent_times = stats.stats[key]
-                _, _, selftime, cumtime = parent_times[parent]
+    def populate(key, parent):
+        if parent is None:
+            _, _, selftime, cumtime, parent_times = stats.stats[key]
+            parent_times = []
+        else:
+            _, _, _, _, parent_times = stats.stats[key]
+            _, _, selftime, cumtime = parent_times[parent]
 
-            # Convert the tuple key into a string
-            name = "{}::{}::{}".format(*key)
-            if len(parent_times) <= 1:
-                # Handle children
-                # merge dictionaries
-                out.append({"name": name, "children": populate(children[key], key)})
-                out[-1]["children"].append({"name": name + "::self", "value": selftime})
-            else:
-                out.append({"name": name, "value": cumtime})
+        # Convert the tuple key into a string
+        name = "{}::{}::{}".format(*key)
+        if len(parent_times) <= 1:
+            # Handle children
+            # merge dictionaries
+            c = [populate(child, key) for child in children[key]]
+            c.append({"name": name + "::self", "value": selftime})
+            out = {"name": name, "children": c}
+        else:
+            out = {"name": name, "value": cumtime}
         return out
 
-    data = populate(root_nodes, None)
-
-    # TODO perhaps remove this?
-    # watch <https://github.com/d3/d3-hierarchy/issues/119>
-    # For now, just assume that data only has two "roots", and one if from the profiler.
-    # Remove it.
-    assert len(data) == 2
-    m = [re.search("_lsprof.Profiler", data[k]["name"]) for k in [0, 1]]
-    assert (m[0] is None) != (m[1] is None)
-    idx = 0 if m[0] is None else 1
-    data = data[idx]
+    data = populate(root, None)
 
     return data
 

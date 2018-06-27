@@ -3,7 +3,7 @@
 import argparse
 
 from .__about__ import __version__
-from .main import read, start_server
+from .main import start_server
 
 
 def main(argv=None):
