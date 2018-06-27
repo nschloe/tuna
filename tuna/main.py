@@ -5,6 +5,7 @@ import os
 import pstats
 import time
 import threading
+import webbrowser
 
 import tornado.ioloop
 import tornado.web
@@ -98,16 +99,47 @@ class ServerThread(threading.Thread):
                 break
         assert self.port is not None, "Could not find open port."
 
-        tornado.ioloop.IOLoop.current().start()
         return
 
 
-def start_server(prof_filename):
-    thread = ServerThread(prof_filename)
-    thread.start()
-    while thread.port is None:
-        time.sleep(0.01)
+def start_server(prof_filename, start_browser):
+    data = read(prof_filename)
+    this_dir = os.path.dirname(__file__)
+    data = data
 
-    address = "http://localhost:{}".format(thread.port)
+    class IndexHandler(tornado.web.RequestHandler):
+        def get(self):
+            self.render(
+                os.path.join(this_dir, "web", "index.html"),
+                data=tornado.escape.json_encode(data),
+                version=__version__,
+            )
+            return
+
+    app = tornado.web.Application(
+        [(r"/", IndexHandler)], static_path=os.path.join(this_dir, "web", "static")
+    )
+
+    port = None
+    for prt in range(8000, 8100):
+        try:
+            app.listen(prt)
+        except OSError:
+            pass
+        else:
+            port = prt
+            break
+    assert port is not None, "Could not find open port."
+
+    address = "http://localhost:{}".format(port)
     print("Started tuna server at {}".format(address))
-    return address
+
+    if start_browser:
+        threading.Thread(target=lambda: webbrowser.open_new_tab(address)).start()
+
+    try:
+        tornado.ioloop.IOLoop.instance().start()
+    except KeyboardInterrupt:
+        tornado.ioloop.IOLoop.instance().stop()
+        print('\nBye!')
+    return
