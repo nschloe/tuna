@@ -40,4 +40,5 @@ setup(
         "Topic :: Software Development :: User Interfaces",
     ],
     entry_points={"console_scripts": ["tuna = tuna.cli:main"]},
+    package_data={"": ["*.html", "*.js", "*.css", "tuna/web/static/favicon256.png"]},
 )
