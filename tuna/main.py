@@ -56,52 +56,6 @@ def read(prof_filename):
     return data
 
 
-class ServerThread(threading.Thread):
-    def __init__(self, prof_filename):
-        threading.Thread.__init__(self)
-        self.data = read(prof_filename)
-        self.port = None
-        return
-
-    def run(self):
-        # Create event loop in this thread; cf.
-        # <https://github.com/tornadoweb/tornado/issues/2183#issuecomment-371001254>.
-        # If not used, one sees the error message
-        # ```
-        # RuntimeError: There is no current event loop in thread 'Thread-1'.
-        # ```
-        asyncio.set_event_loop(asyncio.new_event_loop())
-
-        this_dir = os.path.dirname(__file__)
-        data = self.data
-
-        class IndexHandler(tornado.web.RequestHandler):
-            def get(self):
-                self.render(
-                    os.path.join(this_dir, "web", "index.html"),
-                    data=tornado.escape.json_encode(data),
-                    version=__version__,
-                )
-                return
-
-        app = tornado.web.Application(
-            [(r"/", IndexHandler)], static_path=os.path.join(this_dir, "web", "static")
-        )
-
-        self.port = None
-        for port in range(8000, 8100):
-            try:
-                app.listen(port)
-            except OSError:
-                pass
-            else:
-                self.port = port
-                break
-        assert self.port is not None, "Could not find open port."
-
-        return
-
-
 def start_server(prof_filename, start_browser):
     data = read(prof_filename)
     this_dir = os.path.dirname(__file__)
