@@ -51,7 +51,9 @@ class Icicle extends HTMLElement {
 
     // title, typically rendered as tooltip
     rect.append("title")
-      .text(function(d) { return d.data.name + "\n" + d.value + " s"; });
+      .text(function(d) {
+        return d.data.name + "\n" + d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)"
+      });
 
     // Now add the text. First, the clip path.
     const clipPath = g.append("clipPath")
