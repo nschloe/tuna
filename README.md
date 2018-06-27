@@ -24,7 +24,7 @@ Right, and that's because the whole timed call tree _cannot_ be retrieved from p
 data. Python developers made the decision to only store _parent data_ in profiles
 because it can be computed with little overhead.
 To illustrate, consider the following program.
-```
+```python
 import time
 
 
