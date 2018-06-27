@@ -60,12 +60,12 @@ class Icicle extends HTMLElement {
     // title, typically rendered as tooltip
     rect.append("title")
       .text(function(d) {
-        return d.data.name + "\n" + d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)"
+        return d.data.name + "\n" + d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)";
       });
 
     // Now add the text. First, the clip path.
     const clipPath = g.append("clipPath")
-      .attr("id", function(d) { return "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)); })
+      .attr("id", function(d) { return "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)); });
     const clipRect = clipPath.append("rect")
       .attr("x", function(d) { return x(d.x0); })
       .attr("y", function(d) { return y(d.y0); })
@@ -87,7 +87,7 @@ class Icicle extends HTMLElement {
       .attr("font-family", "sans-serif")
       .attr("x", function(d) { return x(d.x0 + d.x1)/2; });
     const tspan2 = text.append("tspan")
-      .text(function(d) { return d3.format(".3f")(d.value) + " s  (" + d3.format(".1f")(d.value / totalRuntime * 100) + "%)" })
+      .text(function(d) { return d3.format(".3f")(d.value) + " s  (" + d3.format(".1f")(d.value / totalRuntime * 100) + "%)"; })
       .attr("font-family", "sans-serif")
       .attr("x", function(d) { return x(d.x0 + d.x1)/2; })
       .attr("dy", "1.5em");
@@ -130,10 +130,10 @@ class Icicle extends HTMLElement {
 }
 
 try {
-  customElements.define('x-icicle', Icicle)
+  customElements.define('x-icicle', Icicle);
 } catch (err) {
   console.log(err);
-  const h3 = document.createElement('h3')
-  h3.innerHTML = "This site uses webcomponents which don't work in all browsers. Try this site in a browser that supports them."
-  document.body.appendChild(h3)
+  const h3 = document.createElement('h3');
+  h3.innerHTML = "This site uses webcomponents which don't work in all browsers. Try this site in a browser that supports them.";
+  document.body.appendChild(h3);
 }
