@@ -26,6 +26,8 @@ class Icicle extends HTMLElement {
       .sum( function(d) { return d.value; })
       .sort(function(a, b) { return b.value - a.value; });
 
+    const totalRuntime = root.value;
+
     const partition = d3.partition();
     // .size([this.width, this.height])
     // .round(true);
@@ -71,7 +73,7 @@ class Icicle extends HTMLElement {
       .attr("font-family", "sans-serif")
       .attr("x", function(d) { return x(d.x0 + d.x1)/2; });
     const tspan2 = text.append("tspan")
-      .text(function(d) { return d3.format(".3f")(d.value) + " s" })
+      .text(function(d) { return d3.format(".3f")(d.value) + " s  (" + d3.format(".1f")(d.value / totalRuntime * 100) + "%)" })
       .attr("font-family", "sans-serif")
       .attr("x", function(d) { return x(d.x0 + d.x1)/2; })
       .attr("dy", "1.5em");
