@@ -3,6 +3,7 @@
 import asyncio
 import os
 import pstats
+import time
 import threading
 import webbrowser
 
@@ -57,7 +58,7 @@ class ServerThread(threading.Thread):
     def __init__(self, prof_filename):
         threading.Thread.__init__(self)
         self.data = read(prof_filename)
-        self.port = 8000
+        self.port = None
         return
 
     def run(self):
@@ -83,7 +84,18 @@ class ServerThread(threading.Thread):
         app = tornado.web.Application(
             [(r"/", IndexHandler)], static_path=os.path.join(this_dir, "web", "static")
         )
-        app.listen(self.port)
+
+        self.port = None
+        for port in range(8000, 8100):
+            try:
+                app.listen(port)
+            except OSError:
+                pass
+            else:
+                self.port = port
+                break
+        assert self.port is not None, "Could not find open port."
+
         tornado.ioloop.IOLoop.current().start()
         return
 
@@ -91,5 +103,7 @@ class ServerThread(threading.Thread):
 def start_server(prof_filename):
     thread = ServerThread(prof_filename)
     thread.start()
+    while thread.port is None:
+        time.sleep(0.01)
     webbrowser.open_new_tab("http://localhost:{}".format(thread.port))
     return
