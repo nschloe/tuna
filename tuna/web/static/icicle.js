@@ -4,7 +4,6 @@ class Icicle extends HTMLElement {
     this.data = JSON.parse(this.getAttribute('data'));
     this.width = this.getAttribute('width');
     this.height = this.getAttribute('height');
-    this.myheight = this.getAttribute('height');
     this.render();
   }
 
@@ -19,10 +18,6 @@ class Icicle extends HTMLElement {
     var y = d3.scaleLinear()
       .range([0, this.height]);
 
-    const partition = d3.partition();
-    // .size([this.width, this.height])
-    // .round(true);
-
     const svg = d3.select("body").append("svg")
       .attr("width", this.width)
       .attr("height", this.height);
@@ -31,6 +26,9 @@ class Icicle extends HTMLElement {
       .sum( function(d) { return d.value; })
       .sort(function(a, b) { return b.value - a.value; });
 
+    const partition = d3.partition();
+    // .size([this.width, this.height])
+    // .round(true);
     partition(root);
 
     // Put text and rectangle into a group;
@@ -73,7 +71,7 @@ class Icicle extends HTMLElement {
       .attr("font-family", "sans-serif")
       .attr("x", function(d) { return x(d.x0 + d.x1)/2; });
     const tspan2 = text.append("tspan")
-      .text(function(d) { return d3.format(".3e")(d.value) + " s" })
+      .text(function(d) { return d3.format(".3f")(d.value) + " s" })
       .attr("font-family", "sans-serif")
       .attr("x", function(d) { return x(d.x0 + d.x1)/2; })
       .attr("dy", "1.5em");
