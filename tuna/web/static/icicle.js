@@ -9,11 +9,9 @@ class Icicle extends HTMLElement {
   }
 
   render () {
-    // const color = d3.scaleOrdinal(d3.schemeCategory20c);
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    // TODO filter width 0
-    // some interesting test cases
+    // TODO some interesting test cases
 
     var x = d3.scaleLinear()
       .range([0, this.width]);
@@ -37,8 +35,11 @@ class Icicle extends HTMLElement {
 
     // Put text and rectangle into a group;
     // cf. <https://stackoverflow.com/a/6732550/353337>.
-    const g = svg.selectAll("g").data(root.descendants())
-      .enter().append("g");
+    const g = svg.selectAll("g").data(
+      // Only get the blocks above a certain threshold width
+      root.descendants().filter(d => x(d.x1 - d.x0) > 1.0)
+    )
+    .enter().append("g");
 
     const rect = g.append("rect")
       .attr("x", function(d) { return x(d.x0); })
