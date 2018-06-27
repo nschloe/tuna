@@ -4,7 +4,7 @@ import tuna
 
 
 def test_tuna():
-    tuna.cli.main(["test/optimesh.prof"])
+    tuna.cli.main(["test/optimesh.prof", "--no-browser"])
     # tuna.cli.main(["test/foo.prof"])
     return
 

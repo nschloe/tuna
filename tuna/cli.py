@@ -12,7 +12,8 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     address = start_server(args.infile)
-    webbrowser.open_new_tab(address)
+    if args.browser:
+        webbrowser.open_new_tab(address)
     return
 
 
@@ -21,6 +22,10 @@ def _get_parser():
     parser = argparse.ArgumentParser(description=("Visualize Python profile."))
 
     parser.add_argument("infile", type=str, help="input profile file")
+
+    parser.add_argument('--browser', dest='browser', action='store_true')
+    parser.add_argument('--no-browser', dest='browser', action='store_false')
+    parser.set_defaults(browser=True)
 
     parser.add_argument(
         "--version",

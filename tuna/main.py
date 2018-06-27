@@ -107,4 +107,7 @@ def start_server(prof_filename):
     thread.start()
     while thread.port is None:
         time.sleep(0.01)
-    return "http://localhost:{}".format(thread.port)
+
+    address = "http://localhost:{}".format(thread.port)
+    print("Started tuna server at {}".format(address))
+    return address
