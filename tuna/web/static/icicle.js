@@ -1,6 +1,6 @@
 class Icicle extends HTMLElement {
   connectedCallback () {
-    // this.createShadowRoot()
+    // this.shadow = this.createShadowRoot();
     this.data = JSON.parse(this.getAttribute('data'));
     this.width = this.getAttribute('width');
     this.rowHeight = this.getAttribute('row-height');
@@ -25,7 +25,7 @@ class Icicle extends HTMLElement {
     var y = d3.scaleLinear()
       .range([0, height]);
 
-    const svg = d3.select("body").append("svg")
+    const svg = d3.select(this).append("svg")
       .attr("width", this.width)
       .attr("height", height);
 
@@ -76,7 +76,6 @@ class Icicle extends HTMLElement {
     const tspan1 = text.append("tspan")
       .text(function(d) {
         let arr = d.data.name.split("::");
-        console.log(arr[0].split("/")[-1]);
         arr[0] = arr[0].split("/").pop();
         return arr.join("::");
       })

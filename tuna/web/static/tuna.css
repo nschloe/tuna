@@ -12,8 +12,6 @@ rect:hover {
 #wrapper {
   text-align: center;
 }
-
 #yourdiv {
-  background-color: red; /* for visualization purposes */
   display: inline-block;
 }
