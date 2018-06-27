@@ -2,7 +2,11 @@ class Icicle extends HTMLElement {
   connectedCallback () {
     // this.shadow = this.createShadowRoot();
     this.data = JSON.parse(this.getAttribute('data'));
-    this.width = this.getAttribute('width');
+
+    const paddingLeft = parseFloat(getComputedStyle(this.parentElement).paddingLeft);
+    const paddingRight = parseFloat(getComputedStyle(this.parentElement).paddingRight);
+    this.width = this.parentElement.offsetWidth - paddingLeft - paddingRight;
+
     this.rowHeight = this.getAttribute('row-height');
     this.render();
   }

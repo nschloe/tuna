@@ -3,15 +3,6 @@ rect {
   fill: #01579B;
 }
 
-
 rect:hover {
   fill: #0277BD;
-}
-
-
-#wrapper {
-  text-align: center;
-}
-#yourdiv {
-  display: inline-block;
 }

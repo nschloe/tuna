@@ -4,24 +4,28 @@
     <meta charset="utf-8">
     <title>tuna</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/tuna.css" rel="stylesheet">
+
     <link rel="shortcut icon" type="image/png" href="static/favicon256.png"/>
+
+    <link href="static/tuna.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
   </head>
 
   <body>
 
-    <a href="https://github.com/nschloe/tuna">
-      <img style="position: absolute; top: 0; right: 0; border: 0;"
-           src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub">
-    </a>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="https://github.com/nschloe/tuna">
+        <img src="/static/favicon256.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        tuna
+      </a>
+    </nav>
 
-    <h1 id="tuna-text">
-      <a href="https://github.com/nschloe/tuna/">tuna</a>
-    </h1>
-
-    <div id="wrapper">
-      <div id="yourdiv">
-        <x-icicle data="{{data}}" width="960" row-height="100"></x-icicle>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <x-icicle data="{{data}}" row-height="100"></x-icicle>
+        </div>
       </div>
     </div>
 
