@@ -20,7 +20,7 @@ def read(prof_filename):
     # called somewhere in the program. For this reason, simple hardcode the root node.
     # This disregards the _lsprof.Profiler, but the runtime of this is typically so
     # small that it's okay to skip it.
-    root = ('~', 0, '<built-in method builtins.exec>')
+    root = ("~", 0, "<built-in method builtins.exec>")
 
     # Collect children
     children = {key: [] for key in stats.stats.keys()}
