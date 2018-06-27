@@ -1,27 +1,26 @@
 import time
 
 
-def prime(n):
-    time.sleep(n)
-    return 0
+def a(t0, t1):
+    c(t0)
+    d(t1)
+    return
 
 
-def a(k=1):
-    return prime(k)
+def b():
+    return a(1, 4)
 
 
-def b(k=3):
-    return prime(k)
+def c(t):
+    time.sleep(t)
+    return
 
 
-def c():
-    a(0.1)
-    b(0.1)
-    time.sleep(1)
+def d(t):
+    time.sleep(t)
     return
 
 
 if __name__ == "__main__":
-    a()
+    a(4, 1)
     b()
-    c()

@@ -18,6 +18,50 @@ tuna program.prof
 ![](https://nschloe.github.io/tuna/screencast.gif)
 
 
+### But tuna doesn't show the whole call tree!
+
+Right, and that's because the whole timed call tree _cannot_ be retrieved from profile
+data. Python developers made the decision to only store _parent data_ in profiles
+because it can be computed with little overhead.
+To illustrate, consider the following program.
+```
+import time
+
+
+def a(t0, t1):
+    c(t0)
+    d(t1)
+    return
+
+
+def b():
+    return a(1, 4)
+
+
+def c(t):
+    time.sleep(t)
+    return
+
+
+def d(t):
+    time.sleep(t)
+    return
+
+
+if __name__ == "__main__":
+    a(4, 1)
+    b()
+```
+The root process (`__main__`) calls `a()` which spends 4 seconds in `c()` and 1 second
+in `d()`. `__main__` also calls `b()` which calls `a()`, this time spending 1 second in
+`c()` and 4 seconds in `d()`. The profile, however, will only store that `c()` spent a
+total of 5 seconds when called from `a()`, and likewise `d()`. The information that the
+program spent more time in `c()` when called in `root -> a() -> c()` than when called in
+`root -> b() -> a() -> c()` is no present in the profile.
+
+tuna only displays the part of the timed call tree that can be deduced from the profile:
+![](https://nschloe.github.io/tuna/foo.png)
+
 ### Installation
 
 tuna is [available from the Python Package
