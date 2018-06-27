@@ -1,9 +1,19 @@
 rect {
   stroke: #fff;
-  fill: #1f77b4;
+  fill: #01579B;
 }
 
 
 rect:hover {
-  fill: #57a0e1;
+  fill: #0277BD;
+}
+
+
+#wrapper {
+  text-align: center;
+}
+
+#yourdiv {
+  background-color: red; /* for visualization purposes */
+  display: inline-block;
 }

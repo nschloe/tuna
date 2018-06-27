@@ -74,7 +74,12 @@ class Icicle extends HTMLElement {
       .attr("fill", "white")
       .attr("clip-path", function(d) { return "url(#" + "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)) + ")"; });
     const tspan1 = text.append("tspan")
-      .text(function(d) { return d.data.name })
+      .text(function(d) {
+        let arr = d.data.name.split("::");
+        console.log(arr[0].split("/")[-1]);
+        arr[0] = arr[0].split("/").pop();
+        return arr.join("::");
+      })
       .attr("font-family", "sans-serif")
       .attr("x", function(d) { return x(d.x0 + d.x1)/2; });
     const tspan2 = text.append("tspan")
