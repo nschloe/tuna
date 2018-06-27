@@ -7,7 +7,7 @@ import time
 
 def test_tuna():
     this_dir = os.path.dirname(__file__)
-    filename = os.path.join(this_dir, "test/optimesh.prof")
+    filename = os.path.join(this_dir, "foo.prof")
     cmd = ["tuna", filename, "--no-browser"]
 
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)

@@ -1,7 +1,6 @@
 # tuna
 
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/tuna/master.svg)](https://circleci.com/gh/nschloe/tuna)
-[![codecov](https://img.shields.io/codecov/c/github/nschloe/tuna.svg)](https://codecov.io/gh/nschloe/tuna)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 [![PyPi Version](https://img.shields.io/pypi/v/tuna.svg)](https://pypi.org/project/tuna)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?logo=github&label=Stars)](https://github.com/nschloe/tuna)

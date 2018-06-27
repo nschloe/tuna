@@ -20,7 +20,7 @@ jobs:
       # Create a profile file
       - run: python3 -mcProfile -o test/foo.prof test/foo.py
       # The tests
-      - run: cd test/ && MPLBACKEND=Agg pytest --cov tuna
+      - run: cd test/ && pytest --cov tuna
       # submit to codecov
       - run: apt-get install -y curl
       - run: bash <(curl -s https://codecov.io/bash) -R ~/work
