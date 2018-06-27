@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 import argparse
+import webbrowser
 
 from .__about__ import __version__
 from .main import start_server
@@ -10,7 +11,8 @@ def main(argv=None):
     parser = _get_parser()
     args = parser.parse_args(argv)
 
-    start_server(args.infile)
+    address = start_server(args.infile)
+    webbrowser.open_new_tab(address)
     return
 
 

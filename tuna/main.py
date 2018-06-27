@@ -5,7 +5,6 @@ import os
 import pstats
 import time
 import threading
-import webbrowser
 
 import tornado.ioloop
 import tornado.web
@@ -108,5 +107,4 @@ def start_server(prof_filename):
     thread.start()
     while thread.port is None:
         time.sleep(0.01)
-    webbrowser.open_new_tab("http://localhost:{}".format(thread.port))
-    return
+    return "http://localhost:{}".format(thread.port)
