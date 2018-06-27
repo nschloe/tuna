@@ -10,6 +10,8 @@ import webbrowser
 import tornado.ioloop
 import tornado.web
 
+from .__about__ import __version__
+
 
 def read(prof_filename):
     stats = pstats.Stats(prof_filename)
@@ -78,6 +80,7 @@ class ServerThread(threading.Thread):
                 self.render(
                     os.path.join(this_dir, "web", "index.html"),
                     data=tornado.escape.json_encode(data),
+                    version=__version__
                 )
                 return
 
