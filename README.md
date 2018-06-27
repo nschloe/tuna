@@ -5,6 +5,19 @@
 [![PyPi Version](https://img.shields.io/pypi/v/tuna.svg)](https://pypi.org/project/tuna)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?logo=github&label=Stars)](https://github.com/nschloe/tuna)
 
+tuna is a Python profile viewer inspired by [SnakeViz](https://github.com/jiffyclub/snakeviz).
+Create a runtime profile with
+```
+python -mcProfile -o program.prof yourfile.py
+```
+and show it with
+```
+tuna program.prof
+```
+
+![](https://nschloe.github.io/tuna/screencast.gif)
+
+
 ### Installation
 
 tuna is [available from the Python Package
