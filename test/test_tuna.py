@@ -4,6 +4,8 @@ import os
 import subprocess
 import time
 
+import tuna  # noqa
+
 
 def test_tuna():
     this_dir = os.path.dirname(__file__)

@@ -14,8 +14,6 @@ class Icicle extends HTMLElement {
   render () {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    // TODO some interesting test cases
-
     const root = d3.hierarchy(this.data)
       .sum(function(d) { return d.value; })
       .sort(function(a, b) { return b.value - a.value; });
