@@ -17,3 +17,10 @@ jobs:
       - run: flake8 setup.py tuna/ test/*.py
       - run: eslint tuna/web/static/icicle.js
       - run: htmlhint tuna/web/index.html
+      # Create a profile file
+      - run: python3 -mcProfile -o test/foo.prof test/foo.py
+      # The tests
+      - run: cd test/ && MPLBACKEND=Agg pytest --cov tuna
+      # submit to codecov
+      - run: apt-get install -y curl
+      - run: bash <(curl -s https://codecov.io/bash)

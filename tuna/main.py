@@ -93,5 +93,5 @@ def start_server(prof_filename, start_browser):
         tornado.ioloop.IOLoop.instance().start()
     except KeyboardInterrupt:
         tornado.ioloop.IOLoop.instance().stop()
-        print('\nBye!')
+        print("\nBye!")
     return

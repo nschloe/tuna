@@ -20,9 +20,13 @@ def _get_parser():
 
     parser.add_argument("infile", type=str, help="input profile file")
 
-    parser.add_argument('--browser', dest='browser', action='store_true')
-    parser.add_argument('--no-browser', dest='browser', action='store_false')
-    parser.set_defaults(browser=True)
+    parser.add_argument(
+        "--no-browser",
+        default=True,
+        dest="browser",
+        action="store_false",
+        help="Don't start a web browser (default: do start)",
+    )
 
     parser.add_argument(
         "--version",

@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 #
-import tuna
+import os
+import subprocess
+import time
 
 
 def test_tuna():
-    tuna.cli.main(["test/optimesh.prof", "--no-browser"])
-    # tuna.cli.main(["test/foo.prof"])
+    this_dir = os.path.dirname(__file__)
+    filename = os.path.join(this_dir, "test/optimesh.prof")
+    cmd = ["tuna", filename, "--no-browser"]
+
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    # give server time to start up
+    time.sleep(3)
+    p.terminate()
     return
 
 
