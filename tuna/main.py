@@ -106,7 +106,7 @@ def read_import_profile(filename):
         while k < len(lst):
             name, level, self_time = lst[k]
             if level == reference_level:
-                out.append({"name": name, "value": self_time})
+                out.append({"name": name, "value": self_time * 1.0e-6})
                 k += 1
             elif level < reference_level:
                 return out, k
