@@ -11,7 +11,16 @@ import tornado.web
 from .__about__ import __version__
 
 
-def read(prof_filename):
+def read(filename):
+    _, ext = os.path.splitext(filename)
+    if ext == ".prof":
+        # runtime profile
+        return read_runtime_profile(filename)
+
+    return read_import_profile(filename)
+
+
+def read_runtime_profile(prof_filename):
     stats = pstats.Stats(prof_filename)
 
     # One way of picking finding out the root notes would be to loop over
@@ -52,6 +61,64 @@ def read(prof_filename):
     data = populate(root, None)
 
     return data
+
+
+def read_import_profile(filename):
+    # The import profile is of the form
+    # ```
+    # import time: self [us] | cumulative | imported package
+    # import time:       378 |        378 | zipimport
+    # import time:      1807 |       1807 | _frozen_importlib_external
+    # import time:       241 |        241 |     _codecs
+    # import time:      6743 |       6984 |   codecs
+    # import time:      1601 |       1601 |   encodings.aliases
+    # import time:     11988 |      20571 | encodings
+    # import time:       700 |        700 | encodings.utf_8
+    # import time:       535 |        535 | _signal
+    # import time:      1159 |       1159 | encodings.latin_1
+    # [...]
+    # ```
+    # The indentation in the last column signals parent-child relationships. In the
+    # above example, `encodings` is parent to `encodings.aliases` and `codecs` which in
+    # turn is parent to `_codecs`.
+    entries = []
+    with open(filename, "r") as f:
+        line = f.readline()
+        assert line == "import time: self [us] | cumulative | imported package\n"
+        while True:
+            line = f.readline()
+            if not line:
+                break  # EOF
+            # remove `import time:`
+            items = line[12:].strip().split("|")
+            assert len(items) == 3
+            self_time = int(items[0])
+            last = items[2][1:]  # cut leading space
+            name = items[2].lstrip()
+            num_leading_spaces = len(last) - len(name)
+            assert num_leading_spaces % 2 == 0
+            level = num_leading_spaces // 2
+            entries.append((name, level, self_time))
+
+    def shelf(lst, k):
+        reference_level = lst[k][1]
+        out = []
+        while k < len(lst):
+            name, level, self_time = lst[k]
+            if level == reference_level:
+                out.append({"name": name, "value": self_time * 1.0e-6})
+                k += 1
+            elif level < reference_level:
+                return out, k
+            else:
+                assert level == reference_level + 1
+                out[-1]["children"], k = shelf(lst, k)
+        return out, k
+
+    lst, k = shelf(entries[::-1], 0)
+    assert k == len(entries)
+
+    return {"name": "main", "children": lst}
 
 
 def start_server(prof_filename, start_browser):

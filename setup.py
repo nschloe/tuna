@@ -22,7 +22,7 @@ setup(
     author=about["__author__"],
     author_email=about["__author_email__"],
     packages=find_packages(),
-    description="Visualize Python profile",
+    description="Visualize Python profiles in the browser",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     url="https://github.com/nschloe/tuna",
