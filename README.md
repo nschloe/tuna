@@ -59,7 +59,7 @@ in `d()`. `__main__` also calls `b()` which calls `a()`, this time spending 1 se
 `c()` and 4 seconds in `d()`. The profile, however, will only store that `c()` spent a
 total of 5 seconds when called from `a()`, and likewise `d()`. The information that the
 program spent more time in `c()` when called in `root -> a() -> c()` than when called in
-`root -> b() -> a() -> c()` is no present in the profile.
+`root -> b() -> a() -> c()` is not present in the profile.
 
 tuna only displays the part of the timed call tree that can be deduced from the profile:
 ![](https://nschloe.github.io/tuna/foo.png)
