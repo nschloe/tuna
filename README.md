@@ -12,6 +12,12 @@ Create a runtime profile with
 ```
 python -mcProfile -o program.prof yourfile.py
 ```
+or an [import
+profile](https://docs.python.org/3/using/cmdline.html#envvar-PYTHONPROFILEIMPORTTIME)
+with
+```
+python -X importprofile yourfile.py 2> import.log
+```
 and show it with
 ```
 tuna program.prof
