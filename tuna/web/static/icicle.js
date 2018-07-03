@@ -15,8 +15,8 @@ class Icicle extends HTMLElement {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     const root = d3.hierarchy(this.data)
-      .sum(function(d) { return d.value; })
-      .sort(function(a, b) { return b.value - a.value; });
+      .sum(d => d.value)
+      .sort((a, b) => b.value - a.value);
 
     const strokeWidth = 1;
     const numLevels = root.height + 1;
@@ -48,46 +48,46 @@ class Icicle extends HTMLElement {
     .enter().append("g");
 
     const rect = g.append("rect")
-      .attr("x", function(d) { return x(d.x0); })
-      .attr("y", function(d) { return y(d.y0); })
-      .attr("width", function(d) { return x(d.x1 - d.x0); })
+      .attr("x", d => x(d.x0))
+      .attr("y", d => y(d.y0))
+      .attr("width", d => x(d.x1 - d.x0))
       .attr("height", this.rowHeight)
       .on("click", clicked);
-      // .attr("fill", function(d) { return color((d.children ? d : d.parent).key); })
+      // .attr("fill", d => color((d.children ? d : d.parent).key))
 
     // title, typically rendered as tooltip
     rect.append("title")
-      .text(function(d) {
+      .text(d => {
         return d.data.name + "\n" + d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)";
       });
 
     // Now add the text. First, the clip path.
     const clipPath = g.append("clipPath")
-      .attr("id", function(d) { return "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)); });
+      .attr("id", d => "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)));
     const clipRect = clipPath.append("rect")
-      .attr("x", function(d) { return x(d.x0); })
-      .attr("y", function(d) { return y(d.y0); })
-      .attr("width", function(d) { return x(d.x1) - x(d.x0); })
+      .attr("x", d => x(d.x0))
+      .attr("y", d => y(d.y0))
+      .attr("width", d => x(d.x1) - x(d.x0))
       .attr("height", this.rowHeight);
     // Now the text. Multiline text is realized with <tspan> in SVG.
     const text = g.append("text")
-      .attr("y", function(d) { return y(d.y0 + d.y1)/2; })
+      .attr("y", d => y(d.y0 + d.y1)/2)
       .attr("alignment-baseline", "middle")
       .attr("text-anchor", "middle")
       .attr("fill", "white")
-      .attr("clip-path", function(d) { return "url(#" + "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)) + ")"; });
+      .attr("clip-path", d => "url(#" + "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)) + ")");
     const tspan1 = text.append("tspan")
-      .text(function(d) {
+      .text(d => {
         let arr = d.data.name.split("::");
         arr[0] = arr[0].split("/").pop();
         return arr.join("::");
       })
       .attr("font-family", "sans-serif")
-      .attr("x", function(d) { return x(d.x0 + d.x1)/2; });
+      .attr("x", d => x(d.x0 + d.x1)/2);
     const tspan2 = text.append("tspan")
-      .text(function(d) { return d3.format(".3f")(d.value) + " s  (" + d3.format(".1f")(d.value / totalRuntime * 100) + "%)"; })
+      .text(d => d3.format(".3f")(d.value) + " s  (" + d3.format(".1f")(d.value / totalRuntime * 100) + "%)")
       .attr("font-family", "sans-serif")
-      .attr("x", function(d) { return x(d.x0 + d.x1)/2; })
+      .attr("x", d => x(d.x0 + d.x1)/2)
       .attr("dy", "1.5em");
 
     // Make rowHeight available in clicked()
@@ -102,27 +102,27 @@ class Icicle extends HTMLElement {
 
       rect.transition()
         .duration(750)
-        .attr("x", function(d) { return x(d.x0); })
-        .attr("y", function(d) { return y(d.y0); })
-        .attr("width", function(d) { return x(d.x1) - x(d.x0); });
+        .attr("x", d => x(d.x0))
+        .attr("y", d => y(d.y0))
+        .attr("width", d => x(d.x1) - x(d.x0));
 
       clipRect.transition()
         .duration(750)
-        .attr("x", function(d) { return x(d.x0); })
-        .attr("y", function(d) { return y(d.y0); })
-        .attr("width", function(d) { return x(d.x1) - x(d.x0); });
+        .attr("x", d => x(d.x0))
+        .attr("y", d => y(d.y0))
+        .attr("width", d => x(d.x1) - x(d.x0));
 
       text.transition()
         .duration(750)
-        .attr("y", function(d) { return y((d.y0 + d.y1)/2); });
+        .attr("y", d => y((d.y0 + d.y1)/2));
 
       tspan1.transition()
         .duration(750)
-        .attr("x", function(d) { return x((d.x0 + d.x1)/2); });
+        .attr("x", d => x((d.x0 + d.x1)/2));
 
       tspan2.transition()
         .duration(750)
-        .attr("x", function(d) { return x((d.x0 + d.x1)/2); });
+        .attr("x", d => x((d.x0 + d.x1)/2));
     }
   }
 }
