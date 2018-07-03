@@ -1,13 +1,38 @@
 rect {
   stroke: #fff;
-  /* material design light blue 900 */
+}
+
+rect.color0 {
+  /* default color for rects */
+  /* material design light blue 50 900 */
   fill: #01579B;
 }
 
-rect:hover {
-  /* material design light blue 800 */
+rect.color0:hover {
+  /* material design light blue 50 800 */
   fill: #0277BD;
 }
+
+rect.color1 {
+  /* material design light blue 50 700 */
+  fill: #0288D1;
+}
+
+rect.color1:hover {
+  /* material design light blue 50 800 */
+  fill: #0277BD;
+}
+
+rect.color2 {
+  /* material design light blue 50 700 */
+  fill: #0288D1;
+}
+
+rect.color2:hover {
+  /* material design light blue 50 800 */
+  fill: #0277BD;
+}
+
 
 /* From
  * <https://getbootstrap.com/docs/4.1/examples/sticky-footer-navbar/sticky-footer-navbar.css>
