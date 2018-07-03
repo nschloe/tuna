@@ -1,9 +1,11 @@
 rect {
   stroke: #fff;
+  /* material design light blue 900 */
   fill: #01579B;
 }
 
 rect:hover {
+  /* material design light blue 900 */
   fill: #0277BD;
 }
 

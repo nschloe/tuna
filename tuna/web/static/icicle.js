@@ -22,10 +22,10 @@ class Icicle extends HTMLElement {
     const numLevels = root.height + 1;
     const height = numLevels * this.rowHeight + numLevels * strokeWidth;
 
-    var x = d3.scaleLinear()
+    const x = d3.scaleLinear()
       .range([0, this.width]);
 
-    var y = d3.scaleLinear()
+    const y = d3.scaleLinear()
       .range([0, height]);
 
     const svg = d3.select(this).append("svg")
@@ -39,7 +39,8 @@ class Icicle extends HTMLElement {
     // .round(true);
     partition(root);
 
-    let to_anim = {};
+    // array for storing all entities that are animated upon transition
+    const to_anim = {};
 
     // Put text and rectangle into a group;
     // cf. <https://stackoverflow.com/a/6732550/353337>.
@@ -60,9 +61,10 @@ class Icicle extends HTMLElement {
 
         // title, typically rendered as tooltip
         .call(el => el.append("title")
-          .text(d => {
-            return d.data.name + "\n" + d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)";
-          })
+          .text(d => (
+            d.data.name + "\n" +
+            d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)"
+          ))
         )
       )
       // Now add the text. First, the clip path.
@@ -91,13 +93,11 @@ class Icicle extends HTMLElement {
             arr[0] = arr[0].split("/").pop();
             return arr.join("::");
           })
-          .attr("font-family", "sans-serif")
           .attr("x", d => x(d.x0 + d.x1)/2)
         )
         .call(el => el.append("tspan")
           .call(tspan2 => { to_anim.tspan2 = tspan2; })
           .text(d => d3.format(".3f")(d.value) + " s  (" + d3.format(".1f")(d.value / totalRuntime * 100) + "%)")
-          .attr("font-family", "sans-serif")
           .attr("x", d => x(d.x0 + d.x1)/2)
           .attr("dy", "1.5em")
         )
