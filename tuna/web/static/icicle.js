@@ -18,6 +18,10 @@ class Icicle extends HTMLElement {
       .sum(d => d.value)
       .sort((a, b) => b.value - a.value);
 
+    // Give each node a unique id (used for clip paths)
+    let id = 0;
+    root.descendants().forEach(function(d) {d.id = id; id++;});
+
     const strokeWidth = 1;
     const numLevels = root.height + 1;
     const height = numLevels * this.rowHeight + numLevels * strokeWidth;
@@ -69,7 +73,7 @@ class Icicle extends HTMLElement {
       )
       // Now add the text. First, the clip path.
       .call(el => el.append("clipPath")
-        .attr("id", d => "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)))
+        .attr("id", d => "cp" + d.id)
         .call(el => el.append("rect")
           .call(clipRect => { to_anim.clipRect = clipRect; })
           .attr("x", d => x(d.x0))
@@ -85,7 +89,7 @@ class Icicle extends HTMLElement {
         .attr("alignment-baseline", "middle")
         .attr("text-anchor", "middle")
         .attr("fill", "white")
-        .attr("clip-path", d => "url(#" + "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)) + ")")
+        .attr("clip-path", d => "url(#" + "cp" + d.id + ")")
         .call(el => el.append("tspan")
           .call(tspan1 => { to_anim.tspan1 = tspan1; })
           .text(d => {
