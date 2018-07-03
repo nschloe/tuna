@@ -39,56 +39,70 @@ class Icicle extends HTMLElement {
     // .round(true);
     partition(root);
 
+    let to_anim = {};
+
     // Put text and rectangle into a group;
     // cf. <https://stackoverflow.com/a/6732550/353337>.
     const g = svg.selectAll("g").data(
       // Only get the blocks above a certain threshold width
       root.descendants().filter(d => x(d.x1 - d.x0) > 1.0)
     )
-    .enter().append("g");
+    .enter()
+    .call(el => el.append("g")
+      .call(el => el.append("rect")
+        .call(rect => { to_anim.rect = rect; })
+        .attr("x", d => x(d.x0))
+        .attr("y", d => y(d.y0))
+        .attr("width", d => x(d.x1 - d.x0))
+        .attr("height", this.rowHeight)
+        .on("click", clicked)
+        // .attr("fill", d => color((d.children ? d : d.parent).key))
 
-    const rect = g.append("rect")
-      .attr("x", d => x(d.x0))
-      .attr("y", d => y(d.y0))
-      .attr("width", d => x(d.x1 - d.x0))
-      .attr("height", this.rowHeight)
-      .on("click", clicked);
-      // .attr("fill", d => color((d.children ? d : d.parent).key))
-
-    // title, typically rendered as tooltip
-    rect.append("title")
-      .text(d => {
-        return d.data.name + "\n" + d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)";
-      });
-
-    // Now add the text. First, the clip path.
-    const clipPath = g.append("clipPath")
-      .attr("id", d => "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)));
-    const clipRect = clipPath.append("rect")
-      .attr("x", d => x(d.x0))
-      .attr("y", d => y(d.y0))
-      .attr("width", d => x(d.x1) - x(d.x0))
-      .attr("height", this.rowHeight);
-    // Now the text. Multiline text is realized with <tspan> in SVG.
-    const text = g.append("text")
-      .attr("y", d => y(d.y0 + d.y1)/2)
-      .attr("alignment-baseline", "middle")
-      .attr("text-anchor", "middle")
-      .attr("fill", "white")
-      .attr("clip-path", d => "url(#" + "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)) + ")");
-    const tspan1 = text.append("tspan")
-      .text(d => {
-        let arr = d.data.name.split("::");
-        arr[0] = arr[0].split("/").pop();
-        return arr.join("::");
-      })
-      .attr("font-family", "sans-serif")
-      .attr("x", d => x(d.x0 + d.x1)/2);
-    const tspan2 = text.append("tspan")
-      .text(d => d3.format(".3f")(d.value) + " s  (" + d3.format(".1f")(d.value / totalRuntime * 100) + "%)")
-      .attr("font-family", "sans-serif")
-      .attr("x", d => x(d.x0 + d.x1)/2)
-      .attr("dy", "1.5em");
+        // title, typically rendered as tooltip
+        .call(el => el.append("title")
+          .text(d => {
+            return d.data.name + "\n" + d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)";
+          })
+        )
+      )
+      // Now add the text. First, the clip path.
+      .call(el => el.append("clipPath")
+        .attr("id", d => "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)))
+        .call(el => el.append("rect")
+          .call(clipRect => { to_anim.clipRect = clipRect; })
+          .attr("x", d => x(d.x0))
+          .attr("y", d => y(d.y0))
+          .attr("width", d => x(d.x1) - x(d.x0))
+          .attr("height", this.rowHeight)
+        )
+      )
+      // Now the text. Multiline text is realized with <tspan> in SVG.
+      .call(el => el.append("text")
+        .call(text => { to_anim.text = text; })
+        .attr("y", d => y(d.y0 + d.y1)/2)
+        .attr("alignment-baseline", "middle")
+        .attr("text-anchor", "middle")
+        .attr("fill", "white")
+        .attr("clip-path", d => "url(#" + "cp_" + Math.round(x(d.x0)) + "_" + Math.round(x(d.x1)) + "_" + Math.round(y(d.y0)) + "_" + Math.round(y(d.y1)) + ")")
+        .call(el => el.append("tspan")
+          .call(tspan1 => { to_anim.tspan1 = tspan1; })
+          .text(d => {
+            let arr = d.data.name.split("::");
+            arr[0] = arr[0].split("/").pop();
+            return arr.join("::");
+          })
+          .attr("font-family", "sans-serif")
+          .attr("x", d => x(d.x0 + d.x1)/2)
+        )
+        .call(el => el.append("tspan")
+          .call(tspan2 => { to_anim.tspan2 = tspan2; })
+          .text(d => d3.format(".3f")(d.value) + " s  (" + d3.format(".1f")(d.value / totalRuntime * 100) + "%)")
+          .attr("font-family", "sans-serif")
+          .attr("x", d => x(d.x0 + d.x1)/2)
+          .attr("dy", "1.5em")
+        )
+      )
+    );
 
     // Make rowHeight available in clicked()
     const rowHeight = this.rowHeight;
@@ -100,27 +114,27 @@ class Icicle extends HTMLElement {
       x.domain([d.x0, d.x1]);
       y.domain([d.y0, 1]).range([offset, newHeight + offset]);
 
-      rect.transition()
+      to_anim.rect.transition()
         .duration(750)
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
 
-      clipRect.transition()
+      to_anim.clipRect.transition()
         .duration(750)
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
 
-      text.transition()
+      to_anim.text.transition()
         .duration(750)
         .attr("y", d => y((d.y0 + d.y1)/2));
 
-      tspan1.transition()
+      to_anim.tspan1.transition()
         .duration(750)
         .attr("x", d => x((d.x0 + d.x1)/2));
 
-      tspan2.transition()
+      to_anim.tspan2.transition()
         .duration(750)
         .attr("x", d => x((d.x0 + d.x1)/2));
     }
