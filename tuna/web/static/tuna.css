@@ -2,33 +2,33 @@ rect {
   stroke: #fff;
 }
 
-rect.color0 {
+.color0 rect {
   /* default color for rects */
   /* material design light blue 50 900 */
   fill: #01579B;
 }
 
-rect.color0:hover {
+.color0:hover rect {
   /* material design light blue 50 800 */
   fill: #0277BD;
 }
 
-rect.color1 {
+.color1 rect {
   /* material design light blue 50 700 */
   fill: #0288D1;
 }
 
-rect.color1:hover {
+.color1:hover rect {
   /* material design light blue 50 800 */
   fill: #0277BD;
 }
 
-rect.color2 {
+.color2 rect {
   /* material design light blue 50 700 */
   fill: #0288D1;
 }
 
-rect.color2:hover {
+.color2:hover rect {
   /* material design light blue 50 800 */
   fill: #0277BD;
 }
