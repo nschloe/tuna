@@ -56,6 +56,7 @@ class Icicle extends HTMLElement {
     .call(el => el.append("g")
       .call(el => el.append("rect")
         .call(rect => { to_anim.rect = rect; })
+        .attr("class", d => "color" + d.data.color)
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1 - d.x0))
