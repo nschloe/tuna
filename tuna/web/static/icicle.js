@@ -54,14 +54,14 @@ class Icicle extends HTMLElement {
     )
     .enter()
     .call(el => el.append("g")
+      .attr("class", d => "color" + d.data.color)
+      .on("click", clicked)
       .call(el => el.append("rect")
         .call(rect => { to_anim.rect = rect; })
-        .attr("class", d => "color" + d.data.color)
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1 - d.x0))
         .attr("height", this.rowHeight)
-        .on("click", clicked)
         // .attr("fill", d => color((d.children ? d : d.parent).key))
 
         // title, typically rendered as tooltip
