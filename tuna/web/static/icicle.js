@@ -115,28 +115,26 @@ class Icicle extends HTMLElement {
       x.domain([d.x0, d.x1]);
       y.domain([d.y0, 1]).range([offset, newHeight + offset]);
 
-      to_anim.rect.transition()
-        .duration(750)
+      const trans = d3.transition()
+        .duration(750);
+
+      to_anim.rect.transition(trans)
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
 
-      to_anim.clipRect.transition()
-        .duration(750)
+      to_anim.clipRect.transition(trans)
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
 
-      to_anim.text.transition()
-        .duration(750)
+      to_anim.text.transition(trans)
         .attr("y", d => y((d.y0 + d.y1)/2));
 
-      to_anim.tspan1.transition()
-        .duration(750)
+      to_anim.tspan1.transition(trans)
         .attr("x", d => x((d.x0 + d.x1)/2));
 
-      to_anim.tspan2.transition()
-        .duration(750)
+      to_anim.tspan2.transition(trans)
         .attr("x", d => x((d.x0 + d.x1)/2));
     }
   }
