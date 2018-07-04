@@ -56,6 +56,13 @@ class Icicle extends HTMLElement {
     .call(el => el.append("g")
       .attr("class", d => "color" + d.data.color)
       .on("click", clicked.bind(this))  // ensures `this` is correct in clicked
+      // title, typically rendered as tooltip
+      .call(el => el.append("title")
+        .text(d => (
+          d.data.name + "\n" +
+          d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)"
+        ))
+      )
       .call(el => el.append("rect")
         .call(rect => { to_anim.rect = rect; })
         .attr("x", d => x(d.x0))
@@ -63,14 +70,6 @@ class Icicle extends HTMLElement {
         .attr("width", d => x(d.x1 - d.x0))
         .attr("height", this.rowHeight)
         // .attr("fill", d => color((d.children ? d : d.parent).key))
-
-        // title, typically rendered as tooltip
-        .call(el => el.append("title")
-          .text(d => (
-            d.data.name + "\n" +
-            d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)"
-          ))
-        )
       )
       // Now add the text. First, the clip path.
       .call(el => el.append("clipPath")
