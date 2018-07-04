@@ -2,13 +2,14 @@ class Icicle extends HTMLElement {
   connectedCallback () {
     // this.shadow = this.createShadowRoot();
     this.data = JSON.parse(this.getAttribute('data'));
-
-    const paddingLeft = parseFloat(getComputedStyle(this.parentElement).paddingLeft);
-    const paddingRight = parseFloat(getComputedStyle(this.parentElement).paddingRight);
-    this.width = this.parentElement.offsetWidth - paddingLeft - paddingRight;
-
     this.rowHeight = this.getAttribute('row-height');
+    this.svg = d3.select(this).append("svg");
+    this.svg.style("width", "100%");
     this.render();
+  }
+
+  get width() {
+    return this.svg.node().getBoundingClientRect().width;
   }
 
   render () {
@@ -26,15 +27,13 @@ class Icicle extends HTMLElement {
     const numLevels = root.height + 1;
     const height = numLevels * this.rowHeight + numLevels * strokeWidth;
 
+    this.svg.attr("height", height);
+
     const x = d3.scaleLinear()
       .range([0, this.width]);
 
     const y = d3.scaleLinear()
       .range([0, height]);
-
-    const svg = d3.select(this).append("svg")
-      .attr("width", this.width)
-      .attr("height", height);
 
     const totalRuntime = root.value;
 
@@ -48,7 +47,7 @@ class Icicle extends HTMLElement {
 
     // Put text and rectangle into a group;
     // cf. <https://stackoverflow.com/a/6732550/353337>.
-    const g = svg.selectAll("g").data(
+    const g = this.svg.selectAll("g").data(
       // Only get the blocks above a certain threshold width
       root.descendants().filter(d => x(d.x1 - d.x0) > 1.0)
     )
