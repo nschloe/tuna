@@ -53,7 +53,7 @@ def read_runtime_profile(prof_filename):
             # Handle children
             # merge dictionaries
             c = [populate(child, key) for child in children[key]]
-            c.append({"name": name + "::self", "value": selftime})
+            c.append({"name": name + "::self", "color": 0, "value": selftime})
             out = {"name": name, "color": 0, "children": c}
         else:
             out = {"name": name, "color": 0, "value": cumtime}
