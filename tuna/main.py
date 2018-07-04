@@ -84,18 +84,19 @@ def read_import_profile(filename):
     # turn is parent to `_codecs`.
     entries = []
     with open(filename, "r") as f:
-        line = f.readline()
-        assert line == "import time: self [us] | cumulative | imported package\n"
-        while True:
-            line = f.readline()
-            if not line:
-                break  # EOF
-            # remove `import time:`
-            items = line[12:].strip().split("|")
+        # filtered iterator over lines prefixed with "import time: "
+        import_lines = (
+            line[len("import time: ") :].rstrip()
+            for line in f
+            if line.startswith("import time: ")
+        )
+        assert next(import_lines) == "self [us] | cumulative | imported package"
+        for line in import_lines:
+            items = line.split(" | ")
             assert len(items) == 3
             self_time = int(items[0])
-            last = items[2][1:]  # cut leading space
-            name = items[2].lstrip()
+            last = items[2]
+            name = last.lstrip()
             num_leading_spaces = len(last) - len(name)
             assert num_leading_spaces % 2 == 0
             level = num_leading_spaces // 2

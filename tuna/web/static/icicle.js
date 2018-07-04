@@ -55,7 +55,7 @@ class Icicle extends HTMLElement {
     .enter()
     .call(el => el.append("g")
       .attr("class", d => "color" + d.data.color)
-      .on("click", clicked)
+      .on("click", clicked.bind(this))  // ensures `this` is correct in clicked
       .call(el => el.append("rect")
         .call(rect => { to_anim.rect = rect; })
         .attr("x", d => x(d.x0))
@@ -109,13 +109,10 @@ class Icicle extends HTMLElement {
       )
     );
 
-    // Make rowHeight available in clicked()
-    const rowHeight = this.rowHeight;
-
     function clicked(d) {
       const offset = d.y0 ? 20 : 0;
       const height = root.height - d.depth;
-      const newHeight = (height+1) * rowHeight + (height+1) * strokeWidth;
+      const newHeight = (height+1) * this.rowHeight + (height+1) * strokeWidth;
       x.domain([d.x0, d.x1]);
       y.domain([d.y0, 1]).range([offset, newHeight + offset]);
 
