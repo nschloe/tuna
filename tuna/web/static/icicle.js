@@ -60,7 +60,7 @@ class Icicle extends HTMLElement {
       .call(el => el.append("title")
         .text(d => (
           d.data.name + "\n" +
-          d.value + " s  (" + d3.format(".2f")(d.value / totalRuntime * 100) + "%)"
+          d.value + " s  (" + d3.format(".2%")(d.value / totalRuntime) + ")"
         ))
       )
       .call(el => el.append("rect")
@@ -101,7 +101,7 @@ class Icicle extends HTMLElement {
         )
         .call(el => el.append("tspan")
           .call(tspan2 => { to_anim.tspan2 = tspan2; })
-          .text(d => d3.format(".3f")(d.value) + " s  (" + d3.format(".1f")(d.value / totalRuntime * 100) + "%)")
+          .text(d => d3.format(".3f")(d.value) + " s  (" + d3.format(".1%")(d.value / totalRuntime) + ")")
           .attr("x", d => x(d.x0 + d.x1)/2)
           .attr("dy", "1.5em")
         )
