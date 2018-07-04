@@ -111,7 +111,7 @@ class Icicle extends HTMLElement {
       const offset = d.y0 ? 20 : 0;
       const height = root.height - d.depth;
       const newHeight = (height+1) * this.rowHeight + (height+1) * strokeWidth;
-      x.domain([d.x0, d.x1]);
+      x.domain([d.x0, d.x1]).range([0, this.width]);
       y.domain([d.y0, 1]).range([offset, newHeight + offset]);
 
       const trans = d3.transition()
