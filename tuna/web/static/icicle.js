@@ -136,6 +136,29 @@ class Icicle extends HTMLElement {
       to_anim.tspan2.transition(trans)
         .attr("x", d => x((d.x0 + d.x1)/2));
     }
+
+    // TODO: This repeats a lot of the content of `clicked`
+    window.addEventListener('resize', e => {
+      x.range([0, this.width]);
+      to_anim.rect
+        .attr("x", d => x(d.x0))
+        .attr("y", d => y(d.y0))
+        .attr("width", d => x(d.x1) - x(d.x0));
+
+      to_anim.clipRect
+        .attr("x", d => x(d.x0))
+        .attr("y", d => y(d.y0))
+        .attr("width", d => x(d.x1) - x(d.x0));
+
+      to_anim.text
+        .attr("y", d => y((d.y0 + d.y1)/2));
+
+      to_anim.tspan1
+        .attr("x", d => x((d.x0 + d.x1)/2));
+
+      to_anim.tspan2
+        .attr("x", d => x((d.x0 + d.x1)/2));
+    });
   }
 }
 
