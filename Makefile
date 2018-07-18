@@ -17,6 +17,10 @@ upload: setup.py
 	python3 setup.py bdist_wheel --universal
 	twine upload dist/*
 
+update:
+	curl https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css > tuna/web/static/bootstrap.min.css
+	curl https://d3js.org/d3.v5.min.js > tuna/web/static/d3.v5.min.js
+
 publish: tag upload
 
 clean:
