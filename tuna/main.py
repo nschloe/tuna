@@ -12,13 +12,19 @@ from .__about__ import __version__
 from .module_groups import built_in, built_in_deprecated
 
 
+class TunaError(Exception):
+    pass
+
+
 def read(filename):
     _, ext = os.path.splitext(filename)
-    if ext == ".prof":
-        # runtime profile
-        return read_runtime_profile(filename)
+    try:
+        return read_import_profile(filename)
+    except TunaError:
+        pass
 
-    return read_import_profile(filename)
+    # runtime profile
+    return read_runtime_profile(filename)
 
 
 def read_runtime_profile(prof_filename):
@@ -26,11 +32,16 @@ def read_runtime_profile(prof_filename):
 
     # One way of picking finding out the root notes would be to loop over
     # stats.stats.items() and check which doesn't have parents. This, however, doesn't
-    # work if there are loops in the graph, occurring, for example, when exec() is
-    # called somewhere in the program. For this reason, simple hardcode the root node.
+    # work if there are loops in the graph which happens, for example, if exec() is
+    # called somewhere in the program. For this reason, simply hardcode the root node.
     # This disregards the _lsprof.Profiler, but the runtime of this is typically so
     # small that it's okay to skip it.
     root = ("~", 0, "<built-in method builtins.exec>")
+
+    assert root in stats.stats, (
+        "The default root node `<built-in method builtins.exec>` "
+        "was not found in the profile. "
+    )
 
     # Collect children
     children = {key: [] for key in stats.stats.keys()}
@@ -90,7 +101,14 @@ def read_import_profile(filename):
             for line in f
             if line.startswith("import time: ")
         )
-        assert next(import_lines) == "self [us] | cumulative | imported package"
+
+        try:
+            line = next(import_lines)
+        except UnicodeError:
+            raise TunaError()
+
+        assert next(line) == "self [us] | cumulative | imported package"
+
         for line in import_lines:
             items = line.split(" | ")
             assert len(items) == 3
