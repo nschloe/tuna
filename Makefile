@@ -31,7 +31,7 @@ lint:
 	flake8 setup.py tuna/ test/*.py
 	black --check setup.py tuna/ test/*.py
 	eslint tuna/web/static/icicle.js
-	tmlhint tuna/web/index.html
+	htmlhint tuna/web/index.html
 
 black:
 	black setup.py tuna/ test/*.py
