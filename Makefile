@@ -32,3 +32,6 @@ lint:
 	black --check setup.py tuna/ test/*.py
 	eslint tuna/web/static/icicle.js
 	htmlhint tuna/web/index.html
+
+black:
+	black setup.py tuna/ test/*.py

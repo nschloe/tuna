@@ -33,15 +33,16 @@ def read_runtime_profile(prof_filename):
     # One way of picking finding out the root notes would be to loop over
     # stats.stats.items() and check which doesn't have parents. This, however, doesn't
     # work if there are loops in the graph which happens, for example, if exec() is
-    # called somewhere in the program. For this reason, simply hardcode the root node.
-    # This disregards the _lsprof.Profiler, but the runtime of this is typically so
-    # small that it's okay to skip it.
-    root = ("~", 0, "<built-in method builtins.exec>")
-
-    assert root in stats.stats, (
-        "The default root node `<built-in method builtins.exec>` "
-        "was not found in the profile. "
-    )
+    # called somewhere in the program. For this reason, find all nodes without parents
+    # and simply hardcode `<built-in method builtins.exec>`.
+    roots = []
+    for item in stats.stats.items():
+        key, value = item
+        if value[4] == {}:
+            roots.append(key)
+    default_root = ("~", 0, "<built-in method builtins.exec>")
+    if default_root in stats.stats:
+        roots += [default_root]
 
     # Collect children
     children = {key: [] for key in stats.stats.keys()}
@@ -70,8 +71,11 @@ def read_runtime_profile(prof_filename):
             out = {"name": name, "color": 0, "value": cumtime}
         return out
 
-    data = populate(root, None)
-
+    data = {
+        "name": "root",
+        "color": 0,
+        "children": [populate(root, None) for root in roots],
+    }
     return data
 
 
@@ -107,7 +111,7 @@ def read_import_profile(filename):
         except UnicodeError:
             raise TunaError()
 
-        assert next(line) == "self [us] | cumulative | imported package"
+        assert line == "self [us] | cumulative | imported package"
 
         for line in import_lines:
             items = line.split(" | ")
