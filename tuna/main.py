@@ -20,7 +20,7 @@ def read(filename):
     _, ext = os.path.splitext(filename)
     try:
         return read_import_profile(filename)
-    except TunaError:
+    except (TunaError, StopIteration):
         pass
 
     # runtime profile
