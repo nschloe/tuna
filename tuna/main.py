@@ -1,15 +1,26 @@
 # -*- coding: utf-8 -*-
 #
 import os
+import json
 import pstats
 import threading
 import webbrowser
+import string
 
 import tornado.ioloop
 import tornado.web
 
 from .__about__ import __version__
 from .module_groups import built_in, built_in_deprecated
+
+try:
+    from html import escape
+except ImportError:
+    from cgi import escape
+
+this_dir = os.path.dirname(__file__)
+with open(os.path.join(this_dir, "web", "index.html")) as _file:
+    INDEX = string.Template(_file.read())
 
 
 class TunaError(Exception):
@@ -154,17 +165,14 @@ def read_import_profile(filename):
 
 def start_server(prof_filename, start_browser):
     data = read(prof_filename)
-    this_dir = os.path.dirname(__file__)
     data = data
 
     class IndexHandler(tornado.web.RequestHandler):
         def get(self):
-            self.render(
-                os.path.join(this_dir, "web", "index.html"),
-                data=tornado.escape.json_encode(data),
-                version=__version__,
-            )
-            return
+            self.write(INDEX.substitute(
+                data=escape(json.dumps(data).replace("</", "<\\/")),
+                version=escape(__version__),
+            ))
 
     app = tornado.web.Application(
         [(r"/", IndexHandler)], static_path=os.path.join(this_dir, "web", "static")
