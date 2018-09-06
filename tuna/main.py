@@ -163,16 +163,20 @@ def read_import_profile(filename):
     return {"name": "main", "color": 0, "children": lst}
 
 
+def render(data):
+    return INDEX.substitute(
+        data=escape(json.dumps(data).replace("</", "<\\/")),
+        version=escape(__version__),
+    )
+
+
 def start_server(prof_filename, start_browser):
     data = read(prof_filename)
     data = data
 
     class IndexHandler(tornado.web.RequestHandler):
         def get(self):
-            self.write(INDEX.substitute(
-                data=escape(json.dumps(data).replace("</", "<\\/")),
-                version=escape(__version__),
-            ))
+            self.write(render(data))
 
     app = tornado.web.Application(
         [(r"/", IndexHandler)], static_path=os.path.join(this_dir, "web", "static")
