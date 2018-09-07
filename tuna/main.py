@@ -165,8 +165,7 @@ def read_import_profile(filename):
 
 def render(data):
     return INDEX.substitute(
-        data=escape(json.dumps(data).replace("</", "<\\/")),
-        version=escape(__version__),
+        data=escape(json.dumps(data).replace("</", "<\\/")), version=escape(__version__)
     )
 
 
