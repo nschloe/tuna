@@ -1,26 +1,21 @@
 # -*- coding: utf-8 -*-
 #
-import os
+from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
+import mimetypes
+import os
 import pstats
+import string
 import threading
 import webbrowser
-import string
-
-import tornado.ioloop
-import tornado.web
-
-from .__about__ import __version__
-from .module_groups import built_in, built_in_deprecated
 
 try:
     from html import escape
 except ImportError:
     from cgi import escape
 
-this_dir = os.path.dirname(__file__)
-with open(os.path.join(this_dir, "web", "index.html")) as _file:
-    INDEX = string.Template(_file.read())
+from .__about__ import __version__
+from .module_groups import built_in, built_in_deprecated
 
 
 class TunaError(Exception):
@@ -164,43 +159,48 @@ def read_import_profile(filename):
 
 
 def render(data):
-    return INDEX.substitute(
+    this_dir = os.path.dirname(__file__)
+    with open(os.path.join(this_dir, "web", "index.html")) as _file:
+        template = string.Template(_file.read())
+
+    return template.substitute(
         data=escape(json.dumps(data).replace("</", "<\\/")), version=escape(__version__)
     )
 
 
 def start_server(prof_filename, start_browser):
     data = read(prof_filename)
-    data = data
 
-    class IndexHandler(tornado.web.RequestHandler):
-        def get(self):
-            self.write(render(data))
+    class StaticServer(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
 
-    app = tornado.web.Application(
-        [(r"/", IndexHandler)], static_path=os.path.join(this_dir, "web", "static")
-    )
+            if self.path == "/":
+                self.send_header("Content-type", "text/html")
+                self.end_headers()
+                self.wfile.write(render(data).encode("utf-8"))
+            else:
+                # Remove the leading slash in self.path
+                this_dir = os.path.dirname(__file__)
+                filepath = os.path.join(this_dir, "web", self.path[1:])
 
-    port = None
-    for prt in range(8000, 8100):
-        try:
-            app.listen(prt)
-        except OSError:
-            pass
-        else:
-            port = prt
-            break
-    assert port is not None, "Could not find open port."
+                mimetype, _ = mimetypes.guess_type(filepath)
+                self.send_header("Content-type", mimetype)
+                self.end_headers()
 
-    address = "http://localhost:{}".format(port)
-    print("Started tuna server at {}".format(address))
+                with open(filepath, "rb") as fh:
+                    content = fh.read()
+                self.wfile.write(content)
+
+            return
+
+    port = 8000
+    httpd = HTTPServer(("", port), StaticServer)
 
     if start_browser:
+        address = "http://localhost:{}".format(port)
         threading.Thread(target=lambda: webbrowser.open_new_tab(address)).start()
 
-    try:
-        tornado.ioloop.IOLoop.instance().start()
-    except KeyboardInterrupt:
-        tornado.ioloop.IOLoop.instance().stop()
-        print("\nBye!")
+    print("Starting httpd on port {}".format(port))
+    httpd.serve_forever()
     return
