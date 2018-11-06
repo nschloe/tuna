@@ -13,7 +13,8 @@ with open(os.path.join(base_dir, "tuna", "__about__.py"), "rb") as f:
 
 
 def read(fname):
-    return codecs.open(os.path.join(base_dir, fname), encoding="utf-8").read()
+    with codecs.open(os.path.join(base_dir, fname), encoding="utf-8") as f:
+        return f.read()
 
 
 setup(
