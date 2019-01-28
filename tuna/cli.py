@@ -30,7 +30,7 @@ def main(argv=None):
                 target=lambda: webbrowser.open_new_tab(args.outdir)
             ).start()
     else:
-        start_server(args.infile, args.browser)
+        start_server(args.infile, args.browser, args.port)
 
 
 def _get_parser():
@@ -45,6 +45,14 @@ def _get_parser():
         type=str,
         help="output directory for static files. "
         "No server is started if outdir is specified",
+    )
+
+    parser.add_argument(
+        "-p",
+        "--port",
+        default=8000,
+        type=int,
+        help="local port used by web server. (default: 8000)"
     )
 
     parser.add_argument(
