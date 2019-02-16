@@ -6,7 +6,11 @@
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?logo=github&label=Stars&logoColor=white)](https://github.com/nschloe/tuna)
 
 tuna is a Python profile viewer inspired by the amazing
-[SnakeViz](https://github.com/jiffyclub/snakeviz).
+[SnakeViz](https://github.com/jiffyclub/snakeviz). It handles runtime and import
+profiles, is rather small, uses [d3](https://d3js.org/) and
+[bootstrap](https://getbootstrap.com/), and avoids
+[certain](https://github.com/jiffyclub/snakeviz/issues/111)
+[errors](https://github.com/jiffyclub/snakeviz/issues/112) present in SnakeViz.
 
 Create a runtime profile with
 ```
