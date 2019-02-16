@@ -117,9 +117,9 @@ def read_import_profile(filename):
         except UnicodeError:
             raise TunaError()
 
-        assert line == "self [us] | cumulative | imported package"
-
         for line in import_lines:
+            if line == "self [us] | cumulative | imported package":
+                continue
             items = line.split(" | ")
             assert len(items) == 3
             self_time = int(items[0])
@@ -180,8 +180,8 @@ def start_server(prof_filename, start_browser):
                 self.end_headers()
                 self.wfile.write(render(data).encode("utf-8"))
             else:
-                # Remove the leading slash in self.path
                 this_dir = os.path.dirname(__file__)
+                # Remove the leading slash in self.path
                 filepath = os.path.join(this_dir, "web", self.path[1:])
 
                 mimetype, _ = mimetypes.guess_type(filepath)
