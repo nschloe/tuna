@@ -85,6 +85,39 @@ def read_runtime_profile(prof_filename):
     return data
 
 
+def _shelf(lst, k):
+    reference_level = lst[k][1]
+    out = []
+    while k < len(lst):
+        name, level, self_time = lst[k]
+        if level == reference_level:
+            out.append({"name": name, "value": self_time * 1.0e-6})
+            k += 1
+        elif level < reference_level:
+            return out, k
+        else:
+            assert level == reference_level + 1
+            out[-1]["children"], k = _shelf(lst, k)
+    return out, k
+
+
+def _add_color(lst, ancestor_is_built_in):
+    for item in lst:
+        module_name = item["name"].split(".")[0]
+        is_built_in = (
+            ancestor_is_built_in
+            or module_name in built_in
+            or module_name in built_in_deprecated
+        )
+        color = 1 if is_built_in else 0
+        if module_name in built_in_deprecated:
+            color = 2
+        item["color"] = color
+        if "children" in item:
+            _add_color(item["children"], is_built_in)
+    return
+
+
 def read_import_profile(filename):
     # The import profile is of the form
     # ```
@@ -127,33 +160,14 @@ def read_import_profile(filename):
             name = last.lstrip()
             num_leading_spaces = len(last) - len(name)
             assert num_leading_spaces % 2 == 0
-            level = num_leading_spaces // 2
-            entries.append((name, level, self_time))
+            indentation_level = num_leading_spaces // 2
+            entries.append((name, indentation_level, self_time))
 
-    def shelf(lst, k):
-        reference_level = lst[k][1]
-        out = []
-        while k < len(lst):
-            name, level, self_time = lst[k]
-            if level == reference_level:
-                module = name.split(".")[0]
-                if module in built_in:
-                    color = 1
-                elif module in built_in_deprecated:
-                    color = 2
-                else:
-                    color = 0
-                out.append({"name": name, "value": self_time * 1.0e-6, "color": color})
-                k += 1
-            elif level < reference_level:
-                return out, k
-            else:
-                assert level == reference_level + 1
-                out[-1]["children"], k = shelf(lst, k)
-        return out, k
-
-    lst, k = shelf(entries[::-1], 0)
+    lst, k = _shelf(entries[::-1], 0)
     assert k == len(entries)
+
+    # go through the tree and add "color"
+    _add_color(lst, False)
 
     return {"name": "main", "color": 0, "children": lst}
 
