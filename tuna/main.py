@@ -182,7 +182,7 @@ def render(data):
     )
 
 
-def start_server(prof_filename, start_browser):
+def start_server(prof_filename, start_browser, port):
     data = read(prof_filename)
 
     class StaticServer(BaseHTTPRequestHandler):
@@ -208,7 +208,6 @@ def start_server(prof_filename, start_browser):
 
             return
 
-    port = 8000
     httpd = HTTPServer(("", port), StaticServer)
 
     if start_browser:
