@@ -4,6 +4,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 [![PyPi Version](https://img.shields.io/pypi/v/tuna.svg)](https://pypi.org/project/tuna)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?logo=github&label=Stars&logoColor=white)](https://github.com/nschloe/tuna)
+[![PyPi downloads](https://img.shields.io/pypi/dd/tuna.svg)](https://pypistats.org/packages/tuna)
 
 tuna is a Python profile viewer inspired by the amazing
 [SnakeViz](https://github.com/jiffyclub/snakeviz). It handles runtime and import
