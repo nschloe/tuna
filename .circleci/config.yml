@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run: apt update
-      - run: apt install -y python3-pip
+      - run: apt install -y python3-pip npm
       - run: pip3 install -U black flake8
       - run: npm install -g eslint htmlhint
       # format and lint
@@ -21,7 +21,7 @@ jobs:
       - image: ubuntu:18.04
     steps:
       - run: apt-get update
-      - run: apt-get install -y git python3-pip npm
+      - run: apt-get install -y python3-pip
       - run: pip3 install -U pytest pytest-cov
       - checkout
       - run: pip3 install .
