@@ -31,12 +31,11 @@ tuna program.prof
 ![](https://nschloe.github.io/tuna/screencast.gif)
 
 
-### But tuna doesn't show the whole call tree!
+### Why tuna doesn't show the whole call tree
 
-Right, and that's because the whole timed call tree _cannot_ be retrieved from profile
-data. Python developers made the decision to only store _parent data_ in profiles
-because it can be computed with little overhead.
-To illustrate, consider the following program.
+The whole timed call tree _cannot_ be retrieved from profile data. Python developers
+made the decision to only store _parent data_ in profiles because it can be computed
+with little overhead. To illustrate, consider the following program.
 ```python
 import time
 

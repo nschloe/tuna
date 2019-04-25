@@ -36,19 +36,20 @@ def read(filename):
 def read_runtime_profile(prof_filename):
     stats = pstats.Stats(prof_filename)
 
-    # One way of picking finding out the root notes would be to loop over
-    # stats.stats.items() and check which doesn't have parents. This, however, doesn't
-    # work if there are loops in the graph which happens, for example, if exec() is
-    # called somewhere in the program. For this reason, find all nodes without parents
-    # and simply hardcode `<built-in method builtins.exec>`.
-    roots = []
+    # One way of picking the root nodes would be to loop over stats.stats.items() and
+    # check which doesn't have parents. This, however, doesn't work if there are loops
+    # in the graph which happens, for example, if exec() is called somewhere in the
+    # program. For this reason, find all nodes without parents and simply hardcode
+    # `<built-in method builtins.exec>`.
+    roots = set([])
     for item in stats.stats.items():
         key, value = item
         if value[4] == {}:
-            roots.append(key)
+            roots.add(key)
     default_root = ("~", 0, "<built-in method builtins.exec>")
     if default_root in stats.stats:
-        roots += [default_root]
+        roots.add(default_root)
+    roots = list(roots)
 
     # Collect children
     children = {key: [] for key in stats.stats.keys()}
