@@ -7,7 +7,7 @@ import threading
 import webbrowser
 
 from .__about__ import __version__
-from .main import start_server, read, render
+from .main import read, render, start_server
 
 
 def main(argv=None):

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 #
-from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import mimetypes
 import os
@@ -8,14 +7,15 @@ import pstats
 import string
 import threading
 import webbrowser
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+from .__about__ import __version__
+from .module_groups import built_in, built_in_deprecated
 
 try:
     from html import escape
 except ImportError:
     from cgi import escape
-
-from .__about__ import __version__
-from .module_groups import built_in, built_in_deprecated
 
 
 class TunaError(Exception):
