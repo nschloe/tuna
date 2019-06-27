@@ -2,15 +2,14 @@
 #
 from __future__ import print_function
 
+from . import cli
 from .__about__ import (
     __author__,
     __author_email__,
     __license__,
-    __version__,
     __status__,
+    __version__,
 )
-
-from . import cli
 
 __all__ = [
     "__author__",

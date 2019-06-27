@@ -1,10 +1,10 @@
 # tuna
 
-[![CircleCI](https://img.shields.io/circleci/project/github/nschloe/tuna/master.svg)](https://circleci.com/gh/nschloe/tuna)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
-[![PyPi Version](https://img.shields.io/pypi/v/tuna.svg)](https://pypi.org/project/tuna)
-[![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?logo=github&label=Stars&logoColor=white)](https://github.com/nschloe/tuna)
-[![PyPi downloads](https://img.shields.io/pypi/dd/tuna.svg)](https://pypistats.org/packages/tuna)
+[![CircleCI](https://img.shields.io/circleci/project/github/nschloe/tuna/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/tuna)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/ambv/black)
+[![PyPi Version](https://img.shields.io/pypi/v/tuna.svg?style=flat-square)](https://pypi.org/project/tuna)
+[![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?style=flat-square&logo=github&label=Stars&logoColor=white)](https://github.com/nschloe/tuna)
+[![PyPi downloads](https://img.shields.io/pypi/dd/tuna.svg?style=flat-square)](https://pypistats.org/packages/tuna)
 
 tuna is a Python profile viewer inspired by the amazing
 [SnakeViz](https://github.com/jiffyclub/snakeviz). It handles runtime and import
@@ -90,17 +90,6 @@ To run the tuna unit tests, check out this repository and type
 ```
 pytest
 ```
-
-### Distribution
-
-To create a new release
-
-1. bump the `__version__` number,
-
-2. tag and upload to PyPi:
-    ```
-    make publish
-    ```
 
 ### License
 
