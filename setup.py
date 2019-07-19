@@ -29,7 +29,7 @@ setup(
     url="https://github.com/nschloe/tuna",
     license=about["__license__"],
     platforms="any",
-    install_requires=["pipdate >=0.3.0, <0.4.0"],
+    python_requires=">=3",
     classifiers=[
         about["__status__"],
         about["__license__"],
