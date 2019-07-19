@@ -1,4 +1,7 @@
-# tuna
+<p align="center">
+  <a href="https://github.com/nschloe/tuna"><img alt="tuna" src="https://nschloe.github.io/tuna/logo-with-text.svg" width="50%"></a>
+  <p align="center">Performance analysis for Python.</p>
+</p>
 
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/tuna/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/tuna)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/ambv/black)
@@ -6,7 +9,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?style=flat-square&logo=github&label=Stars&logoColor=white)](https://github.com/nschloe/tuna)
 [![PyPi downloads](https://img.shields.io/pypi/dd/tuna.svg?style=flat-square)](https://pypistats.org/packages/tuna)
 
-tuna is a Python profile viewer inspired by the amazing
+tuna is a modern, lightweight Python profile viewer inspired by the amazing
 [SnakeViz](https://github.com/jiffyclub/snakeviz). It handles runtime and import
 profiles, is rather small, uses [d3](https://d3js.org/) and
 [bootstrap](https://getbootstrap.com/), and avoids
@@ -76,10 +79,10 @@ tuna only displays the part of the timed call tree that can be deduced from the 
 
 ### Installation
 
-tuna is [available from the Python Package
-Index](https://pypi.org/project/tuna/), so simply type
+tuna is [available from the Python Package Index](https://pypi.org/project/tuna/), so
+simply type
 ```
-pip install -U tuna
+pip3 install tuna --user --upgrade
 ```
 to install or upgrade.
 
