@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 from . import cli
 from .__about__ import (
     __author__,
