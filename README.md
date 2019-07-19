@@ -76,10 +76,10 @@ tuna only displays the part of the timed call tree that can be deduced from the 
 
 ### Installation
 
-tuna is [available from the Python Package
-Index](https://pypi.org/project/tuna/), so simply type
+tuna is [available from the Python Package Index](https://pypi.org/project/tuna/), so
+simply type
 ```
-pip install -U tuna
+pip3 install tuna --user --upgrade
 ```
 to install or upgrade.
 
