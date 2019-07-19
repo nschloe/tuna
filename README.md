@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/nschloe/tuna"><img alt="tuna" src="https://nschloe.github.io/tuna/logo-with-text.svg" width="60%"></a>
-  <p align="center">The tables have termed.</p>
+  <a href="https://github.com/nschloe/tuna"><img alt="tuna" src="https://nschloe.github.io/tuna/logo-with-text.svg" width="50%"></a>
+  <p align="center">Performance analysis for Python.</p>
 </p>
 
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/tuna/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/tuna)
