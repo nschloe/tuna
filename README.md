@@ -9,7 +9,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?style=flat-square&logo=github&label=Stars&logoColor=white)](https://github.com/nschloe/tuna)
 [![PyPi downloads](https://img.shields.io/pypi/dd/tuna.svg?style=flat-square)](https://pypistats.org/packages/tuna)
 
-tuna is a Python profile viewer inspired by the amazing
+tuna is a modern, lightweight Python profile viewer inspired by the amazing
 [SnakeViz](https://github.com/jiffyclub/snakeviz). It handles runtime and import
 profiles, is rather small, uses [d3](https://d3js.org/) and
 [bootstrap](https://getbootstrap.com/), and avoids
