@@ -4,14 +4,14 @@
 </p>
 
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/tuna/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/tuna)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/ambv/black)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 [![PyPi Version](https://img.shields.io/pypi/v/tuna.svg?style=flat-square)](https://pypi.org/project/tuna)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?style=flat-square&logo=github&label=Stars&logoColor=white)](https://github.com/nschloe/tuna)
-[![PyPi downloads](https://img.shields.io/pypi/dd/tuna.svg?style=flat-square)](https://pypistats.org/packages/tuna)
+[![PyPi downloads](https://img.shields.io/pypi/dm/tuna.svg?style=flat-square)](https://pypistats.org/packages/tuna)
 
 tuna is a modern, lightweight Python profile viewer inspired by the amazing
 [SnakeViz](https://github.com/jiffyclub/snakeviz). It handles runtime and import
-profiles, is rather small, uses [d3](https://d3js.org/) and
+profiles, has zero dependencies, uses [d3](https://d3js.org/) and
 [bootstrap](https://getbootstrap.com/), and avoids
 [certain](https://github.com/jiffyclub/snakeviz/issues/111)
 [errors](https://github.com/jiffyclub/snakeviz/issues/112) present in SnakeViz.
