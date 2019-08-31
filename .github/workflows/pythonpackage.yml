@@ -24,12 +24,11 @@ jobs:
         LC_ALL=C.UTF-8 black --check .
     - name: Lint with eslint
       run: |
-        apt install -y npm
+        sudo apt install -y npm
         npm install -g eslint
         eslint tuna/web/static/icicle.js
     - name: Lint with htmlhint
       run: |
-        apt install -y npm
         npm install -g htmlhint
         htmlhint tuna/web/index.html
 
