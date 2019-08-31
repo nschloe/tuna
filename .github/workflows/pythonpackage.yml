@@ -47,7 +47,6 @@ jobs:
         pytest --cov tuna
     - name: Submit to codecov
       run: |
-        apt install -y curl
         pwd
         ls
         bash <(curl -s https://codecov.io/bash) -R ~/work
