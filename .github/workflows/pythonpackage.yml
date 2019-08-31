@@ -43,7 +43,7 @@ jobs:
         pip install .
     - name: Test with pytest
       run: |
-        pip install pytest
+        pip install pytest pytest-cov
         pytest --cov tuna
     - name: Submit to codecov
       run: |
