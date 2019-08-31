@@ -5,15 +5,14 @@ on: [push]
 jobs:
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.7]
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+    - uses: actions/setup-python@v1
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.x"
+    - uses: actions/setup-node@v1
+      with:
+        node-version: "10.x"
+    - uses: actions/checkout@v1
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -24,7 +23,6 @@ jobs:
         LC_ALL=C.UTF-8 black --check .
     - name: Lint with eslint
       run: |
-        sudo apt install -y npm
         npm install -g eslint
         eslint tuna/web/static/icicle.js
     - name: Lint with htmlhint
