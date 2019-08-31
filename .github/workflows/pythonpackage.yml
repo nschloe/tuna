@@ -16,7 +16,7 @@ jobs:
     - name: Lint with flake8
       run: |
         pip install flake8
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 .
     - name: Lint with black
       run: |
         pip install black
@@ -32,16 +32,11 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.5, 3.6, 3.7]
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+    - uses: actions/setup-python@v1
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.x"
+    - uses: actions/checkout@v1
     - name: Install package
       run: |
         python -m pip install --upgrade pip
@@ -49,4 +44,10 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest
+        pytest --cov tuna
+    - name: Submit to codecov
+      run: |
+        apt install -y curl
+        pwd
+        ls
+        bash <(curl -s https://codecov.io/bash) -R ~/work
