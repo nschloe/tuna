@@ -1,0 +1,52 @@
+name: Python package
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v1
+      with:
+        python-version: "3.x"
+    - uses: actions/setup-node@v1
+      with:
+        node-version: "10.x"
+    - uses: actions/checkout@v1
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        flake8 .
+    - name: Lint with black
+      run: |
+        pip install black
+        LC_ALL=C.UTF-8 black --check .
+    - name: Lint with eslint
+      run: |
+        npm install -g eslint
+        eslint tuna/web/static/icicle.js
+    - name: Lint with htmlhint
+      run: |
+        npm install -g htmlhint
+        htmlhint tuna/web/index.html
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v1
+      with:
+        python-version: "3.x"
+    - uses: actions/checkout@v1
+    - name: Install package
+      run: |
+        python -m pip install --upgrade pip
+        pip install .
+    - name: Test with pytest
+      run: |
+        pip install pytest pytest-cov
+        pytest --cov tuna
+    - name: Submit to codecov
+      run: |
+        pwd
+        ls
+        bash <(curl -s https://codecov.io/bash) -R ~/work
