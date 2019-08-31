@@ -28,8 +28,8 @@ clean:
 	@rm -rf *.egg-info/ build/ dist/
 
 lint:
-	flake8 setup.py tuna/ test/*.py
-	black --check setup.py tuna/ test/*.py
+	flake8 .
+	black --check .
 	eslint tuna/web/static/icicle.js
 	htmlhint tuna/web/index.html
 
