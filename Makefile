@@ -9,6 +9,11 @@ tag:
 	git tag v$(VERSION)
 	git push --tags
 
+dep:
+	npm install
+	cp -r node_modules/bootstrap/dist/css/bootstrap.min.css tuna/web/static/
+	cp -r node_modules/d3/dist/d3.min.js tuna/web/static/
+
 upload: setup.py
 	# Make sure we're on the master branch
 	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi
@@ -25,7 +30,7 @@ publish: tag upload
 
 clean:
 	@find . | grep -E "(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf
-	@rm -rf *.egg-info/ build/ dist/
+	@rm -rf *.egg-info/ build/ dist/ node_modules/
 
 lint:
 	flake8 .
