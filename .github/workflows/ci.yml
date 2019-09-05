@@ -1,4 +1,4 @@
-name: Python package
+name: ci
 
 on: [push]
 
@@ -20,7 +20,7 @@ jobs:
     - name: Lint with black
       run: |
         pip install black
-        LC_ALL=C.UTF-8 black --check .
+        black --check .
     - name: Lint with eslint
       run: |
         npm install -g eslint
@@ -46,4 +46,4 @@ jobs:
         pip install pytest pytest-cov
         pytest --cov tuna
     - name: Submit to codecov
-      run: bash <(curl -s https://codecov.io/bash) -R ~/work
+      run: bash <(curl -s https://codecov.io/bash)
