@@ -181,8 +181,7 @@ def read_import_profile(filename):
     # go through the tree and add "color"
     _add_color(tree, False)
 
-    # {"name": "main", "color": 0, "children": lst}
-    return tree
+    return tree[0]
 
 
 def render(data):
