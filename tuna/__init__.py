@@ -6,6 +6,7 @@ from .__about__ import (
     __status__,
     __version__,
 )
+from .main import read_import_profile
 
 __all__ = [
     "__author__",
@@ -14,4 +15,5 @@ __all__ = [
     "__version__",
     "__status__",
     "cli",
+    "read_import_profile",
 ]

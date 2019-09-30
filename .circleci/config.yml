@@ -3,35 +3,33 @@ version: 2
 jobs:
   lint:
     docker:
-      - image: ubuntu:18.04
+      - image: circleci/python:3
     steps:
       - checkout
-      - run: apt update
-      - run: apt install -y python3-pip npm
-      - run: pip3 install -U black flake8
-      - run: npm install -g eslint htmlhint
+      - run: sudo apt install -y npm
+      - run: pip3 install -U black flake8 --user
+      - run: sudo npm install -g eslint htmlhint
       # format and lint
-      - run: LC_ALL=C.UTF-8 black --check setup.py tuna/ test/*.py
-      - run: flake8 setup.py tuna/ test/*.py
+      - run: black --check .
+      - run: flake8 .
       - run: eslint tuna/web/static/icicle.js
       - run: htmlhint tuna/web/index.html
   build:
     working_directory: ~/work
     docker:
-      - image: ubuntu:18.04
+      - image: circleci/python:3
     steps:
-      - run: apt-get update
-      - run: apt-get install -y python3-pip
-      - run: pip3 install -U pytest pytest-cov
+      - run: pip3 install -U pytest pytest-cov --user
       - checkout
-      - run: pip3 install .
+      - run: pip3 install . --user
       # Create a profile file
       - run: python3 -mcProfile -o test/foo.prof test/foo.py
       # The tests
-      - run: cd test/ && pytest --cov tuna
+      - run: 
+          command: pytest --cov tuna
+          working_directory: test/
       # submit to codecov
-      - run: apt-get install -y curl
-      - run: bash <(curl -s https://codecov.io/bash) -R ~/work
+      - run: bash <(curl -s https://codecov.io/bash)
 
 workflows:
   version: 2
