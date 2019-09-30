@@ -1,7 +1,7 @@
 import os
 import subprocess
-import time
 import tempfile
+import time
 
 import tuna  # noqa
 

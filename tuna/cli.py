@@ -54,7 +54,11 @@ def _get_parser():
     )
 
     parser.add_argument(
-        "--port", "-p", default=None, type=int, help="Webserver port (default: first free port from 8000)"
+        "--port",
+        "-p",
+        default=None,
+        type=int,
+        help="Webserver port (default: first free port from 8000)",
     )
 
     parser.add_argument(

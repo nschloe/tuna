@@ -1,5 +1,4 @@
 from . import cli
-from .main import read_import_profile
 from .__about__ import (
     __author__,
     __author_email__,
@@ -7,6 +6,7 @@ from .__about__ import (
     __status__,
     __version__,
 )
+from .main import read_import_profile
 
 __all__ = [
     "__author__",
