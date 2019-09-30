@@ -2,6 +2,7 @@ import json
 import mimetypes
 import os
 import pstats
+import socket
 import string
 import threading
 import webbrowser
@@ -84,24 +85,37 @@ def read_runtime_profile(prof_filename):
     return data
 
 
-def _shelf(lst, k):
-    reference_level = lst[k][1]
-    out = []
-    while k < len(lst):
-        name, level, self_time = lst[k]
-        if level == reference_level:
-            out.append({"name": name, "value": self_time * 1.0e-6})
-            k += 1
-        elif level < reference_level:
-            return out, k
-        else:
-            assert level == reference_level + 1
-            out[-1]["children"], k = _shelf(lst, k)
-    return out, k
+def _sort_into_tree(lst):
+    main = {"name": "main", "color": 0, "children": []}
+
+    # keep a dictionary of the last entry of any given level
+    last = {}
+    last[0] = main
+
+    for entry in lst:
+        name, level, time = entry
+        # find the last entry with level-1
+        last[level - 1]["children"] += [
+            {"name": name, "value": time * 1.0e-6, "children": []}
+        ]
+        last[level] = last[level - 1]["children"][-1]
+
+    _remove_empty_children(main)
+
+    return [main]
 
 
-def _add_color(lst, ancestor_is_built_in):
-    for item in lst:
+def _remove_empty_children(tree):
+    if not tree["children"]:
+        del tree["children"]
+    else:
+        for k, child in enumerate(tree["children"]):
+            tree["children"][k] = _remove_empty_children(child)
+    return tree
+
+
+def _add_color(tree, ancestor_is_built_in):
+    for item in tree:
         module_name = item["name"].split(".")[0]
         is_built_in = (
             ancestor_is_built_in
@@ -159,16 +173,16 @@ def read_import_profile(filename):
             name = last.lstrip()
             num_leading_spaces = len(last) - len(name)
             assert num_leading_spaces % 2 == 0
-            indentation_level = num_leading_spaces // 2
+            indentation_level = num_leading_spaces // 2 + 1
             entries.append((name, indentation_level, self_time))
 
-    lst, k = _shelf(entries[::-1], 0)
-    assert k == len(entries)
+    tree = _sort_into_tree(entries[::-1])
 
     # go through the tree and add "color"
-    _add_color(lst, False)
+    _add_color(tree, False)
 
-    return {"name": "main", "color": 0, "children": lst}
+    # {"name": "main", "color": 0, "children": lst}
+    return tree
 
 
 def render(data):
@@ -179,6 +193,11 @@ def render(data):
     return template.substitute(
         data=escape(json.dumps(data).replace("</", "<\\/")), version=escape(__version__)
     )
+
+
+def is_port_in_use(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(('localhost', port)) == 0
 
 
 def start_server(prof_filename, start_browser, port):
@@ -206,6 +225,11 @@ def start_server(prof_filename, start_browser, port):
                 self.wfile.write(content)
 
             return
+
+    if port is None:
+        port = 8000
+        while is_port_in_use(port):
+            port += 1
 
     httpd = HTTPServer(("", port), StaticServer)
 
