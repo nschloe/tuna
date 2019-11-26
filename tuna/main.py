@@ -1,4 +1,5 @@
 import json
+import logging
 import mimetypes
 import os
 import pstats
@@ -153,18 +154,20 @@ def read_import_profile(filename):
     entries = []
     with open(filename, "r") as f:
         # filtered iterator over lines prefixed with "import time: "
-        import_lines = (
-            line[len("import time: ") :].rstrip()
-            for line in f
-            if line.startswith("import time: ")
-        )
-
         try:
-            line = next(import_lines)
+            line = next(f)
         except UnicodeError:
             raise TunaError()
 
-        for line in import_lines:
+        for line in f:
+            if not line.startswith("import time: "):
+                logging.warning(
+                    "Didn't recognize and skipped line `{}`".format(line.rstrip())
+                )
+                continue
+
+            line = line[len("import time: ") :].rstrip()
+
             if line == "self [us] | cumulative | imported package":
                 continue
             items = line.split(" | ")

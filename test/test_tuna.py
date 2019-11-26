@@ -24,6 +24,7 @@ import time:       3 |    22 |     c
 import time:       2 |    15 |   b
 import time:       1 |    12 | a
 """
+
     ref = {
         "name": "main",
         "color": 0,
@@ -31,8 +32,15 @@ import time:       1 |    12 | a
             {
                 "name": "a",
                 "value": 1e-06,
-                "children": [{"name": "b", "value": 2e-06, "color": 0}],
                 "color": 0,
+                "children": [
+                    {
+                        "name": "b",
+                        "value": 2e-06,
+                        "color": 0,
+                        "children": [{"name": "c", "value": 3e-06, "color": 0}],
+                    }
+                ],
             }
         ],
     }
@@ -45,7 +53,6 @@ import time:       1 |    12 | a
         out = tuna.read_import_profile(filepath)
 
     assert out == ref, ref
-    return
 
 
 def test_importprofile_multiprocessing():
@@ -69,7 +76,20 @@ import time:       1 |    12 | a
                     {
                         "name": "b",
                         "value": 2e-06,
-                        "children": [{"name": "c", "value": 3e-06, "color": 0}],
+                        "children": [
+                            {
+                                "name": "c",
+                                "value": 3e-06,
+                                "children": [
+                                    {
+                                        "name": "e",
+                                        "value": 4.9999999999999996e-06,
+                                        "color": 0,
+                                    }
+                                ],
+                                "color": 0,
+                            }
+                        ],
                         "color": 0,
                     },
                     {"name": "d", "value": 4e-06, "color": 0},
@@ -87,7 +107,6 @@ import time:       1 |    12 | a
         out = tuna.read_import_profile(filepath)
 
     assert out == ref, ref
-    return
 
 
 if __name__ == "__main__":
