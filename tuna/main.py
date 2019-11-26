@@ -191,8 +191,9 @@ def render(data):
         template = string.Template(_file.read())
 
     return template.substitute(
-        data=escape(json.dumps(data["data"]).replace("</", "<\\/")), version=escape(__version__),
-        filename=escape(data["filename"].replace("</", "<\\/"))
+        data=escape(json.dumps(data["data"]).replace("</", "<\\/")),
+        version=escape(__version__),
+        filename=escape(data["filename"].replace("</", "<\\/")),
     )
 
 
