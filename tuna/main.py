@@ -29,7 +29,8 @@ def read(filename):
         pass
 
     # runtime profile
-    return read_runtime_profile(filename)
+    data = read_runtime_profile(filename)
+    return {"data": data, "filename": filename}
 
 
 def read_runtime_profile(prof_filename):
@@ -190,7 +191,9 @@ def render(data):
         template = string.Template(_file.read())
 
     return template.substitute(
-        data=escape(json.dumps(data).replace("</", "<\\/")), version=escape(__version__)
+        data=escape(json.dumps(data["data"]).replace("</", "<\\/")),
+        version=escape(__version__),
+        filename=escape(data["filename"].replace("</", "<\\/")),
     )
 
 
