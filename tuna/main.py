@@ -192,7 +192,7 @@ def render(data):
 
     return template.substitute(
         data=escape(json.dumps(data["data"]).replace("</", "<\\/")), version=escape(__version__),
-        filename=data["filename"]
+        filename=escape(data["filename"].replace("</", "<\\/"))
     )
 
 
