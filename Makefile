@@ -24,7 +24,7 @@ upload: setup.py
 	twine upload dist/*
 
 update:
-	curl https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css > tuna/web/static/bootstrap.min.css
+	curl https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css > tuna/web/static/bootstrap.min.css
 	curl https://d3js.org/d3.v5.min.js > tuna/web/static/d3.min.js
 
 publish: tag upload
