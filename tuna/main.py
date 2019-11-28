@@ -31,7 +31,7 @@ def read(filename):
 
     # runtime profile
     data = read_runtime_profile(filename)
-    return {"data": data, "filename": filename}
+    return data
 
 
 def read_runtime_profile(prof_filename):
@@ -188,15 +188,15 @@ def read_import_profile(filename):
     return tree[0]
 
 
-def render(data):
+def render(data, filename):
     this_dir = os.path.dirname(__file__)
     with open(os.path.join(this_dir, "web", "index.html")) as _file:
         template = string.Template(_file.read())
 
     return template.substitute(
-        data=escape(json.dumps(data["data"]).replace("</", "<\\/")),
+        data=escape(json.dumps(data).replace("</", "<\\/")),
         version=escape(__version__),
-        filename=escape(data["filename"].replace("</", "<\\/")),
+        filename=escape(filename.replace("</", "<\\/")),
     )
 
 
@@ -215,7 +215,7 @@ def start_server(prof_filename, start_browser, port):
             if self.path == "/":
                 self.send_header("Content-type", "text/html")
                 self.end_headers()
-                self.wfile.write(render(data).encode("utf-8"))
+                self.wfile.write(render(data, prof_filename).encode("utf-8"))
             else:
                 this_dir = os.path.dirname(__file__)
                 # Remove the leading slash in self.path
