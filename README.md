@@ -9,9 +9,9 @@
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?style=flat-square&logo=github&label=Stars&logoColor=white)](https://github.com/nschloe/tuna)
 [![PyPi downloads](https://img.shields.io/pypi/dm/tuna.svg?style=flat-square)](https://pypistats.org/packages/tuna)
 
-tuna is a modern, lightweight Python profile viewer inspired by the amazing
+tuna is a modern, lightweight Python profile viewer inspired by
 [SnakeViz](https://github.com/jiffyclub/snakeviz). It handles runtime and import
-profiles, has zero dependencies, uses [d3](https://d3js.org/) and
+profiles, has no Python dependencies, uses [d3](https://d3js.org/) and
 [bootstrap](https://getbootstrap.com/), and avoids
 [certain](https://github.com/jiffyclub/snakeviz/issues/111)
 [errors](https://github.com/jiffyclub/snakeviz/issues/112) present in SnakeViz.
