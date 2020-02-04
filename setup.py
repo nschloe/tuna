@@ -27,7 +27,7 @@ setup(
     url="https://github.com/nschloe/tuna",
     license=about["__license__"],
     platforms="any",
-    python_requires=">=3",
+    python_requires=">=3.6",
     classifiers=[
         about["__status__"],
         about["__license__"],

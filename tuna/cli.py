@@ -17,15 +17,17 @@ def main(argv=None):
         if not os.path.exists(args.outdir):
             os.makedirs(args.outdir)
         with open(os.path.join(args.outdir, "index.html"), "wt") as out:
-            out.write(render(data))
+            out.write(render(data, args.infile))
         this_dir = os.path.dirname(__file__)
-        shutil.rmtree(os.path.join(args.outdir, "static"))
-        shutil.copytree(
-            os.path.join(this_dir, "web", "static"), os.path.join(args.outdir, "static")
-        )
+        static_dir = os.path.join(args.outdir, "static")
+        if os.path.exists(static_dir):
+            shutil.rmtree(static_dir)
+        shutil.copytree(os.path.join(this_dir, "web", "static"), static_dir)
         if args.browser:
             threading.Thread(
-                target=lambda: webbrowser.open_new_tab(args.outdir)
+                target=lambda: webbrowser.open_new_tab(
+                    os.path.join(args.outdir, "index.html")
+                )
             ).start()
     else:
         start_server(args.infile, args.browser, args.port)
@@ -41,8 +43,8 @@ def _get_parser():
         "--outdir",
         default=None,
         type=str,
-        help="output directory for static files"
-        "No server is started if outdir is specified",
+        help="output directory for static files "
+        "(no server is started if outdir is specified)",
     )
 
     parser.add_argument(
@@ -65,6 +67,6 @@ def _get_parser():
         "--version",
         "-v",
         action="version",
-        version="%(prog)s " + ("(version {})".format(__version__)),
+        version="%(prog)s " + (f"(version {__version__})"),
     )
     return parser
