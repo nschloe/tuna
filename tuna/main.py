@@ -42,7 +42,7 @@ def read_runtime_profile(prof_filename):
     # in the graph which happens, for example, if exec() is called somewhere in the
     # program. For this reason, find all nodes without parents and simply hardcode
     # `<built-in method builtins.exec>`.
-    roots = set([])
+    roots = set()
     for item in stats.stats.items():
         key, value = item
         if value[4] == {}:
@@ -130,7 +130,6 @@ def _add_color(tree, ancestor_is_built_in):
         item["color"] = color
         if "children" in item:
             _add_color(item["children"], is_built_in)
-    return
 
 
 def read_import_profile(filename):
@@ -188,7 +187,7 @@ def read_import_profile(filename):
     return tree[0]
 
 
-def render(data, filename):
+def render(data, prof_filename):
     this_dir = os.path.dirname(__file__)
     with open(os.path.join(this_dir, "web", "index.html")) as _file:
         template = string.Template(_file.read())
@@ -196,7 +195,7 @@ def render(data, filename):
     return template.substitute(
         data=escape(json.dumps(data).replace("</", "<\\/")),
         version=escape(__version__),
-        filename=escape(filename.replace("</", "<\\/")),
+        filename=escape(prof_filename.replace("</", "<\\/")),
     )
 
 
@@ -239,9 +238,8 @@ def start_server(prof_filename, start_browser, port):
     httpd = HTTPServer(("", port), StaticServer)
 
     if start_browser:
-        address = "http://localhost:{}".format(port)
+        address = f"http://localhost:{port}"
         threading.Thread(target=lambda: webbrowser.open_new_tab(address)).start()
 
-    print("Starting httpd on port {}".format(port))
+    print(f"Starting httpd on port {port}")
     httpd.serve_forever()
-    return

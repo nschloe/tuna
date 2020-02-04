@@ -17,7 +17,7 @@ def main(argv=None):
         if not os.path.exists(args.outdir):
             os.makedirs(args.outdir)
         with open(os.path.join(args.outdir, "index.html"), "wt") as out:
-            out.write(render(data))
+            out.write(render(data, args.infile))
         this_dir = os.path.dirname(__file__)
         shutil.rmtree(os.path.join(args.outdir, "static"))
         shutil.copytree(
@@ -41,8 +41,8 @@ def _get_parser():
         "--outdir",
         default=None,
         type=str,
-        help="output directory for static files"
-        "No server is started if outdir is specified",
+        help="output directory for static files "
+        "(no server is started if outdir is specified)",
     )
 
     parser.add_argument(
@@ -65,6 +65,6 @@ def _get_parser():
         "--version",
         "-v",
         action="version",
-        version="%(prog)s " + ("(version {})".format(__version__)),
+        version="%(prog)s " + (f"(version {__version__})"),
     )
     return parser
