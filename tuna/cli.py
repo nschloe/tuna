@@ -19,13 +19,15 @@ def main(argv=None):
         with open(os.path.join(args.outdir, "index.html"), "wt") as out:
             out.write(render(data, args.infile))
         this_dir = os.path.dirname(__file__)
-        shutil.rmtree(os.path.join(args.outdir, "static"))
-        shutil.copytree(
-            os.path.join(this_dir, "web", "static"), os.path.join(args.outdir, "static")
-        )
+        static_dir = os.path.join(args.outdir, "static")
+        if os.path.exists(static_dir):
+            shutil.rmtree(static_dir)
+        shutil.copytree(os.path.join(this_dir, "web", "static"), static_dir)
         if args.browser:
             threading.Thread(
-                target=lambda: webbrowser.open_new_tab(args.outdir)
+                target=lambda: webbrowser.open_new_tab(
+                    os.path.join(args.outdir, "index.html")
+                )
             ).start()
     else:
         start_server(args.infile, args.browser, args.port)
