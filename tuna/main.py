@@ -47,9 +47,14 @@ def read_runtime_profile(prof_filename):
         key, value = item
         if value[4] == {}:
             roots.add(key)
-    default_root = ("~", 0, "<built-in method builtins.exec>")
-    if default_root in stats.stats:
-        roots.add(default_root)
+
+    default_roots = [
+        ("~", 0, "<built-in method builtins.exec>"),
+        ("~", 0, "<built-in method exec>"),
+    ]
+    for default_root in default_roots:
+        if default_root in stats.stats:
+            roots.add(default_root)
     roots = list(roots)
 
     # Collect children
@@ -151,7 +156,7 @@ def read_import_profile(filename):
     # above example, `encodings` is parent to `encodings.aliases` and `codecs` which in
     # turn is parent to `_codecs`.
     entries = []
-    with open(filename, "r") as f:
+    with open(filename) as f:
         # filtered iterator over lines prefixed with "import time: "
         try:
             line = next(f)
@@ -160,9 +165,7 @@ def read_import_profile(filename):
 
         for line in f:
             if not line.startswith("import time: "):
-                logging.warning(
-                    "Didn't recognize and skipped line `{}`".format(line.rstrip())
-                )
+                logging.warning(f"Didn't recognize and skipped line `{line.rstrip()}`")
                 continue
 
             line = line[len("import time: ") :].rstrip()

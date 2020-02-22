@@ -1,4 +1,3 @@
-import codecs
 import os
 
 from setuptools import find_packages, setup
@@ -10,11 +9,6 @@ with open(os.path.join(base_dir, "tuna", "__about__.py"), "rb") as f:
     exec(f.read(), about)
 
 
-def read(fname):
-    with codecs.open(os.path.join(base_dir, fname), encoding="utf-8") as f:
-        return f.read()
-
-
 setup(
     name="tuna",
     version=about["__version__"],
@@ -22,7 +16,7 @@ setup(
     author_email=about["__author_email__"],
     packages=find_packages(),
     description="Visualize Python profiles in the browser",
-    long_description=read("README.md"),
+    long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/nschloe/tuna",
     license=about["__license__"],
@@ -33,8 +27,9 @@ setup(
         about["__license__"],
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Topic :: Software Development :: User Interfaces",
     ],
     entry_points={"console_scripts": ["tuna = tuna.cli:main"]},
