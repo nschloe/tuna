@@ -156,7 +156,7 @@ def read_import_profile(filename):
     # above example, `encodings` is parent to `encodings.aliases` and `codecs` which in
     # turn is parent to `_codecs`.
     entries = []
-    with open(filename, "r") as f:
+    with open(filename) as f:
         # filtered iterator over lines prefixed with "import time: "
         try:
             line = next(f)
@@ -166,7 +166,7 @@ def read_import_profile(filename):
         for line in f:
             if not line.startswith("import time: "):
                 logging.warning(
-                    "Didn't recognize and skipped line `{}`".format(line.rstrip())
+                    f"Didn't recognize and skipped line `{line.rstrip()}`"
                 )
                 continue
 

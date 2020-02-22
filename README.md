@@ -5,6 +5,7 @@
 
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/tuna/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/tuna)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/tuna.svg?style=flat-square)](https://pypi.org/pypi/tuna/)
 [![PyPi Version](https://img.shields.io/pypi/v/tuna.svg?style=flat-square)](https://pypi.org/project/tuna)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?style=flat-square&logo=github&label=Stars&logoColor=white)](https://github.com/nschloe/tuna)
 [![PyPi downloads](https://img.shields.io/pypi/dm/tuna.svg?style=flat-square)](https://pypistats.org/packages/tuna)
