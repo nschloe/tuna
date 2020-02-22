@@ -47,9 +47,14 @@ def read_runtime_profile(prof_filename):
         key, value = item
         if value[4] == {}:
             roots.add(key)
-    default_root = ("~", 0, "<built-in method builtins.exec>")
-    if default_root in stats.stats:
-        roots.add(default_root)
+
+    default_roots = [
+        ("~", 0, "<built-in method builtins.exec>"),
+        ("~", 0, "<built-in method exec>"),
+    ]
+    for default_root in default_roots:
+        if default_root in stats.stats:
+            roots.add(default_root)
     roots = list(roots)
 
     # Collect children
