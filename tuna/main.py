@@ -165,9 +165,7 @@ def read_import_profile(filename):
 
         for line in f:
             if not line.startswith("import time: "):
-                logging.warning(
-                    f"Didn't recognize and skipped line `{line.rstrip()}`"
-                )
+                logging.warning(f"Didn't recognize and skipped line `{line.rstrip()}`")
                 continue
 
             line = line[len("import time: ") :].rstrip()
