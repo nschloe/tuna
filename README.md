@@ -79,8 +79,7 @@ providing lots of _wrong_ timings.
 
 | ![](https://nschloe.github.io/tuna/snakeviz-example-wrong.png) | ![](https://nschloe.github.io/tuna/foo.png) |
 |:----:|:----:|
-| SnakeViz output. **Wrong.** | tuna output. Only shows what can be retrieved from the
-profile. |
+| SnakeViz output. **Wrong.** | tuna output. Only shows what can be retrieved from the profile. |
 
 ### Installation
 
