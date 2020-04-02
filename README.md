@@ -15,7 +15,8 @@ tuna is a modern, lightweight Python profile viewer inspired by
 profiles, has no Python dependencies, uses [d3](https://d3js.org/) and
 [bootstrap](https://getbootstrap.com/), and avoids
 [certain](https://github.com/jiffyclub/snakeviz/issues/111)
-[errors](https://github.com/jiffyclub/snakeviz/issues/112) present in SnakeViz.
+[errors](https://github.com/jiffyclub/snakeviz/issues/112) present in SnakeViz (see
+below).
 
 Create a runtime profile with
 ```
@@ -47,21 +48,18 @@ import time
 def a(t0, t1):
     c(t0)
     d(t1)
-    return
 
 
 def b():
-    return a(1, 4)
+    a(1, 4)
 
 
 def c(t):
     time.sleep(t)
-    return
 
 
 def d(t):
     time.sleep(t)
-    return
 
 
 if __name__ == "__main__":
@@ -75,8 +73,14 @@ total of 5 seconds when called from `a()`, and likewise `d()`. The information t
 program spent more time in `c()` when called in `root -> a() -> c()` than when called in
 `root -> b() -> a() -> c()` is not present in the profile.
 
-tuna only displays the part of the timed call tree that can be deduced from the profile:
-![](https://nschloe.github.io/tuna/foo.png)
+tuna only displays the part of the timed call tree that can be deduced from the profile.
+SnakeViz, on the other hand, tries to construct the entire call tree, but ends up
+providing lots of _wrong_ timings.
+
+| ![](https://nschloe.github.io/tuna/snakeviz-example-wrong.png) | ![](https://nschloe.github.io/tuna/foo.png) |
+|:----:|:----:|
+| SnakeViz output. **Wrong.** | tuna output. Only shows what can be retrieved from the
+profile. |
 
 ### Installation
 
@@ -96,5 +100,4 @@ pytest
 ```
 
 ### License
-
-tuna is published under the [MIT license](https://en.wikipedia.org/wiki/MIT_License).
+This software is published under the [GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
