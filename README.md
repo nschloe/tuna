@@ -48,21 +48,18 @@ import time
 def a(t0, t1):
     c(t0)
     d(t1)
-    return
 
 
 def b():
-    return a(1, 4)
+    a(1, 4)
 
 
 def c(t):
     time.sleep(t)
-    return
 
 
 def d(t):
     time.sleep(t)
-    return
 
 
 if __name__ == "__main__":
@@ -78,7 +75,7 @@ program spent more time in `c()` when called in `root -> a() -> c()` than when c
 
 tuna only displays the part of the timed call tree that can be deduced from the profile.
 SnakeViz, on the other hand, tries to construct the entire call tree, but ends up
-providing lots of wrong timings.
+providing lots of _wrong_ timings.
 
 | ![](https://nschloe.github.io/tuna/snakeviz-example-wrong.png) | ![](https://nschloe.github.io/tuna/foo.png) |
 |:----:|:----:|
