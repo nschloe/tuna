@@ -1,3 +1,4 @@
+import html
 import json
 import logging
 import mimetypes
@@ -12,18 +13,12 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from .__about__ import __version__
 from .module_groups import built_in, built_in_deprecated
 
-try:
-    from html import escape
-except ImportError:
-    from cgi import escape
-
 
 class TunaError(Exception):
     pass
 
 
 def read(filename):
-    _, ext = os.path.splitext(filename)
     try:
         return read_import_profile(filename)
     except (TunaError, StopIteration):
@@ -196,9 +191,9 @@ def render(data, prof_filename):
         template = string.Template(_file.read())
 
     return template.substitute(
-        data=escape(json.dumps(data).replace("</", "<\\/")),
-        version=escape(__version__),
-        filename=escape(prof_filename.replace("</", "<\\/")),
+        data=html.escape(json.dumps(data).replace("</", "<\\/")),
+        version=html.escape(__version__),
+        filename=html.escape(prof_filename.replace("</", "<\\/")),
     )
 
 
