@@ -1,8 +1,8 @@
 import argparse
-import os.path
 import shutil
 import threading
 import webbrowser
+from pathlib import Path
 
 from .__about__ import __version__
 from .main import read, render, start_server
@@ -14,20 +14,19 @@ def main(argv=None):
 
     if args.outdir:
         data = read(args.infile)
-        if not os.path.exists(args.outdir):
-            os.makedirs(args.outdir)
-        with open(os.path.join(args.outdir, "index.html"), "wt") as out:
+        outdir = Path(args.outdir)
+        if not outdir.is_dir():
+            outdir.mkdir(parents=True)
+        with open(outdir / "index.html", "wt") as out:
             out.write(render(data, args.infile))
-        this_dir = os.path.dirname(__file__)
-        static_dir = os.path.join(args.outdir, "static")
-        if os.path.exists(static_dir):
+        this_dir = Path(__file__).resolve().parent
+        static_dir = outdir / "static"
+        if static_dir.is_dir():
             shutil.rmtree(static_dir)
-        shutil.copytree(os.path.join(this_dir, "web", "static"), static_dir)
+        shutil.copytree(this_dir / "web" / "static", static_dir)
         if args.browser:
             threading.Thread(
-                target=lambda: webbrowser.open_new_tab(
-                    os.path.join(args.outdir, "index.html")
-                )
+                target=lambda: webbrowser.open_new_tab(outdir / "index.html")
             ).start()
     else:
         start_server(args.infile, args.browser, args.port)

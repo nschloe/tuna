@@ -2,13 +2,13 @@ import html
 import json
 import logging
 import mimetypes
-import os
 import pstats
 import socket
 import string
 import threading
 import webbrowser
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
 
 from .__about__ import __version__
 from .module_groups import built_in, built_in_deprecated
@@ -186,8 +186,8 @@ def read_import_profile(filename):
 
 
 def render(data, prof_filename):
-    this_dir = os.path.dirname(__file__)
-    with open(os.path.join(this_dir, "web", "index.html")) as _file:
+    this_dir = Path(__file__).resolve().parent
+    with open(this_dir / "web" / "index.html") as _file:
         template = string.Template(_file.read())
 
     return template.substitute(
@@ -214,9 +214,8 @@ def start_server(prof_filename, start_browser, port):
                 self.end_headers()
                 self.wfile.write(render(data, prof_filename).encode("utf-8"))
             else:
-                this_dir = os.path.dirname(__file__)
-                # Remove the leading slash in self.path
-                filepath = os.path.join(this_dir, "web", self.path[1:])
+                this_dir = Path(__file__).resolve().parent
+                filepath = this_dir / "web" / self.path
 
                 mimetype, _ = mimetypes.guess_type(filepath)
                 self.send_header("Content-type", mimetype)

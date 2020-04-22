@@ -1,14 +1,14 @@
-import os
 import subprocess
 import tempfile
 import time
+from pathlib import Path
 
 import tuna  # noqa
 
 
 def test_tuna():
-    this_dir = os.path.dirname(__file__)
-    filename = os.path.join(this_dir, "foo.prof")
+    this_dir = Path(__file__).resolve().parent
+    filename = this_dir / "foo.prof"
     cmd = ["tuna", filename, "--no-browser"]
 
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -46,7 +46,7 @@ import time:       1 |    12 | a
     }
 
     with tempfile.TemporaryDirectory() as temp_dir:
-        filepath = os.path.join(temp_dir, "test.log")
+        filepath = Path(temp_dir) / "test.log"
         with open(filepath, "w") as f:
             f.write(content)
 
@@ -100,7 +100,7 @@ import time:       1 |    12 | a
     }
 
     with tempfile.TemporaryDirectory() as temp_dir:
-        filepath = os.path.join(temp_dir, "test.log")
+        filepath = Path(temp_dir) / "test.log"
         with open(filepath, "w") as f:
             f.write(content)
 
