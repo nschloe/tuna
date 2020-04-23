@@ -215,7 +215,7 @@ def start_server(prof_filename, start_browser, port):
                 self.wfile.write(render(data, prof_filename).encode("utf-8"))
             else:
                 this_dir = Path(__file__).resolve().parent
-                filepath = this_dir / "web" / self.path
+                filepath = this_dir / "web" / self.path[1:]
 
                 mimetype, _ = mimetypes.guess_type(filepath)
                 self.send_header("Content-type", mimetype)
