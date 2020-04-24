@@ -61,10 +61,10 @@ def read_runtime_profile(prof_filename):
 
     def populate(key, parent):
         if parent is None:
-            _, _, selftime, cumtime, parent_times = stats.stats[key]
-            parent_times = []
+            _, _, selftime, cumtime, _ = stats.stats[key]
+            parent_times = {}
         else:
-            _, _, _, _, parent_times = stats.stats[key]
+            _, _, x, _, parent_times = stats.stats[key]
             _, _, selftime, cumtime = parent_times[parent]
 
         # Convert the tuple key into a string
@@ -76,7 +76,16 @@ def read_runtime_profile(prof_filename):
             c.append({"name": name + "::self", "color": 0, "value": selftime})
             out = {"name": name, "color": 0, "children": c}
         else:
-            out = {"name": name, "color": 0, "value": cumtime}
+            # More than one parent; we cannot further determine the call times.
+            # Terminate the tree here.
+            if children[key]:
+                msg = "Possible calls of " + ", ".join(
+                    "{}::{}::{}".format(*child) for child in children[key]
+                )
+                c = [{"name": msg, "color": 2, "value": cumtime}]
+                out = {"name": name, "color": 0, "children": c}
+            else:
+                out = {"name": name, "color": 0, "value": cumtime}
         return out
 
     data = {
