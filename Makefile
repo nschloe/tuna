@@ -18,7 +18,7 @@ dep:
 upload: setup.py
 	# Make sure we're on the master branch
 	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi
-	rm -f dist/*
+	rm -rf dist/*
 	python3 setup.py sdist
 	python3 setup.py bdist_wheel
 	twine upload dist/*
