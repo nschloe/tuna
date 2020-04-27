@@ -33,6 +33,16 @@ rect {
   fill: #0277BD;
 }
 
+.color3 rect {
+  /* material design gray 50 400 */
+  fill: #BDBDBD;
+}
+
+.color3:hover rect {
+  /* material design gray 50 600 */
+  fill: #757575;
+}
+
 
 /* From
  * <https://getbootstrap.com/docs/4.1/examples/sticky-footer-navbar/sticky-footer-navbar.css>
