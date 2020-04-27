@@ -82,7 +82,7 @@ def read_runtime_profile(prof_filename):
                 msg = "Possible calls of " + ", ".join(
                     "{}::{}::{}".format(*child) for child in children[key]
                 )
-                c = [{"name": msg, "color": 2, "value": cumtime}]
+                c = [{"name": msg, "color": 3, "value": cumtime}]
                 out = {"name": name, "color": 0, "children": c}
             else:
                 out = {"name": name, "color": 0, "value": cumtime}
