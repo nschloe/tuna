@@ -226,7 +226,7 @@ def start_server(prof_filename, start_browser, port):
                 this_dir = Path(__file__).resolve().parent
                 filepath = this_dir / "web" / self.path[1:]
 
-                mimetype, _ = mimetypes.guess_type(filepath)
+                mimetype, _ = mimetypes.guess_type(str(filepath))
                 self.send_header("Content-type", mimetype)
                 self.end_headers()
 
