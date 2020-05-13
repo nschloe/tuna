@@ -25,10 +25,11 @@ jobs:
       run: |
         npm install -g eslint
         eslint tuna/web/static/icicle.js
-    - name: Lint with htmlhint
-      run: |
-        npm install -g htmlhint
-        htmlhint tuna/web/index.html
+    # May 2020: htmlhint broken: SyntaxError: Unexpected token return
+    # - name: Lint with htmlhint
+    #   run: |
+    #     npm install -g htmlhint
+    #     htmlhint tuna/web/index.html
 
   build:
     runs-on: ubuntu-latest
