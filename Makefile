@@ -15,16 +15,17 @@ dep:
 	cp -r node_modules/bootstrap/dist/css/bootstrap.min.css tuna/web/static/
 	cp -r node_modules/d3/dist/d3.min.js tuna/web/static/
 
-upload: setup.py
+upload:
 	# Make sure we're on the master branch
 	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi
 	rm -rf dist/*
-	python3 setup.py sdist
-	python3 setup.py bdist_wheel
+	# python3 setup.py sdist bdist_wheel
+	# https://stackoverflow.com/a/58756491/353337
+	python3 -m pep517.build --source --binary .
 	twine upload dist/*
 
 update:
-	curl https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css > tuna/web/static/bootstrap.min.css
+	curl https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css > tuna/web/static/bootstrap.min.css
 	curl https://d3js.org/d3.v5.min.js > tuna/web/static/d3.min.js
 
 publish: tag upload
