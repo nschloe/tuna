@@ -12,16 +12,18 @@ from IPython.utils.io import capture_output
 from .cli import main as tuna_main
 
 
-def _display_tuna(tuna_dir: str, row_height: int = 60, iframe_height: int = 500) -> HTML:
+def _display_tuna(
+    tuna_dir: str, row_height: int = 60, iframe_height: int = 500
+) -> HTML:
     tuna_dir = Path(tuna_dir)
     static_dir = tuna_dir / "static"
 
     # in-line all of the css and js files
     replacements = {
         '<link rel="stylesheet" href="static/bootstrap.min.css">': "bootstrap.min.css",
-        '<link href="static/tuna.css" rel="stylesheet">': 'tuna.css',
-        '<script src="static/d3.min.js"></script>': 'd3.min.js',
-        '<script src="static/icicle.js"></script>': 'icicle.js',
+        '<link href="static/tuna.css" rel="stylesheet">': "tuna.css",
+        '<script src="static/d3.min.js"></script>': "d3.min.js",
+        '<script src="static/icicle.js"></script>': "icicle.js",
     }
 
     page = (tuna_dir / "index.html").read_text()
@@ -41,7 +43,16 @@ def _display_tuna(tuna_dir: str, row_height: int = 60, iframe_height: int = 500)
     # displayed
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=UserWarning)
-        return HTML(f"""<iframe srcdoc="{html.escape(page)}" style="border: 0" width="100%" height={iframe_height}></iframe>""")
+        return HTML(
+            f"""
+            <iframe
+              srcdoc="{html.escape(page)}"
+              style="border: 0"
+              width="100%"
+              height={iframe_height}>
+            </iframe>
+            """
+        )
 
 
 @register_line_cell_magic
