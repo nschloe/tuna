@@ -12,7 +12,7 @@ from IPython.utils.io import capture_output
 from .cli import main as tuna_main
 
 
-def _display_tuna(tuna_dir: str, row_height: int=60, iframe_height: int=500) -> HTML:
+def _display_tuna(tuna_dir: str, row_height: int = 60, iframe_height: int = 500) -> HTML:
     tuna_dir = Path(tuna_dir)
     static_dir = tuna_dir / "static"
 
@@ -45,8 +45,8 @@ def _display_tuna(tuna_dir: str, row_height: int=60, iframe_height: int=500) -> 
 
 
 @register_line_cell_magic
-def tuna(line: str, cell: Optional[str]=None) -> HTML:
-    ip = get_ipython()
+def tuna(line: str, cell: Optional[str] = None) -> HTML:
+    ip = get_ipython()  # noqa: F821
     with tempfile.TemporaryDirectory() as tmp_dir:
         prun_fname = f"{tmp_dir}/prun"
         prun_line = f"-q -D {prun_fname}"
