@@ -98,5 +98,9 @@ To run the tuna unit tests, check out this repository and type
 pytest
 ```
 
+### Development
+
+After forking and cloning the repository, make sure to run `make dep` to install additional dependencies (bootstrap and d3) which aren't stored in the repo.
+
 ### License
 This software is published under the [GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
