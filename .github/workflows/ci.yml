@@ -6,7 +6,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-python@v1
+    - uses: actions/setup-python@v2
       with:
         python-version: "3.x"
     - uses: actions/setup-node@v1
@@ -37,16 +37,14 @@ jobs:
       matrix:
         python-version: [3.6, 3.7, 3.8]
     steps:
-    - uses: actions/setup-python@v1
+    - uses: actions/setup-python@v2
       with:
-        python-version: "3.x"
+        python-version: ${{ matrix.python-version }}
     - uses: actions/checkout@v2
-    - name: Install package
+    - name: Test with tox
       run: |
-        pip install .
-    - name: Test with pytest
-      run: |
-        pip install pytest pytest-cov
-        pytest --cov tuna
-    # - name: Submit to codecov
-    #   run: bash <(curl -s https://codecov.io/bash)
+        pip install tox
+        tox
+    - name: Submit to codecov
+      if: ${{ matrix.python-version == '3.8' }}
+      run: bash <(curl -s https://codecov.io/bash)
