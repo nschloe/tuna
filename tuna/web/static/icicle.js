@@ -107,7 +107,7 @@ class Icicle extends HTMLElement {
       )
     );
 
-    function clicked(d) {
+    function clicked(evnt, d) {
       const offset = d.y0 ? 20 : 0;
       const height = root.height - d.depth;
       const newHeight = (height+1) * this.rowHeight + (height+1) * strokeWidth;

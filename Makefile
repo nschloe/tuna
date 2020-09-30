@@ -7,22 +7,26 @@ tag:
 	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi
 	curl -H "Authorization: token `cat $(HOME)/.github-access-token`" -d '{"tag_name": "v$(VERSION)"}' https://api.github.com/repos/nschloe/tuna/releases
 
+upload: clean
+	# Make sure we're on the master branch
+	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi
+	# https://stackoverflow.com/a/58756491/353337
+	python3 -m pep517.build --source --binary .
+	twine upload dist/*
+
+# update:
+# 	curl https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css > tuna/web/static/bootstrap.min.css
+# 	curl https://d3js.org/d3.v5.min.js > tuna/web/static/d3.min.js
+
 dep:
 	npm install
 	cp -r node_modules/bootstrap/dist/css/bootstrap.min.css tuna/web/static/
 	cp -r node_modules/d3/dist/d3.min.js tuna/web/static/
 
-upload:
-	# Make sure we're on the master branch
-	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi
-	rm -rf dist/*
-	# https://stackoverflow.com/a/58756491/353337
-	python3 -m pep517.build --source --binary .
-	twine upload dist/*
-
 update:
-	curl https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css > tuna/web/static/bootstrap.min.css
-	curl https://d3js.org/d3.v5.min.js > tuna/web/static/d3.min.js
+	npm update
+	npm update --save-dev
+	npm outdated
 
 publish: tag upload
 
