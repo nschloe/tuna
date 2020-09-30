@@ -12,13 +12,15 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-light bg-light">
-      <div class="navbar-header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
         <a class="navbar-brand" href="https://github.com/nschloe/tuna">
           <img src="static/favicon256.png" width="30" height="30" class="d-inline-block align-top" alt="">
           tuna
         </a>
-        ${filename}
+        <div class="collapse navbar-collapse">
+          ${filename}
+        </div>
       </div>
     </nav>
 
@@ -30,8 +32,8 @@
       </div>
     </div>
 
-    <footer class="footer">
-      <div class="container text-muted">
+    <footer class="bg-light text-center text-lg-left">
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
         tuna v${version}
       </div>
     </footer>
