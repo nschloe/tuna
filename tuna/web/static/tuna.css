@@ -62,3 +62,8 @@ body {
   line-height: 60px;
   background-color: #f5f5f5;
 }
+
+/**/
+.sticky-offset {
+  top: 40px !important;
+}
