@@ -23,17 +23,20 @@ class Icicle extends HTMLElement {
     let id = 0;
     root.descendants().forEach(function(d) {d.id = id; id++;});
 
+    // Find the resetZoomButton and call clicked() with root
+    const button = document.getElementById('resetZoomButton');
+    button.addEventListener('click', (evt => {
+      (clicked.bind(this))(evt, root);
+    }));
+
     const strokeWidth = 1;
     const numLevels = root.height + 1;
     const height = numLevels * this.rowHeight + numLevels * strokeWidth;
 
     this.svg.attr("height", height);
 
-    const x = d3.scaleLinear()
-      .range([0, this.width]);
-
-    const y = d3.scaleLinear()
-      .range([0, height]);
+    const x = d3.scaleLinear().range([0, this.width]);
+    const y = d3.scaleLinear().range([0, height]);
 
     const totalRuntime = root.value;
 
@@ -113,7 +116,7 @@ class Icicle extends HTMLElement {
       )
     );
 
-    function clicked(evnt, d) {
+    function clicked(evt, d) {
       const offset = d.y0 ? 20 : 0;
       const height = root.height - d.depth;
       const newHeight = (height+1) * this.rowHeight + (height+1) * strokeWidth;
