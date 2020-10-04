@@ -12,23 +12,36 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="https://github.com/nschloe/tuna">
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3"
+        href="https://github.com/nschloe/tuna">
           <img src="static/favicon256.png" width="30" height="30" class="d-inline-block align-top" alt="">
           tuna
-        </a>
-        <div class="collapse navbar-collapse">
-          ${filename}
-        </div>
+      </a>
+      <div class="text-white w-100">
+        ${filename}
       </div>
     </nav>
 
-    <div class="container-fluid py-md-3">
+    <div class="container-fluid">
       <div class="row">
-        <div class="col">
-          <x-icicle data="${data}" row-height="100"></x-icicle>
-        </div>
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sticky-sidebar
+          collapse">
+          <div class="pt-3 sticky-top sticky-offset">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                Reset zoom
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+          <div class="justify-content-between flex-wrap flex-md-nowrap
+            align-items-center pt-3 pb-2 mb-3">
+            <x-icicle data="${data}" row-height="100"></x-icicle>
+          </div>
+        </main>
       </div>
     </div>
 
