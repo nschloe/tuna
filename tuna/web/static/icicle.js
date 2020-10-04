@@ -100,8 +100,14 @@ class Icicle extends HTMLElement {
         )
         .call(el => el.append("tspan")
           .call(tspan2 => { to_anim.tspan2 = tspan2; })
-          .text(d => d3.format(".3f")(d.value) + " s  (" + d3.format(".1%")(d.value / totalRuntime) + ")")
-          .attr("x", d => x(d.x0 + d.x1)/2)
+          .text(
+            d =>
+            d3.format(".3f")(d.value) +
+            " s  (" +
+            d3.format(".1%")(d.value / totalRuntime)
+            + ")"
+          )
+          .attr("x", d => x(d.x0 + d.x1) / 2)
           .attr("dy", "1.5em")
         )
       )
@@ -113,51 +119,40 @@ class Icicle extends HTMLElement {
       const newHeight = (height+1) * this.rowHeight + (height+1) * strokeWidth;
       x.domain([d.x0, d.x1]).range([0, this.width]);
       y.domain([d.y0, 1]).range([offset, newHeight + offset]);
-
-      const trans = d3.transition()
-        .duration(750);
-
+      const trans = d3.transition().duration(300);
       to_anim.rect.transition(trans)
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
-
       to_anim.clipRect.transition(trans)
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
-
       to_anim.text.transition(trans)
-        .attr("y", d => y((d.y0 + d.y1)/2));
-
+        .attr("y", d => y((d.y0 + d.y1) / 2));
       to_anim.tspan1.transition(trans)
-        .attr("x", d => x((d.x0 + d.x1)/2));
-
+        .attr("x", d => x((d.x0 + d.x1) / 2));
       to_anim.tspan2.transition(trans)
-        .attr("x", d => x((d.x0 + d.x1)/2));
+        .attr("x", d => x((d.x0 + d.x1) / 2));
     }
 
-    // TODO: This repeats a lot of the content of `clicked`
+    // TODO: This repeats much of the content of `clicked`
     window.addEventListener('resize', e => {
       x.range([0, this.width]);
       to_anim.rect
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
-
       to_anim.clipRect
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
-
       to_anim.text
-        .attr("y", d => y((d.y0 + d.y1)/2));
-
+        .attr("y", d => y((d.y0 + d.y1) / 2));
       to_anim.tspan1
-        .attr("x", d => x((d.x0 + d.x1)/2));
-
+        .attr("x", d => x((d.x0 + d.x1) / 2));
       to_anim.tspan2
-        .attr("x", d => x((d.x0 + d.x1)/2));
+        .attr("x", d => x((d.x0 + d.x1) / 2));
     });
   }
 }
