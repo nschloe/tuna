@@ -163,7 +163,8 @@ def read_import_profile(filename):
     with open(filename) as f:
         # filtered iterator over lines prefixed with "import time: "
         try:
-            line = next(f)
+            # skip first line
+            next(f)
         except UnicodeError:
             raise TunaError()
 

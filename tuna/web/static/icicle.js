@@ -13,7 +13,7 @@ class Icicle extends HTMLElement {
   }
 
   render () {
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    // const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     const root = d3.hierarchy(this.data)
       .sum(d => d.value)
@@ -50,7 +50,8 @@ class Icicle extends HTMLElement {
 
     // Put text and rectangle into a group;
     // cf. <https://stackoverflow.com/a/6732550/353337>.
-    const g = this.svg.selectAll("g").data(
+    // const g =
+    this.svg.selectAll("g").data(
       // Only get the blocks above a certain threshold width
       root.descendants().filter(d => x(d.x1 - d.x0) > 1.0)
     )
