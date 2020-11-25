@@ -3,20 +3,23 @@
   <p align="center">Performance analysis for Python.</p>
 </p>
 
-[![CircleCI](https://img.shields.io/circleci/project/github/nschloe/tuna/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/tuna)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/tuna.svg?style=flat-square)](https://pypi.org/pypi/tuna/)
 [![PyPi Version](https://img.shields.io/pypi/v/tuna.svg?style=flat-square)](https://pypi.org/project/tuna)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/tuna.svg?style=flat-square)](https://pypi.org/pypi/tuna/)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/tuna.svg?style=flat-square&logo=github&label=Stars&logoColor=white)](https://github.com/nschloe/tuna)
 [![PyPi downloads](https://img.shields.io/pypi/dm/tuna.svg?style=flat-square)](https://pypistats.org/packages/tuna)
 
+[![gh-actions](https://img.shields.io/github/workflow/status/nschloe/tuna/ci?style=flat-square)](https://github.com/nschloe/tuna/actions?query=workflow%3Aci)
+[![codecov](https://img.shields.io/codecov/c/github/nschloe/tuna.svg?style=flat-square)](https://codecov.io/gh/nschloe/tuna)
+[![LGTM](https://img.shields.io/lgtm/grade/python/github/nschloe/tuna.svg?style=flat-square)](https://lgtm.com/projects/g/nschloe/tuna)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
+
 tuna is a modern, lightweight Python profile viewer inspired by
 [SnakeViz](https://github.com/jiffyclub/snakeviz). It handles runtime and import
-profiles, has no Python dependencies, uses [d3](https://d3js.org/) and
+profiles, has minimal dependencies, uses [d3](https://d3js.org/) and
 [bootstrap](https://getbootstrap.com/), and avoids
 [certain](https://github.com/jiffyclub/snakeviz/issues/111)
 [errors](https://github.com/jiffyclub/snakeviz/issues/112) present in SnakeViz (see
-below).
+below) and is faster, too.
 
 Create a runtime profile with
 ```
