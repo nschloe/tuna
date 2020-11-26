@@ -45,79 +45,69 @@ class Icicle extends HTMLElement {
     // .round(true);
     partition(root);
 
-    // array for storing all entities that are animated upon transition
-    const to_anim = {};
-
     // Put text and rectangle into a group;
     // cf. <https://stackoverflow.com/a/6732550/353337>.
-    // const g =
-    this.svg.selectAll("g").data(
+    const all_g = this.svg.selectAll("g");
+    const g = all_g.data(
       // Only get the blocks above a certain threshold width
       root.descendants().filter(d => x(d.x1 - d.x0) > 1.0)
     )
-    .enter()
-    .call(el => el.append("g")
+    .enter().append("g")
       .attr("class", d => "color" + d.data.color)
-      .on("click", clicked.bind(this))  // binding ensures `this` is correct in clicked
-      // title, typically rendered as tooltip
-      .call(el => el.append("title")
-        .text(d => (
-          d.data.name + "\n" +
-          d.value + " s  (" + d3.format(".2%")(d.value / totalRuntime) + ")"
-        ))
+      // binding ensures `this` is correct in clicked:
+      .on("click", clicked.bind(this));
+
+    // append <title>, rendered as tooltip
+    g.append("title")
+      .text(d => (
+        d.data.name + "\n" +
+        d.value + " s  (" + d3.format(".2%")(d.value / totalRuntime) + ")"
+      ));
+
+    const rect = g.append("rect")
+      .attr("x", d => x(d.x0))
+      .attr("y", d => y(d.y0))
+      .attr("width", d => x(d.x1 - d.x0))
+      .attr("height", this.rowHeight);
+      // .attr("fill", d => color((d.children ? d : d.parent).key))
+
+    // First, the clip path, same as the rect.
+    // It'd be nice to having to repeat outselves here, but the <use> suggestion from
+    // <https://stackoverflow.com/q/23998457/353337> doesn't work.
+    const cp = g.append("clipPath")
+      .attr("id", d => "cp" + d.id);
+    const clipRect = cp.append("rect")
+      .attr("x", d => x(d.x0))
+      .attr("y", d => y(d.y0))
+      .attr("width", d => x(d.x1) - x(d.x0))
+      .attr("height", this.rowHeight);
+
+    // Now the text. Multiline text is realized with <tspan> in SVG.
+    const text = g.append("text")
+      .attr("y", d => y(d.y0 + d.y1)/2)
+      .attr("alignment-baseline", "middle")
+      .attr("text-anchor", "middle")
+      .attr("fill", "white")
+      .attr("clip-path", d => "url(#" + "cp" + d.id + ")");
+
+    const tspan1 = text.append("tspan")
+      .text(d => {
+        let arr = d.data.name.split("::");
+        arr[0] = arr[0].split("/").pop();
+        return arr.join("::");
+      })
+      .attr("x", d => x(d.x0 + d.x1)/2);
+
+    const tspan2 = text.append("tspan")
+      .text(
+        d =>
+        d3.format(".3f")(d.value) +
+        " s  (" +
+        d3.format(".1%")(d.value / totalRuntime)
+        + ")"
       )
-      .call(el => el.append("rect")
-        .call(rect => { to_anim.rect = rect; })
-        .attr("x", d => x(d.x0))
-        .attr("y", d => y(d.y0))
-        .attr("width", d => x(d.x1 - d.x0))
-        .attr("height", this.rowHeight)
-        // .attr("fill", d => color((d.children ? d : d.parent).key))
-      )
-      // First, the clip path, same as the rect.
-      // It'd be nice to having to repeat outselves here, but the <use> suggestion from
-      // <https://stackoverflow.com/q/23998457/353337> doesn't work.
-      .call(el => el.append("clipPath")
-        .attr("id", d => "cp" + d.id)
-        .call(el => el.append("rect")
-          .call(clipRect => { to_anim.clipRect = clipRect; })
-          .attr("x", d => x(d.x0))
-          .attr("y", d => y(d.y0))
-          .attr("width", d => x(d.x1) - x(d.x0))
-          .attr("height", this.rowHeight)
-        )
-      )
-      // Now the text. Multiline text is realized with <tspan> in SVG.
-      .call(el => el.append("text")
-        .call(text => { to_anim.text = text; })
-        .attr("y", d => y(d.y0 + d.y1)/2)
-        .attr("alignment-baseline", "middle")
-        .attr("text-anchor", "middle")
-        .attr("fill", "white")
-        .attr("clip-path", d => "url(#" + "cp" + d.id + ")")
-        .call(el => el.append("tspan")
-          .call(tspan1 => { to_anim.tspan1 = tspan1; })
-          .text(d => {
-            let arr = d.data.name.split("::");
-            arr[0] = arr[0].split("/").pop();
-            return arr.join("::");
-          })
-          .attr("x", d => x(d.x0 + d.x1)/2)
-        )
-        .call(el => el.append("tspan")
-          .call(tspan2 => { to_anim.tspan2 = tspan2; })
-          .text(
-            d =>
-            d3.format(".3f")(d.value) +
-            " s  (" +
-            d3.format(".1%")(d.value / totalRuntime)
-            + ")"
-          )
-          .attr("x", d => x(d.x0 + d.x1) / 2)
-          .attr("dy", "1.5em")
-        )
-      )
-    );
+      .attr("x", d => x(d.x0 + d.x1) / 2)
+      .attr("dy", "1.5em");
 
     function clicked(evt, d) {
       const offset = d.y0 ? 20 : 0;
@@ -126,38 +116,38 @@ class Icicle extends HTMLElement {
       x.domain([d.x0, d.x1]).range([0, this.width]);
       y.domain([d.y0, 1]).range([offset, newHeight + offset]);
       const trans = d3.transition().duration(300);
-      to_anim.rect.transition(trans)
+      rect.transition(trans)
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
-      to_anim.clipRect.transition(trans)
+      clipRect.transition(trans)
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
-      to_anim.text.transition(trans)
+      text.transition(trans)
         .attr("y", d => y((d.y0 + d.y1) / 2));
-      to_anim.tspan1.transition(trans)
+      tspan1.transition(trans)
         .attr("x", d => x((d.x0 + d.x1) / 2));
-      to_anim.tspan2.transition(trans)
+      tspan2.transition(trans)
         .attr("x", d => x((d.x0 + d.x1) / 2));
     }
 
     // TODO: This repeats much of the content of `clicked`
     window.addEventListener('resize', e => {
       x.range([0, this.width]);
-      to_anim.rect
+      rect
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
-      to_anim.clipRect
+      clipRect
         .attr("x", d => x(d.x0))
         .attr("y", d => y(d.y0))
         .attr("width", d => x(d.x1) - x(d.x0));
-      to_anim.text
+      text
         .attr("y", d => y((d.y0 + d.y1) / 2));
-      to_anim.tspan1
+      tspan1
         .attr("x", d => x((d.x0 + d.x1) / 2));
-      to_anim.tspan2
+      tspan2
         .attr("x", d => x((d.x0 + d.x1) / 2));
     });
   }
