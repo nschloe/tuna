@@ -26,19 +26,19 @@ import time:       1 |    12 | a
 """
 
     ref = {
-        "name": "main",
+        "text": ["main"],
         "color": 0,
         "children": [
             {
-                "name": "a",
+                "text": ["a"],
                 "value": 1e-06,
                 "color": 0,
                 "children": [
                     {
-                        "name": "b",
+                        "text": ["b"],
                         "value": 2e-06,
                         "color": 0,
-                        "children": [{"name": "c", "value": 3e-06, "color": 0}],
+                        "children": [{"text": ["c"], "value": 3e-06, "color": 0}],
                     }
                 ],
             }
@@ -66,23 +66,23 @@ import time:       2 |    15 |   b
 import time:       1 |    12 | a
 """
     ref = {
-        "name": "main",
+        "text": ["main"],
         "color": 0,
         "children": [
             {
-                "name": "a",
+                "text": ["a"],
                 "value": 1e-06,
                 "children": [
                     {
-                        "name": "b",
+                        "text": ["b"],
                         "value": 2e-06,
                         "children": [
                             {
-                                "name": "c",
+                                "text": ["c"],
                                 "value": 3e-06,
                                 "children": [
                                     {
-                                        "name": "e",
+                                        "text": ["e"],
                                         "value": 4.9999999999999996e-06,
                                         "color": 0,
                                     }
@@ -92,7 +92,7 @@ import time:       1 |    12 | a
                         ],
                         "color": 0,
                     },
-                    {"name": "d", "value": 4e-06, "color": 0},
+                    {"text": ["d"], "value": 4e-06, "color": 0},
                 ],
                 "color": 0,
             }
