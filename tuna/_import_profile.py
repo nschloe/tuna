@@ -59,7 +59,7 @@ def read_import_profile(filename):
 
 def _add_color(tree, ancestor_is_built_in):
     for item in tree:
-        module_name = item["name"].split(".")[0]
+        module_name = item["text"][0].split(".")[0]
         is_built_in = (
             ancestor_is_built_in
             or module_name in built_in
@@ -74,7 +74,7 @@ def _add_color(tree, ancestor_is_built_in):
 
 
 def _sort_into_tree(lst):
-    main = {"name": "main", "color": 0, "children": []}
+    main = {"text": ["main"], "color": 0, "children": []}
 
     # keep a dictionary of the last entry of any given level
     last = {}
@@ -84,12 +84,11 @@ def _sort_into_tree(lst):
         name, level, time = entry
         # find the last entry with level-1
         last[level - 1]["children"] += [
-            {"name": name, "value": time * 1.0e-6, "children": []}
+            {"text": [name], "value": time * 1.0e-6, "children": []}
         ]
         last[level] = last[level - 1]["children"][-1]
 
     _remove_empty_children(main)
-
     return [main]
 
 
