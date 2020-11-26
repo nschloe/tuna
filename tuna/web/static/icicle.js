@@ -58,7 +58,7 @@ class Icicle extends HTMLElement {
     .enter()
     .call(el => el.append("g")
       .attr("class", d => "color" + d.data.color)
-      .on("click", clicked.bind(this))  // ensures `this` is correct in clicked
+      .on("click", clicked.bind(this))  // binding ensures `this` is correct in clicked
       // title, typically rendered as tooltip
       .call(el => el.append("title")
         .text(d => (
@@ -74,7 +74,9 @@ class Icicle extends HTMLElement {
         .attr("height", this.rowHeight)
         // .attr("fill", d => color((d.children ? d : d.parent).key))
       )
-      // Now add the text. First, the clip path.
+      // First, the clip path, same as the rect.
+      // It'd be nice to having to repeat outselves here, but the <use> suggestion from
+      // <https://stackoverflow.com/q/23998457/353337> doesn't work.
       .call(el => el.append("clipPath")
         .attr("id", d => "cp" + d.id)
         .call(el => el.append("rect")

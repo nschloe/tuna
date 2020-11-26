@@ -32,10 +32,10 @@ def read(filename):
 def read_runtime_profile(prof_filename):
     stats = pstats.Stats(prof_filename)
 
-    # One way of picking the root nodes would be to loop over stats.stats.items() and
-    # check which doesn't have parents. This, however, doesn't work if there are loops
+    # One way of picking the root nodes would be to search through stats.stats.items()
+    # and check which don't have parents. This, however, doesn't work if there are loops
     # in the graph which happens, for example, if exec() is called somewhere in the
-    # program. For this reason, find all nodes without parents and simply hardcode
+    # program. For this reason, find all nodes without parents _and_ simply hardcode
     # `<built-in method builtins.exec>`.
     roots = set()
     for item in stats.stats.items():
