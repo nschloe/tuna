@@ -14,7 +14,7 @@ class Icicle extends HTMLElement {
 
   render () {
     // const color = d3.scaleOrdinal(d3.schemeCategory10);
-
+    //
     const root = d3.hierarchy(this.data)
       .sum(d => d.value)
       .sort((a, b) => b.value - a.value);
@@ -59,10 +59,19 @@ class Icicle extends HTMLElement {
 
     // append <title>, rendered as tooltip
     g.append("title")
-      .text(d => (
-        d.data.name + "\n" +
-        d.value + " s  (" + d3.format(".2%")(d.value / totalRuntime) + ")"
-      ));
+      .text(d => {
+          let out = d.data.text[0] + " ";
+          if (d.data.text.length > 1) {
+            out += d.data.text[1];
+          } else {
+            out += d3.format(".3f")(d.value) +
+              " s  (" +
+              d3.format(".1%")(d.value / totalRuntime)
+              + ")";
+          }
+          return out;
+        }
+      );
 
     const rect = g.append("rect")
       .attr("x", d => x(d.x0))
@@ -91,20 +100,20 @@ class Icicle extends HTMLElement {
       .attr("clip-path", d => "url(#" + "cp" + d.id + ")");
 
     const tspan1 = text.append("tspan")
-      .text(d => {
-        let arr = d.data.name.split("::");
-        arr[0] = arr[0].split("/").pop();
-        return arr.join("::");
-      })
+      .text(d => d.data.text[0])
       .attr("x", d => x(d.x0 + d.x1)/2);
 
     const tspan2 = text.append("tspan")
       .text(
-        d =>
-        d3.format(".3f")(d.value) +
-        " s  (" +
-        d3.format(".1%")(d.value / totalRuntime)
-        + ")"
+        d => {
+          if (d.data.text.length > 1) {
+            return d.data.text[1];
+          }
+          return  d3.format(".3f")(d.value) +
+            " s  (" +
+            d3.format(".1%")(d.value / totalRuntime)
+            + ")";
+        }
       )
       .attr("x", d => x(d.x0 + d.x1) / 2)
       .attr("dy", "1.5em");

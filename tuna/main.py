@@ -24,9 +24,7 @@ def read(filename):
     except (TunaError, StopIteration):
         pass
 
-    # runtime profile
-    data = read_runtime_profile(filename)
-    return data
+    return read_runtime_profile(filename)
 
 
 def read_runtime_profile(prof_filename):
@@ -73,23 +71,45 @@ def read_runtime_profile(prof_filename):
             # Handle children
             # merge dictionaries
             c = [populate(child, key) for child in children[key]]
-            c.append({"name": name + "::self", "color": 0, "value": selftime})
-            out = {"name": name, "color": 0, "children": c}
+            c.append(
+                {
+                    "text": [name + "::self", f"{selftime:.3} s"],
+                    "color": 0,
+                    "value": selftime,
+                }
+            )
+            out = {"text": [name], "color": 0, "children": c}
         else:
             # More than one parent; we cannot further determine the call times.
             # Terminate the tree here.
             if children[key]:
-                msg = "Possible calls of " + ", ".join(
-                    "{}::{}::{}".format(*child) for child in children[key]
-                )
-                c = [{"name": msg, "color": 3, "value": cumtime}]
-                out = {"name": name, "color": 0, "children": c}
+                c = [
+                    {
+                        "text": [
+                            "Possible calls of",
+                            ", ".join(
+                                "{}::{}::{}".format(*child) for child in children[key]
+                            ),
+                        ],
+                        "color": 3,
+                        "value": cumtime,
+                    }
+                ]
+                out = {
+                    "text": [name],
+                    "color": 0,
+                    "children": c,
+                }
             else:
-                out = {"name": name, "color": 0, "value": cumtime}
+                out = {
+                    "text": [name, f"{cumtime:.3f}"],
+                    "color": 0,
+                    "value": cumtime,
+                }
         return out
 
     data = {
-        "name": "root",
+        "text": ["root"],
         "color": 0,
         "children": [populate(root, None) for root in roots],
     }
