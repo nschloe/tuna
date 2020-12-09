@@ -4,6 +4,15 @@ import pstats
 def read_runtime_profile(prof_filename):
     stats = pstats.Stats(prof_filename)
 
+    # # stats.strip_dirs()
+    # stats.sort_stats("cumulative")
+    # # # stats.sort_stats("time")
+    # stats.print_stats(10)
+    # exit(1)
+    # s = stats.get_stats_profile()
+    # print(s)
+    # exit(1)
+
     # One way of picking the root nodes would be to search through stats.stats.items()
     # and check which don't have parents. This, however, doesn't work if there are loops
     # in the graph which happens, for example, if exec() is called somewhere in the
@@ -14,6 +23,8 @@ def read_runtime_profile(prof_filename):
         key, value = item
         if value[4] == {}:
             roots.add(key)
+        # print(key, value)
+        # exit(1)
 
     default_roots = [
         ("~", 0, "<built-in method builtins.exec>"),
@@ -32,11 +43,17 @@ def read_runtime_profile(prof_filename):
             children[parent].append(key)
 
     def populate(key, parent):
+        # stats.stats[key] returns a tuple of length 5 with the following data:
+        # [0]: total calls
+        # [1]: prim calls
+        # [2]: selftime
+        # [3]: cumtime
+        # [4]: a dictionary of callers
         if parent is None:
-            _, _, selftime, cumtime, _ = stats.stats[key]
             parent_times = {}
+            _, _, selftime, cumtime, _ = stats.stats[key]
         else:
-            _, _, x, _, parent_times = stats.stats[key]
+            _, _, _, _, parent_times = stats.stats[key]
             _, _, selftime, cumtime = parent_times[parent]
 
         # Convert the tuple key into a string
@@ -52,35 +69,26 @@ def read_runtime_profile(prof_filename):
                     "value": selftime,
                 }
             )
-            out = {"text": [name], "color": 0, "children": c}
-        else:
-            # More than one parent; we cannot further determine the call times.
-            # Terminate the tree here.
-            if children[key]:
-                c = [
-                    {
-                        "text": [
-                            "Possible calls of",
-                            ", ".join(
-                                "{}::{}::{}".format(*child) for child in children[key]
-                            ),
-                        ],
-                        "color": 3,
-                        "value": cumtime,
-                    }
-                ]
-                out = {
-                    "text": [name],
-                    "color": 0,
-                    "children": c,
-                }
-            else:
-                out = {
-                    "text": [name, f"{cumtime:.3f}"],
-                    "color": 0,
+            return {"text": [name], "color": 0, "children": c}
+
+        # More than one parent; we cannot further determine the call times.
+        # Terminate the tree here.
+        if children[key]:
+            c = [
+                {
+                    "text": [
+                        "Possible calls of",
+                        ", ".join(
+                            "{}::{}::{}".format(*child) for child in children[key]
+                        ),
+                    ],
+                    "color": 3,
                     "value": cumtime,
                 }
-        return out
+            ]
+            return {"text": [name], "color": 0, "children": c}
+
+        return {"text": [name, f"{selftime:.3f}"], "color": 0, "value": selftime}
 
     data = {
         "text": ["root"],
