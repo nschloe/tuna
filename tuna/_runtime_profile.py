@@ -44,11 +44,11 @@ def read_runtime_profile(prof_filename):
 
     def populate(key, parent):
         # stats.stats[key] returns a tuple of length 5 with the following data:
-        # [0]: some call count (?)
-        # [1]: another call count (?)
+        # [0]: total calls
+        # [1]: prim calls
         # [2]: selftime
         # [3]: cumtime
-        # [4]: a dictionary of the parent times
+        # [4]: a dictionary of callers
         if parent is None:
             parent_times = {}
             _, _, selftime, cumtime, _ = stats.stats[key]
