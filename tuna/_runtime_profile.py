@@ -19,12 +19,15 @@ def read_runtime_profile(prof_filename):
     # program. For this reason, find all nodes without parents _and_ simply hardcode
     # `<built-in method builtins.exec>`.
     roots = set()
-    for item in stats.stats.items():
-        key, value = item
-        if value[4] == {}:
+    for key, value in stats.stats.items():
+        # The object {('~', 0, "<method 'disable' of '_lsprof.Profiler' objects>")}
+        # is part of the profile and a root node. Its runtime is usually miniscule and
+        # doesn't appear the the final output. Hence, only consider root nodes with a
+        # cumtime larger than a threshold.
+        # If there is only one remaining root (which is most often the case), one can
+        # cut of the artificial "root" node. See below.
+        if not value[4] and value[3] > 1.0e-5:
             roots.add(key)
-        # print(key, value)
-        # exit(1)
 
     default_roots = [
         ("~", 0, "<built-in method builtins.exec>"),
@@ -90,9 +93,15 @@ def read_runtime_profile(prof_filename):
 
         return {"text": [name, f"{selftime:.3f}"], "color": 0, "value": selftime}
 
-    data = {
-        "text": ["root"],
-        "color": 0,
-        "children": [populate(root, None) for root in roots],
-    }
+    if len(roots) == 1:
+        data = populate(roots[0], None)
+    else:
+        # If there is more than one root, add an artificial "master root" item that is
+        # parent to all roots.
+        assert len(roots) > 1
+        data = {
+            "text": ["root"],
+            "color": 0,
+            "children": [populate(root, None) for root in roots],
+        }
     return data
