@@ -45,7 +45,7 @@ def read_runtime_profile(prof_filename):
         for parent in parents:
             children[parent].append(key)
 
-    def populate(key, parent):
+    def populate(key, parent, all_ancestors):
         # stats.stats[key] returns a tuple of length 5 with the following data:
         # [0]: total calls
         # [1]: prim calls
@@ -61,10 +61,14 @@ def read_runtime_profile(prof_filename):
 
         # Convert the tuple key into a string
         name = "{}::{}::{}".format(*key)
+
+        if key in all_ancestors:
+            # avoid loops
+            return {}
+
         if len(parent_times) <= 1:
             # Handle children
-            # merge dictionaries
-            c = [populate(child, key) for child in children[key]]
+            c = [populate(child, key, all_ancestors + [key]) for child in children[key]]
             c.append(
                 {
                     "text": [name + "::self", f"{selftime:.3} s"],
@@ -94,7 +98,7 @@ def read_runtime_profile(prof_filename):
         return {"text": [name, f"{selftime:.3f}"], "color": 0, "value": selftime}
 
     if len(roots) == 1:
-        data = populate(roots[0], None)
+        data = populate(roots[0], None, [])
     else:
         # If there is more than one root, add an artificial "master root" item that is
         # parent to all roots.
@@ -102,6 +106,6 @@ def read_runtime_profile(prof_filename):
         data = {
             "text": ["root"],
             "color": 0,
-            "children": [populate(root, None) for root in roots],
+            "children": [populate(root, None, []) for root in roots],
         }
     return data
