@@ -4,12 +4,12 @@ default:
 	@echo "\"make publish\"?"
 
 tag:
-	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi
+	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "main" ]; then exit 1; fi
 	curl -H "Authorization: token `cat $(HOME)/.github-access-token`" -d '{"tag_name": "v$(VERSION)"}' https://api.github.com/repos/nschloe/tuna/releases
 
 upload: clean
-	# Make sure we're on the master branch
-	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi
+	# Make sure we're on the main branch
+	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "main" ]; then exit 1; fi
 	# https://stackoverflow.com/a/58756491/353337
 	python3 -m build --sdist --wheel .
 	twine upload dist/*
@@ -20,8 +20,8 @@ upload: clean
 
 dep:
 	npm install
-	cp -r node_modules/bootstrap/dist/css/bootstrap.min.css tuna/web/static/
-	cp -r node_modules/d3/dist/d3.min.js tuna/web/static/
+	cp node_modules/bootstrap/dist/css/bootstrap.min.css tuna/web/static/
+	cp node_modules/d3/dist/d3.min.js tuna/web/static/
 
 update:
 	npm update
@@ -37,6 +37,7 @@ clean:
 lint:
 	flake8 .
 	black --check .
+	blacken-docs README.md
 	eslint tuna/web/static/icicle.js
 	htmlhint tuna/web/index.html
 

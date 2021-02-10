@@ -1,6 +1,12 @@
 name: ci
 
-on: [pull_request]
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
 
 jobs:
   lint:
@@ -35,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8, 3.9]
     steps:
     - uses: actions/setup-python@v2
       with:
@@ -45,6 +51,5 @@ jobs:
       run: |
         pip install tox
         tox
-    - name: Submit to codecov
+    - uses: codecov/codecov-action@v1
       if: ${{ matrix.python-version == '3.8' }}
-      run: bash <(curl -s https://codecov.io/bash)
