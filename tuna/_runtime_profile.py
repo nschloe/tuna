@@ -100,7 +100,7 @@ def read_runtime_profile(prof_filename):
     if len(roots) == 1:
         data = populate(roots[0], None, [])
     else:
-        # If there is more than one root, add an artificial "master root" item that is
+        # If there is more than one root, add an artificial "main root" item that is
         # parent to all roots.
         assert len(roots) > 1
         data = {
