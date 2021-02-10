@@ -20,8 +20,8 @@ upload: clean
 
 dep:
 	npm install
-	cp -r node_modules/bootstrap/dist/css/bootstrap.min.css tuna/web/static/
-	cp -r node_modules/d3/dist/d3.min.js tuna/web/static/
+	cp node_modules/bootstrap/dist/css/bootstrap.min.css tuna/web/static/
+	cp node_modules/d3/dist/d3.min.js tuna/web/static/
 
 update:
 	npm update
@@ -37,6 +37,7 @@ clean:
 lint:
 	flake8 .
 	black --check .
+	blacken-docs README.md
 	eslint tuna/web/static/icicle.js
 	htmlhint tuna/web/index.html
 
