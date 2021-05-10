@@ -3,5 +3,13 @@
   "dependencies": {
     "bootstrap": "5.0.0",
     "d3": "6.7.0"
+  },
+  "devDependencies": {
+    "htmlhint": "^0.14.2",
+    "prettier": "^2.2.1"
+  },
+  "scripts": {
+    "prettier": "prettier --check tuna/web/static/icicle.js",
+    "htmlhint": "htmlhint tuna/web/index.html"
   }
 }

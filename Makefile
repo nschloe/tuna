@@ -37,10 +37,11 @@ clean:
 lint:
 	flake8 .
 	black --check .
-	blacken-docs README.md
-	eslint tuna/web/static/icicle.js
-	htmlhint tuna/web/index.html
+	# blacken-docs README.md
+	npm run prettier
+	npm run htmlhint
 
 format:
 	isort .
 	black .
+	prettier --write tuna/web/static/icicle.js

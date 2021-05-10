@@ -13,6 +13,7 @@
 [![gh-actions](https://img.shields.io/github/workflow/status/nschloe/tuna/ci?style=flat-square)](https://github.com/nschloe/tuna/actions?query=workflow%3Aci)
 [![LGTM](https://img.shields.io/lgtm/grade/python/github/nschloe/tuna.svg?style=flat-square)](https://lgtm.com/projects/g/nschloe/tuna)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 tuna is a modern, lightweight Python profile viewer inspired by
 [SnakeViz](https://github.com/jiffyclub/snakeviz). It handles runtime and import
@@ -104,18 +105,20 @@ pytest
 
 ### IPython magics
 
-tuna includes a `tuna` line / cell magic which can be used as a drop-in replacement for the `prun` magic. Simply run `%load_ext tuna` to load the magic and then call it like `%tuna sleep(3)` or
-
+tuna includes a `tuna` line / cell magic which can be used as a drop-in replacement for
+the `prun` magic. Simply run `%load_ext tuna` to load the magic and then call it like
+`%tuna sleep(3)` or
 ```python
 %%tuna
 sleep(3)
 ```
-
-`prun` is still used to do the actual profiling and then the results are displayed in the notebook.
+`prun` is still used to do the actual profiling and then the results are displayed in
+the notebook.
 
 ### Development
 
-After forking and cloning the repository, make sure to run `make dep` to install additional dependencies (bootstrap and d3) which aren't stored in the repo.
+After forking and cloning the repository, make sure to run `make dep` to install
+additional dependencies (bootstrap and d3) which aren't stored in the repo.
 
 ### License
 This software is published under the [GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
