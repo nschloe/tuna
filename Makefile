@@ -37,7 +37,7 @@ clean:
 lint:
 	flake8 .
 	black --check .
-	blacken-docs README.md
+	# blacken-docs README.md
 	npm run prettier
 	npm run htmlhint
 
