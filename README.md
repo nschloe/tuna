@@ -13,6 +13,7 @@
 [![gh-actions](https://img.shields.io/github/workflow/status/nschloe/tuna/ci?style=flat-square)](https://github.com/nschloe/tuna/actions?query=workflow%3Aci)
 [![LGTM](https://img.shields.io/lgtm/grade/python/github/nschloe/tuna.svg?style=flat-square)](https://lgtm.com/projects/g/nschloe/tuna)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 tuna is a modern, lightweight Python profile viewer inspired by
 [SnakeViz](https://github.com/jiffyclub/snakeviz). It handles runtime and import
