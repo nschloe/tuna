@@ -29,13 +29,9 @@ jobs:
         black --check .
     - name: Lint with npm
       run: |
+        npm ci
         npm run prettier
         npm run htmlhint
-    # May 2020: htmlhint broken: SyntaxError: Unexpected token return
-    # - name: Lint with htmlhint
-    #   run: |
-    #     npm install -g htmlhint
-    #     htmlhint tuna/web/index.html
 
   build:
     runs-on: ubuntu-latest
