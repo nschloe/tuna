@@ -29,7 +29,7 @@ jobs:
         black --check .
     - name: Lint with npm
       run: |
-        npm ci
+        npm ci --dev
         npm run prettier
         npm run htmlhint
 
