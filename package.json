@@ -6,7 +6,7 @@
   },
   "devDependencies": {
     "htmlhint": "^0.14.2",
-    "prettier": "^2.2.1"
+    "prettier": "^2.3.1"
   },
   "scripts": {
     "prettier": "prettier --check tuna/web/static/icicle.js",
