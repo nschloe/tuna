@@ -50,12 +50,13 @@ def start_server(prof_filename, start_browser, port):
             if self.path == "/":
                 self.send_header("Content-type", "text/html")
                 self.end_headers()
-                self.wfile.write(render(data, prof_filename).encode("utf-8"))
+                self.wfile.write(render(data, prof_filename).encode())
             else:
                 this_dir = Path(__file__).resolve().parent
                 filepath = this_dir / "web" / self.path[1:]
 
                 mimetype, _ = mimetypes.guess_type(str(filepath))
+                assert mimetype is not None
                 self.send_header("Content-type", mimetype)
                 self.end_headers()
 
