@@ -23,11 +23,6 @@ dep:
 	cp node_modules/bootstrap/dist/css/bootstrap.min.css tuna/web/static/
 	cp node_modules/d3/dist/d3.min.js tuna/web/static/
 
-update:
-	npm update
-	npm update --save-dev
-	npm outdated
-
 publish: tag upload
 
 clean:
