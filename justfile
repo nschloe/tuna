@@ -40,4 +40,4 @@ lint:
 format:
 	isort .
 	black .
-	prettier --write README.md .github tuna/web/static/icicle.js tuna/web/static/tuna.css
+	prettier --write README.md .github tuna/web/static/icicle.js tuna/web/static/tuna.css tuna/web/index.html
