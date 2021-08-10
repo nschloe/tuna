@@ -64,8 +64,6 @@ def start_server(prof_filename, start_browser, port):
                     content = fh.read()
                 self.wfile.write(content)
 
-            return
-
     if port is None:
         port = 8000
         while is_port_in_use(port):

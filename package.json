@@ -5,11 +5,9 @@
     "d3": "7.0.0"
   },
   "devDependencies": {
-    "htmlhint": "^0.15.1",
     "prettier": "^2.3.2"
   },
   "scripts": {
-    "prettier": "prettier --check tuna/web/static/icicle.js",
-    "htmlhint": "htmlhint tuna/web/index.html"
+    "prettier": "prettier --check tuna/web/static/icicle.js"
   }
 }

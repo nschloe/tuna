@@ -31,7 +31,6 @@ jobs:
       run: |
         npm ci
         npm run prettier
-        npm run htmlhint
 
   build:
     runs-on: ubuntu-latest
