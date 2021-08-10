@@ -3,35 +3,21 @@ name: ci
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
+      - main
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-python@v2
-      with:
-        python-version: "3.x"
-    - uses: actions/setup-node@v1
-      with:
-        node-version: "10.x"
-    - uses: actions/checkout@v2
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        flake8 .
-    - name: Lint with black
-      run: |
-        pip install black
-        black --check .
-    - name: Lint with npm
-      run: |
-        npm ci
-        npm run prettier
-        npm run htmlhint
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+      - name: Run pre-commit
+        uses: pre-commit/action@v2.0.3
 
   build:
     runs-on: ubuntu-latest
@@ -39,13 +25,13 @@ jobs:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
     steps:
-    - uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - uses: actions/checkout@v2
-    - name: Test with tox
-      run: |
-        pip install tox
-        tox
-    - uses: codecov/codecov-action@v1
-      if: ${{ matrix.python-version == '3.9' }}
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v2
+      - name: Test with tox
+        run: |
+          pip install tox
+          tox
+      - uses: codecov/codecov-action@v1
+        if: ${{ matrix.python-version == '3.9' }}

@@ -19,7 +19,7 @@ publish: tag upload
 
 clean:
 	@find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
-	@rm -rf src/*.egg-info/ build/ dist/ .tox/
+	@rm -rf *.egg-info/ src/*.egg-info/ build/ dist/ .tox/
 
 dep:
 	npm install
@@ -36,9 +36,8 @@ lint:
 	black --check .
 	# blacken-docs README.md
 	npm run prettier
-	npm run htmlhint
 
 format:
 	isort .
 	black .
-	prettier --write tuna/web/static/icicle.js
+	prettier --write README.md .github tuna/web/static/icicle.js tuna/web/static/tuna.css tuna/web/index.html

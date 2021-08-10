@@ -1,34 +1,46 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>tuna - ${filename}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="shortcut icon" type="image/png" href="static/favicon256.png"/>
+    <link rel="shortcut icon" type="image/png" href="static/favicon256.png" />
 
-    <link href="static/tuna.css" rel="stylesheet">
-    <link rel="stylesheet" href="static/bootstrap.min.css">
+    <link href="static/tuna.css" rel="stylesheet" />
+    <link rel="stylesheet" href="static/bootstrap.min.css" />
   </head>
 
   <body>
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3"
-        href="https://github.com/nschloe/tuna">
-          <img src="static/favicon256.png" width="30" height="30" class="d-inline-block align-top" alt="">
-          tuna
+    <nav
+      class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow"
+    >
+      <a
+        class="navbar-brand col-md-3 col-lg-2 mr-0 px-3"
+        href="https://github.com/nschloe/tuna"
+      >
+        <img
+          src="static/favicon256.png"
+          width="30"
+          height="30"
+          class="d-inline-block align-top"
+          alt=""
+        />
+        tuna
       </a>
-      <div class="text-white w-100">
-        ${filename}
-      </div>
+      <div class="text-white w-100">${filename}</div>
     </nav>
 
     <div class="container-fluid">
       <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sticky-sidebar
-          collapse">
+        <nav
+          id="sidebarMenu"
+          class="col-md-3 col-lg-2 d-md-block bg-light sticky-sidebar collapse"
+        >
           <div class="pt-3 sticky-top sticky-offset">
-            <button class="btn btn-dark" id="resetZoomButton">Reset zoom</button>
+            <button class="btn btn-dark" id="resetZoomButton">
+              Reset zoom
+            </button>
           </div>
         </nav>
 
@@ -41,7 +53,7 @@
     </div>
 
     <footer class="bg-light text-center text-lg-left">
-      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
         tuna v${version}
       </div>
     </footer>
