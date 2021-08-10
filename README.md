@@ -24,28 +24,33 @@ profiles, has minimal dependencies, uses [d3](https://d3js.org/) and
 below) and is faster, too.
 
 Create a runtime profile with
+
 ```
 python -mcProfile -o program.prof yourfile.py
 ```
+
 or an [import
 profile](https://docs.python.org/3/using/cmdline.html#envvar-PYTHONPROFILEIMPORTTIME)
 with
+
 ```
 python -X importtime yourfile.py 2> import.log
 ```
+
 and show it with
+
 ```
 tuna program.prof
 ```
 
 ![](https://nschloe.github.io/tuna/screencast.gif)
 
-
 ### Why tuna doesn't show the whole call tree
 
 The whole timed call tree _cannot_ be retrieved from profile data. Python developers
 made the decision to only store _parent data_ in profiles because it can be computed
 with little overhead. To illustrate, consider the following program.
+
 ```python
 import time
 
@@ -71,6 +76,7 @@ if __name__ == "__main__":
     a(4, 1)
     b()
 ```
+
 The root process (`__main__`) calls `a()` which spends 4 seconds in `c()` and 1 second
 in `d()`. `__main__` also calls `b()` which calls `a()`, this time spending 1 second in
 `c()` and 4 seconds in `d()`. The profile, however, will only store that `c()` spent a
@@ -82,23 +88,25 @@ tuna only displays the part of the timed call tree that can be deduced from the 
 SnakeViz, on the other hand, tries to construct the entire call tree, but ends up
 providing lots of _wrong_ timings.
 
-| ![](https://nschloe.github.io/tuna/snakeviz-example-wrong.png) | ![](https://nschloe.github.io/tuna/foo.png) |
-|:----:|:----:|
-| SnakeViz output. **Wrong.** | tuna output. Only shows what can be retrieved from the profile. |
+| ![](https://nschloe.github.io/tuna/snakeviz-example-wrong.png) |           ![](https://nschloe.github.io/tuna/foo.png)           |
+| :------------------------------------------------------------: | :-------------------------------------------------------------: |
+|                  SnakeViz output. **Wrong.**                   | tuna output. Only shows what can be retrieved from the profile. |
 
 ### Installation
 
 tuna is [available from the Python Package Index](https://pypi.org/project/tuna/), so
 simply do
+
 ```
 pip install tuna
 ```
-to install.
 
+to install.
 
 ### Testing
 
 To run the tuna unit tests, check out this repository and type
+
 ```
 pytest
 ```
@@ -108,10 +116,12 @@ pytest
 tuna includes a `tuna` line / cell magic which can be used as a drop-in replacement for
 the `prun` magic. Simply run `%load_ext tuna` to load the magic and then call it like
 `%tuna sleep(3)` or
+
 ```python
 %%tuna
 sleep(3)
 ```
+
 `prun` is still used to do the actual profiling and then the results are displayed in
 the notebook.
 
@@ -121,4 +131,5 @@ After forking and cloning the repository, make sure to run `make dep` to install
 additional dependencies (bootstrap and d3) which aren't stored in the repo.
 
 ### License
+
 This software is published under the [GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).

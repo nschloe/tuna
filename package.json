@@ -8,6 +8,6 @@
     "prettier": "^2.3.2"
   },
   "scripts": {
-    "prettier": "prettier --check .github tuna/web/static/icicle.js tuna/web/static/tuna.css"
+    "prettier": "prettier --check README .github tuna/web/static/icicle.js tuna/web/static/tuna.css"
   }
 }
