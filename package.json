@@ -1,7 +1,7 @@
 {
   "name": "tuna",
   "dependencies": {
-    "bootstrap": "5.0.2",
+    "bootstrap": "5.1.0",
     "d3": "7.0.0"
   },
   "devDependencies": {
