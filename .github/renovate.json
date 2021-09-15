@@ -1,0 +1,4 @@
+{
+  "schedule": ["before 3am on Monday"],
+  "extends": ["config:base", "group:allNonMajor"]
+}
