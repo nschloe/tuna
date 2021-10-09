@@ -1,5 +1,4 @@
 import subprocess
-import tempfile
 import time
 from pathlib import Path
 
@@ -15,10 +14,9 @@ def test_tuna():
     # give server time to start up
     time.sleep(3)
     p.terminate()
-    return
 
 
-def test_importprofile():
+def test_importprofile(tmp_path):
     content = """
 import time:       3 |    22 |     c
 import time:       2 |    15 |   b
@@ -45,17 +43,16 @@ import time:       1 |    12 | a
         ],
     }
 
-    with tempfile.TemporaryDirectory() as temp_dir:
-        filepath = Path(temp_dir) / "test.log"
-        with open(filepath, "w") as f:
-            f.write(content)
+    filepath = tmp_path / "test.log"
+    with open(filepath, "w") as f:
+        f.write(content)
 
-        out = tuna.read_import_profile(filepath)
+    out = tuna.read_import_profile(filepath)
 
     assert out == ref, ref
 
 
-def test_importprofile_multiprocessing():
+def test_importprofile_multiprocessing(tmp_path):
     # when using multiprocessing, you can have seemingly excessive indentation,
     # see <https://github.com/nschloe/tuna/issues/53>
     content = """
@@ -99,12 +96,11 @@ import time:       1 |    12 | a
         ],
     }
 
-    with tempfile.TemporaryDirectory() as temp_dir:
-        filepath = Path(temp_dir) / "test.log"
-        with open(filepath, "w") as f:
-            f.write(content)
+    filepath = tmp_path / "test.log"
+    with open(filepath, "w") as f:
+        f.write(content)
 
-        out = tuna.read_import_profile(filepath)
+    out = tuna.read_import_profile(filepath)
 
     assert out == ref, ref
 
