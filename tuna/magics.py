@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import html
 import re
 import tempfile
 import warnings
 from pathlib import Path
-from typing import Optional
 
 from IPython.core.magic import register_line_cell_magic
 from IPython.display import HTML
@@ -56,7 +57,7 @@ def _display_tuna(
 
 
 @register_line_cell_magic
-def tuna(line: str, cell: Optional[str] = None) -> HTML:
+def tuna(line: str, cell: str | None = None) -> HTML:
     ip = get_ipython()  # noqa: F821
     with tempfile.TemporaryDirectory() as tmp_dir:
         prun_fname = f"{tmp_dir}/prun"
