@@ -5,7 +5,7 @@
     "d3": "7.1.1"
   },
   "devDependencies": {
-    "prettier": "^2.4.1"
+    "prettier": "2.4.1"
   },
   "scripts": {
     "prettier": "prettier --check README.md .github tuna/web/static/icicle.js tuna/web/static/tuna.css"
