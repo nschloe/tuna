@@ -17,7 +17,7 @@ def main(argv=None):
         outdir = Path(args.outdir)
         if not outdir.is_dir():
             outdir.mkdir(parents=True)
-        with open(outdir / "index.html", "wt") as out:
+        with open(outdir / "index.html", "wt", encoding="utf-8") as out:
             out.write(render(data, args.infile))
         this_dir = Path(__file__).resolve().parent
         static_dir = outdir / "static"

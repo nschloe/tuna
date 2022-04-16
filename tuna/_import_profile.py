@@ -23,7 +23,7 @@ def read_import_profile(filename):
     # above example, `encodings` is parent to `encodings.aliases` and `codecs` which in
     # turn is parent to `_codecs`.
     entries = []
-    with open(filename) as f:
+    with open(filename, encoding="utf-8") as f:
         # filtered iterator over lines prefixed with "import time: "
         try:
             # skip first line
