@@ -25,7 +25,7 @@ def read(filename):
 
 def render(data, prof_filename):
     this_dir = Path(__file__).resolve().parent
-    with open(this_dir / "web" / "index.html") as _file:
+    with open(this_dir / "web" / "index.html", encoding="utf-8") as _file:
         template = string.Template(_file.read())
 
     return template.substitute(

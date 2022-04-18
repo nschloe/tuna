@@ -44,7 +44,7 @@ import time:       1 |    12 | a
     }
 
     filepath = tmp_path / "test.log"
-    with open(filepath, "w") as f:
+    with open(filepath, "w", encoding="utf-8") as f:
         f.write(content)
 
     out = tuna.read_import_profile(filepath)
@@ -97,7 +97,7 @@ import time:       1 |    12 | a
     }
 
     filepath = tmp_path / "test.log"
-    with open(filepath, "w") as f:
+    with open(filepath, "w", encoding="utf-8") as f:
         f.write(content)
 
     out = tuna.read_import_profile(filepath)
