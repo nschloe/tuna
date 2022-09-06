@@ -14,6 +14,17 @@ def main(argv=None):
 
     prof_filename = args.infile
 
+    if args.infile == '-':
+        import os
+        import sys
+        import tempfile
+        with (
+            os.fdopen(sys.stdin.fileno(), 'r') as input_file,
+            tempfile.NamedTemporaryFile(mode='w', encoding="utf-8", suffix='.prof', delete=False) as output_file
+        ):
+            shutil.copyfileobj(input_file, output_file)
+            prof_filename = output_file.name
+
     if args.outdir:
         data = lambda: read(prof_filename)
         outdir = Path(args.outdir)
@@ -33,12 +44,16 @@ def main(argv=None):
     else:
         start_server(prof_filename, args.browser, args.port)
 
+    if args.infile == '-':
+        import os
+        os.remove(prof_filename)
+
 
 def _get_parser():
     """Parse input options."""
     parser = argparse.ArgumentParser(description=("Visualize Python profile."))
 
-    parser.add_argument("infile", type=str, help="input runtime or import profile file")
+    parser.add_argument("infile", type=str, help="input runtime or import profile file (`-` for stdin)")
     parser.add_argument(
         "-o",
         "--outdir",
