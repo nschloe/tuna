@@ -12,13 +12,15 @@ def main(argv=None):
     parser = _get_parser()
     args = parser.parse_args(argv)
 
+    prof_filename = args.infile
+
     if args.outdir:
-        data = read(args.infile)
+        data = lambda: read(prof_filename)
         outdir = Path(args.outdir)
         if not outdir.is_dir():
             outdir.mkdir(parents=True)
         with open(outdir / "index.html", "wt", encoding="utf-8") as out:
-            out.write(render(data, args.infile))
+            out.write(render(data, prof_filename))
         this_dir = Path(__file__).resolve().parent
         static_dir = outdir / "static"
         if static_dir.is_dir():
@@ -29,7 +31,7 @@ def main(argv=None):
                 target=lambda: webbrowser.open_new_tab(outdir / "index.html")
             ).start()
     else:
-        start_server(args.infile, args.browser, args.port)
+        start_server(prof_filename, args.browser, args.port)
 
 
 def _get_parser():

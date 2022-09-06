@@ -29,7 +29,7 @@ def render(data, prof_filename):
         template = string.Template(_file.read())
 
     return template.substitute(
-        data=html.escape(json.dumps(data).replace("</", "<\\/")),
+        data=html.escape(json.dumps(data()).replace("</", "<\\/")),
         version=html.escape(__version__),
         filename=html.escape(prof_filename.replace("</", "<\\/")),
     )
@@ -41,7 +41,7 @@ def is_port_in_use(port):
 
 
 def start_server(prof_filename, start_browser, port):
-    data = read(prof_filename)
+    data = lambda: read(prof_filename)
 
     class StaticServer(BaseHTTPRequestHandler):
         def do_GET(self):
