@@ -1,11 +1,11 @@
 {
   "name": "tuna",
   "dependencies": {
-    "bootstrap": "5.2.2",
+    "bootstrap": "5.2.3",
     "d3": "7.6.1"
   },
   "devDependencies": {
-    "prettier": "2.7.1"
+    "prettier": "2.8.0"
   },
   "scripts": {
     "prettier": "prettier --check README.md .github tuna/web/static/icicle.js tuna/web/static/tuna.css"
