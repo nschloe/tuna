@@ -1,4 +1,4 @@
-name: ci
+name: tests
 
 on:
   push:
@@ -14,10 +14,6 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.0
 
@@ -26,7 +22,7 @@ jobs:
     needs: [lint]
     strategy:
       matrix:
-        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
     steps:
       - uses: actions/setup-python@v4
         with:
@@ -37,4 +33,4 @@ jobs:
           pip install tox
           tox
       - uses: codecov/codecov-action@v3
-        if: ${{ matrix.python-version == '3.9' }}
+        if: ${{ matrix.python-version == '3.11' }}
