@@ -12,7 +12,7 @@
 
 [![Discord](https://img.shields.io/static/v1?logo=discord&label=chat&message=on%20discord&color=7289da&style=flat-square)](https://discord.gg/hnTJ5MRX2Y)
 
-[![gh-actions](https://img.shields.io/github/workflow/status/nschloe/tuna/ci?style=flat-square)](https://github.com/nschloe/tuna/actions?query=workflow%3Aci)
+[![gh-actions](https://img.shields.io/github/actions/workflow/status/nschloe/tuna/test.yml?branch=main&style=flat-square)](https://github.com/nschloe/tuna/actions?query=workflow%3Atests)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
