@@ -128,7 +128,7 @@ the notebook.
 
 ### Development
 
-After forking and cloning the repository, make sure to run `make dep` to install
+After forking and cloning the repository, make sure to run `just dep` to install
 additional dependencies (bootstrap and d3) which aren't stored in the repo.
 
 ### License
