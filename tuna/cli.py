@@ -12,13 +12,26 @@ def main(argv=None):
     parser = _get_parser()
     args = parser.parse_args(argv)
 
+    prof_filename = args.infile
+
+    if args.infile == '-':
+        import os
+        import sys
+        import tempfile
+        with (
+            os.fdopen(sys.stdin.fileno(), 'r') as input_file,
+            tempfile.NamedTemporaryFile(mode='w', encoding="utf-8", suffix='.prof', delete=False) as output_file
+        ):
+            shutil.copyfileobj(input_file, output_file)
+            prof_filename = output_file.name
+
     if args.outdir:
-        data = read(args.infile)
+        data = lambda: read(prof_filename)
         outdir = Path(args.outdir)
         if not outdir.is_dir():
             outdir.mkdir(parents=True)
         with open(outdir / "index.html", "wt", encoding="utf-8") as out:
-            out.write(render(data, args.infile))
+            out.write(render(data, prof_filename))
         this_dir = Path(__file__).resolve().parent
         static_dir = outdir / "static"
         if static_dir.is_dir():
@@ -29,14 +42,18 @@ def main(argv=None):
                 target=lambda: webbrowser.open_new_tab(outdir / "index.html")
             ).start()
     else:
-        start_server(args.infile, args.browser, args.port)
+        start_server(prof_filename, args.browser, args.port)
+
+    if args.infile == '-':
+        import os
+        os.remove(prof_filename)
 
 
 def _get_parser():
     """Parse input options."""
     parser = argparse.ArgumentParser(description=("Visualize Python profile."))
 
-    parser.add_argument("infile", type=str, help="input runtime or import profile file")
+    parser.add_argument("infile", type=str, help="input runtime or import profile file (`-` for stdin)")
     parser.add_argument(
         "-o",
         "--outdir",
