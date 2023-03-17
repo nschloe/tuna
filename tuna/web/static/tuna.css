@@ -1,46 +1,78 @@
+:root {
+  /* light theme */
+  --color-background: #f5f5f5;
+  --color-sidebar: #f8f9fa;
+  --color-footer: #c6c7c8;
+  --color-footer-text: #000000;
+  --color-stroke: #ffffff;
+
+  /* rects: material, light blue 50 */
+  --color-rect0: #01579b;
+  --color-rect0-hover: #0277bd;
+  --color-rect1: #0288d1;
+  --color-rect1-hover: #0277bd;
+  --color-rect2: #0288d1;
+  --color-rect2-hover: #0277bd;
+  --color-rect3: #bdbdbd;
+  --color-rect3-hover: #757575;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* dark theme */
+    --color-background: #1a1a1a;
+    --color-sidebar: #212121;
+    --color-footer: #212121;
+    --color-footer-text: #ffffff;
+    --color-stroke: #212121;
+
+    /* rects: darker counterparts */
+    --color-rect0: #1e3d4c;
+    --color-rect0-hover: #285166;
+    --color-rect1: #32657f;
+    --color-rect1-hover: #285166;
+    --color-rect2: #32657f;
+    --color-rect2-hover: #285166;
+    --color-rect3: #80919c;
+    --color-rect3-hover: #6d7f8c;
+  }
+}
+
 rect {
-  stroke: #fff;
+  stroke: var(--color-stroke);
 }
-
 .color0 rect {
-  /* default color for rects */
-  /* material design light blue 50 900 */
-  fill: #01579b;
+  fill: var(--color-rect0);
 }
-
 .color0:hover rect {
-  /* material design light blue 50 800 */
-  fill: #0277bd;
+  fill: var(--color-rect0-hover);
 }
-
 .color1 rect {
-  /* material design light blue 50 700 */
-  fill: #0288d1;
+  fill: var(--color-rect1);
 }
-
 .color1:hover rect {
-  /* material design light blue 50 800 */
-  fill: #0277bd;
+  fill: var(--color-rect1-hover);
 }
-
 .color2 rect {
-  /* material design light blue 50 700 */
-  fill: #0288d1;
+  fill: var(--color-rect2);
 }
-
 .color2:hover rect {
-  /* material design light blue 50 800 */
-  fill: #0277bd;
+  fill: var(--color-rect2-hover);
 }
-
 .color3 rect {
-  /* material design gray 50 400 */
-  fill: #bdbdbd;
+  fill: var(--color-rect3);
 }
-
 .color3:hover rect {
-  /* material design gray 50 600 */
-  fill: #757575;
+  fill: var(--color-rect3-hover);
+}
+svg {
+  background-color: var(--color-background);
+}
+div.row {
+  background-color: var(--color-background);
+}
+#sidebarMenu {
+  background-color: var(--color-sidebar) !important;
 }
 
 /* From
@@ -59,10 +91,12 @@ body {
   width: 100%;
   height: 60px;
   line-height: 60px;
-  background-color: #f5f5f5;
+  background-color: var(--color-footer) !important;
 }
-
-/**/
+footer div {
+  background-color: var(--color-footer) !important;
+  color: var(--color-footer-text);
+}
 .sticky-offset {
   top: 40px !important;
 }
