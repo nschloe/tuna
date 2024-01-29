@@ -1,8 +1,4 @@
-try:
-    # Python 3.8
-    from importlib import metadata
-except ImportError:
-    import importlib_metadata as metadata
+from importlib import metadata
 
 try:
     __version__ = metadata.version("tuna")
