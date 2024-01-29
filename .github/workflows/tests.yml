@@ -1,19 +1,16 @@
 name: tests
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request, workflow_dispatch]
+
+env:
+  FORCE_COLOR: 1
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.0
 
@@ -21,16 +18,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint]
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Test with tox
         run: |
           pip install tox
           tox
       - uses: codecov/codecov-action@v3
-        if: ${{ matrix.python-version == '3.11' }}
+        if: ${{ matrix.python-version == '3.12' }}
