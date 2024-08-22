@@ -27,7 +27,7 @@ below) and is faster, too.
 Create a runtime profile with
 
 ```
-python -mcProfile -o program.prof yourfile.py
+python -m cProfile -o program.prof yourfile.py
 ```
 
 or an [import
